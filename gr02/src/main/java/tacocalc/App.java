@@ -1,4 +1,4 @@
-package noteapp;
+package tacocalc;
 
 /**
  * Hello world!
