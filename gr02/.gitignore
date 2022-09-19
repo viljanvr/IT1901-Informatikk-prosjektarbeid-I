@@ -1,0 +1,5 @@
+#Ignore maven build folder
+target/
+
+#Ignore macOS DS_store files
+.DS_store
