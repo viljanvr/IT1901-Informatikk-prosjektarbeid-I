@@ -1,0 +1,4 @@
+.no-label-checkbox {
+    -fx-label-padding: 0;
+    -fx-padding: 5px;
+}
