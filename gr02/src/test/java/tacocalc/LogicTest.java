@@ -21,7 +21,8 @@ public class LogicTest {
         assertEquals(3, I1.getAmount());
         assertThrows(IllegalArgumentException.class, () -> {
             I1.setAmount(-1);
-            });
+        }
+        );
     }
 
     @Test
@@ -51,7 +52,22 @@ public class LogicTest {
         assertTrue(SL.getBought("agurk"));
         //Tries to do the same with an ingredient which is not in the list
         assertThrows(IllegalStateException.class, () -> {
-            SL.getBought("ost");}
-            );
+            SL.getBought("ost");
+        }
+        );
+    }
+
+    @Test
+    public void testAddAndDelete() {
+        ShoppingList SL = new ShoppingList();
+        SL.addItem("ost", 1);
+        SL.setBought("ost", true);
+        assertTrue(SL.getBought("ost"));
+        SL.deleteItem("ost");
+        // "ost" shold no longer be in the ShoppingList, and should therefore throw an exception
+        assertThrows(IllegalStateException.class, () -> {
+            SL.getBought("ost");
+        }
+        );
     }
 }
