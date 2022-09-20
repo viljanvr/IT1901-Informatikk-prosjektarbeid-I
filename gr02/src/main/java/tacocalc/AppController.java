@@ -1,100 +1,104 @@
 package tacocalc;
 
-import javafx.scene.Node;
-
-import java.net.URL;
-import java.security.Key;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
-import javafx.event.Event;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
 
-public class AppController implements Initializable{
+public class AppController {
 
     //Connects the main Shoppingslist class to the FXML file
     @FXML
     private GridPane ingredientsList;
 
-    private ShoppingList shoppingList;
+    @FXML
+    private TextField ingredientNameField, ingredientAmntField;
 
-    private List<Integer> indexOfCurrent;
+    @FXML
+    private Button addIngredient;
+    
+    @FXML
+    private Button editButton;
+    
+    private Boolean editMode = false;
 
-    private ArrayList<ArrayList<Node>> elements = new ArrayList<>();
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        // TODO Auto-generated method stub
-        updateElements();
-        ingredientsList.addEventFilter(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent e){
-                System.out.println("Press");
-                if(e.getCode().equals(KeyCode.ENTER)){
-                    System.out.println("Enter");
-                    CheckBox c = new CheckBox();
-                    c.setStyle("-fx-label-padding: 0;");
-                    TextField t = new TextField();
-                    ingredientsList.addRow(indexOfCurrent.get(1), c, t);
-                    updateElements();
+    private ShoppingList shoppingList = new ShoppingList();
+   
+    
+    public void initialize() {
+    }
+    
+    @FXML
+    private void handleEditButton(){
+        editMode = !editMode;
+        ingredientsList.getChildren().stream().filter(a -> a instanceof Button).forEach(a -> a.setVisible(editMode));
+        editButton.setText(editMode ? "Cancel" : "Edit");
+    }
+
+    private void handleDelete(String ingredient, CheckBox c, Button d){
+        
+        shoppingList.deleteItem(ingredient); //delete from database
+        List<Node> z = ingredientsList.getChildren().stream().filter(n -> (n.equals(c) 
+        || n.equals(d) 
+        //TODO: Change "contains" so you can't remove duplicates at the same time
+        || (n instanceof TextField && ((TextField)n).getText().contains(ingredient))))
+        .collect(Collectors.toList()); 
+        for (Node n : z) {
+            ingredientsList.getChildren().remove(n);
+        }
+    }
+
+    @FXML
+    private void handleAddIngredient() {
+        try {
+            String ingredientName  = ingredientNameField.getText();
+            String ingredientAmnt = ingredientAmntField.getText();
+            
+            shoppingList.addItem(ingredientName, Integer.parseInt(ingredientAmnt));
+
+            CheckBox c = new CheckBox();
+            Button deleteButton = new Button("Delete");
+            deleteButton.setVisible(editMode);
+            TextField t = new TextField(ingredientAmnt + "x " + ingredientName);
+            t.setEditable(false);
+
+            //Event handler for delete button
+            deleteButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e){
+                    handleDelete(ingredientName, c, deleteButton);
+                } 
+            });
+        
+            //Event handler for checkbox
+            c.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent e){
+                    shoppingList.setBought(ingredientName, ((CheckBox)e.getSource()).isSelected());
+                    System.out.println(shoppingList.toString());
                 }
-            }
-        });
-        ingredientsList.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent m){
-                Node n = m.getPickResult().getIntersectedNode().getParent();
-                indexOfCurrent.add(GridPane.getColumnIndex(n));
-                indexOfCurrent.add(GridPane.getRowIndex(n));
-            }
-        });
-    }
+            });
+            
+            ingredientsList.addRow(ingredientsList.getRowCount(), c, t,deleteButton);
 
-    @FXML
-    public void onGridClick(){
-        ingredientsList.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent m){
-                Node n = (Node)m.getSource();
-            }
-        });
-    }
+            //Clear out input fields
+            ingredientAmntField.clear();
+            ingredientNameField.clear();
 
-    private void updateElements(){
-        int i = 0;
-        ArrayList<Node> temp = new ArrayList<>();
-        for(Node n : ingredientsList.getChildren()){
-            if(i%2==0 && i != 0){
-                temp.add(n);
-                elements.add(temp);
-                temp = new ArrayList<>();
-            }
-            temp.add(n);
+        } catch (Exception e) {
+            Alert a = new Alert(AlertType.ERROR);
+            a.setContentText("Amount needs to be a valid inteeger");
+            a.show();
         }
     }
-
-    private void toShoppingList(){
-    }
-
-    @FXML
-    private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
-        for (Node node : gridPane.getChildren()) {
-            System.out.println(node.toString());
-            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
-                return node;
-            }
-        }
-        return null;
-    }
-
-}
+} 
