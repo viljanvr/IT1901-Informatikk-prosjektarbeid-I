@@ -11,21 +11,21 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tacocalc.AppController">
    <children>
       <AnchorPane prefHeight="77.0" prefWidth="900.0">
          <VBox.margin>
             <Insets />
          </VBox.margin>
          <children>
-            <Text layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Shopping list">
+            <Text fx:id="amogus" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Shopping list">
                <font>
                   <Font size="50.0" />
                </font>
             </Text>
          </children>
       </AnchorPane>
-      <GridPane prefHeight="33.0" prefWidth="860.0">
+      <GridPane fx:id="ingredientsList" onMouseClicked="#onGridClick" prefHeight="33.0" prefWidth="860.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="443.0" minWidth="10.0" prefWidth="29.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="867.0" minWidth="10.0" prefWidth="831.0" />
@@ -35,7 +35,7 @@
         </rowConstraints>
          <children>
             <CheckBox mnemonicParsing="false" styleClass="no-label-checkbox" stylesheets="@NoLabelCheckbox.css" />
-            <TextField GridPane.columnIndex="1" />
+            <TextField id="textField" GridPane.columnIndex="1" />
          </children>
       </GridPane>
    </children>
