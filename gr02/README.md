@@ -1,20 +1,19 @@
-# Description of Application and Userstories
-The application will be an adjustable taco-calculator. This means that the application will primarily function as a community based shopping list, which is constantly updated with the help of the users. The purpose of the app is to give an easy to use and easy to modify app that can scale a meal of taco.
-*Further information will be added as the app evolves*
+# Beskrivelse av applikasjon
 
-## Taco Fridays (User 1)
-As per my meal plan, Fridays are for taco. Therefore, I would like to have an easy to access application that shows me all the ingredients. Sometimes I don't want certain ingredients, so it is necessary for me to be able to remove and add ingredients.
+Applikasjonen er en redigerbar taco-kalkulator. Når man åpner appen skal man kunne skrive inn antall personer som skal spise, og da vil mengden av hver ingrediens oppdateres. Samtidig fungerer applikasjonen som en handleliste, hvor man kan huke av ingrediense ettersom man har kjøpt de. Det være veldig lett å redigere skaleringen av ingrediensene i applikasjonen, hvis man for eksempel fant ut av at man fikk alt for mye kjøttdeig denne gangen. Til slutt skal det også være mulig å legge til nye ingredienser og fjerne ingredienser.
 
-### TO SEE
-All ingredients and their amount
-### TO DO
-Add and remove ingredients
+## Oppbygging av prosjektet
+(Ikke fiksa enda)
 
-## Huge parties (User 2)
-As a student that has regular gatherings of a decently large group of students, I need an app where scaling is both simple and fast. Furthermore, the app needs to be able to add a great quantity of weird ingredients, as this is part of our tradition.
+Prosjektet består av to moduler:
+* `Core`: grunnleggende logikk og håndtering av data
+* `UI`: JavaFX brukergrensesnitt
 
-### TO SEE
-All ingredients and their amount
-### TO DO
-Scale according to number of attendees
-Add and remove ingredients
+## Kjøring av kode
+1. Bytt mappe til `gr02`
+2. Kjør `mvn install`
+3. Kjør `mvn javafx:run`
+
+
+## Brukerhistorier
+Du finner brukerhistorier til release 1 [her](/docs/release%201/brukerhistorier.md).
