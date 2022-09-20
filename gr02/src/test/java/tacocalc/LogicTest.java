@@ -41,7 +41,9 @@ public class LogicTest {
         assertEquals(1, SL.getingredientAmount("ost"));
         assertEquals(3, SL.getingredientAmount("agurk"));
         SL.setIngredientAmount("ost", 2);
-        assertEquals(3, SL.getingredientAmount("agurk"));
+        SL.setIngredientAmount("agurk", 2);
+        assertEquals(2, SL.getingredientAmount("ost"));
+        assertEquals(2, SL.getingredientAmount("agurk"));
     }
 
     @Test
@@ -63,6 +65,10 @@ public class LogicTest {
         SL.addItem("ost", 1);
         SL.setBought("ost", true);
         assertTrue(SL.getBought("ost"));
+        // Adding the same ingredient again
+        SL.addItem("ost", 3);
+        assertFalse(SL.getBought("ost"));
+        assertEquals(3, SL.getingredientAmount("ost"));
         SL.deleteItem("ost");
         // "ost" shold no longer be in the ShoppingList, and should therefore throw an exception
         assertThrows(IllegalStateException.class, () -> {
