@@ -10,9 +10,13 @@ Prosjektet består av to moduler:
 * `UI`: JavaFX brukergrensesnitt
 
 ## Kjøring av kode
-1. Bytt mappe til `gr02`
+1. Bytt mappe til `tacocalc`
 2. Kjør `mvn install`
+3. Bytt mappe til `fxui`
 3. Kjør `mvn javafx:run`
+
+"One liner" hvis du er på rotnivå i kildekoden:
+`cd tacocalc; mvn install; cd fxui; mvn javafx:run; cd ../..`
 
 
 ## Brukerhistorier

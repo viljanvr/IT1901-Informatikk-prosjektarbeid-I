@@ -1,4 +1,4 @@
-package tacocalc;
+package tacocalc.core;
 
 public class Ingredient {
     private String name;
