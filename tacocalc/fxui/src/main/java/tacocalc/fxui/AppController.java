@@ -1,4 +1,4 @@
-package tacocalc;
+package tacocalc.fxui;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,10 +14,11 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import tacocalc.core.ShoppingList;
 
 public class AppController {
 
-    //Connects the main Shoppingslist class to the FXML file
+    // Connects the main Shoppingslist class to the FXML file
     @FXML
     private GridPane ingredientsList;
 
@@ -26,33 +27,32 @@ public class AppController {
 
     @FXML
     private Button addIngredient;
-    
+
     @FXML
     private Button editButton;
-    
+
     private Boolean editMode = false;
 
     private ShoppingList shoppingList = new ShoppingList();
-   
-    
+
     public void initialize() {
     }
-    
+
     @FXML
-    private void handleEditButton(){
+    private void handleEditButton() {
         editMode = !editMode;
         ingredientsList.getChildren().stream().filter(a -> a instanceof Button).forEach(a -> a.setVisible(editMode));
         editButton.setText(editMode ? "Cancel" : "Edit");
     }
 
-    private void handleDelete(String ingredient, CheckBox c, Button d){
-        
-        shoppingList.deleteItem(ingredient); //delete from database
-        List<Node> z = ingredientsList.getChildren().stream().filter(n -> (n.equals(c) 
-        || n.equals(d) 
-        //TODO: Change "contains" so you can't remove duplicates at the same time
-        || (n instanceof TextField && ((TextField)n).getText().contains(ingredient))))
-        .collect(Collectors.toList()); 
+    private void handleDelete(String ingredient, CheckBox c, Button d) {
+
+        shoppingList.deleteItem(ingredient); // delete from database
+        List<Node> z = ingredientsList.getChildren().stream().filter(n -> (n.equals(c)
+                || n.equals(d)
+                // TODO: Change "contains" so you can't remove duplicates at the same time
+                || (n instanceof TextField && ((TextField) n).getText().contains(ingredient))))
+                .collect(Collectors.toList());
         for (Node n : z) {
             ingredientsList.getChildren().remove(n);
         }
@@ -61,9 +61,9 @@ public class AppController {
     @FXML
     private void handleAddIngredient() {
         try {
-            String ingredientName  = ingredientNameField.getText();
+            String ingredientName = ingredientNameField.getText();
             String ingredientAmnt = ingredientAmntField.getText();
-            
+
             shoppingList.addItem(ingredientName, Integer.parseInt(ingredientAmnt));
 
             CheckBox c = new CheckBox();
@@ -72,26 +72,26 @@ public class AppController {
             TextField t = new TextField(ingredientAmnt + "x " + ingredientName);
             t.setEditable(false);
 
-            //Event handler for delete button
+            // Event handler for delete button
             deleteButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
-                public void handle(ActionEvent e){
+                public void handle(ActionEvent e) {
                     handleDelete(ingredientName, c, deleteButton);
-                } 
+                }
             });
-        
-            //Event handler for checkbox
+
+            // Event handler for checkbox
             c.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                 @Override
-                public void handle(MouseEvent e){
-                    shoppingList.setBought(ingredientName, ((CheckBox)e.getSource()).isSelected());
+                public void handle(MouseEvent e) {
+                    shoppingList.setBought(ingredientName, ((CheckBox) e.getSource()).isSelected());
                     System.out.println(shoppingList.toString());
                 }
             });
-            
-            ingredientsList.addRow(ingredientsList.getRowCount(), c, t,deleteButton);
 
-            //Clear out input fields
+            ingredientsList.addRow(ingredientsList.getRowCount(), c, t, deleteButton);
+
+            // Clear out input fields
             ingredientAmntField.clear();
             ingredientNameField.clear();
 
@@ -101,4 +101,4 @@ public class AppController {
             a.show();
         }
     }
-} 
+}

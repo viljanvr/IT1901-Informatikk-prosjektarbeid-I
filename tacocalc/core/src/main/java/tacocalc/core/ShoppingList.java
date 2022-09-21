@@ -1,4 +1,4 @@
-package tacocalc;
+package tacocalc.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;

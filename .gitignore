@@ -1,5 +1,6 @@
 #Ignore maven build folder
-gr02/target/
+tacocalc/fxui/target
+tacocalc/core/target
 
 #Ignore macOS DS_store files
 .DS_store
