@@ -1,6 +1,7 @@
 #Ignore maven build folder
 tacocalc/fxui/target
 tacocalc/core/target
+gr02/target
 tacocalc/.vscode
 tacocalc/core/src/main/resources
 

@@ -1,10 +1,20 @@
 package tacocalc.core;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 public class ShoppingList {
     ArrayList<Ingredient> list = new ArrayList<>();
+    private final static String FILEPATH = "./tacocalc/core/src/main/resources/";
 
     public ShoppingList(Ingredient... ingredients) {
         list.addAll(Arrays.asList(ingredients));
@@ -76,4 +86,35 @@ public class ShoppingList {
         }
         return s;
     }
+
+
+    public void write(String fileName) {
+        String fp = FILEPATH + fileName + ".json";
+        try (FileWriter fw = new FileWriter(fp)){
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            gson.toJson(list, fw);
+            // list.stream().forEach(i -> gson.toJson(i, fw));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static ShoppingList read(String fileName) {
+        String fp = FILEPATH + fileName + ".json";
+        try (FileReader fr = new FileReader(fp)){
+            Gson gson = new Gson();
+            
+            // Make Ingredient list from Gson
+            Type listType = new TypeToken<List<Ingredient>>() {}.getType(); 
+            ArrayList<Ingredient> ingredients = gson.fromJson(fr, listType);
+            
+            // Return shopping list from ArrayList
+            return new ShoppingList(ingredients.toArray(new Ingredient[0]));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+
 }
