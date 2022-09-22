@@ -1,19 +1,17 @@
 # Brukerhistorier release 1
-## Taco fredag (Bruker 1)
-As per my meal plan, Fridays are for taco. Therefore, I would like to have an easy to access application that shows me all the ingredients. Sometimes I don't want certain ingredients, so it is necessary for me to be able to remove and add ingredients.
+## Taco fredag (`bruker-1`)
+Hver fredag har jeg reservert til taco. Jeg ønsker en enkel app der jeg kan ha alle ingrediensene jeg vanligvis bruker, uten å måtte skrive en ny handleliste hver dag. Det er derimot viktig at jeg kan fjerne ingredienser når jeg ikke har råd til å kjøpe de eller allerede har de.
 
-Hver fredag har jeg reservert til taco. Jeg ønsker derfor å ha en handleliste 
+### MÅ SE
+Alle ingredienser og deres mengde
+### MÅ GJØRE
+Legge til og fjerne ingredienser
 
-### TO SEE
-All ingredients and their amount
-### TO DO
-Add and remove ingredients
+## Store samlinger (`bruker-2`)
+Som student som gjevnlig har samlinger med medstudenter der vi spiser taco, så trenger jeg en app hvor skalering av ingredienser er raskt og enkelt. I tillegg må appen kunne legge til en stor mengde merkelige ingredienser, da dette er en tradisjon i vår gruppe.
 
-## Huge parties (User 2)
-As a student that has regular gatherings of a decently large group of students, I need an app where scaling is both simple and fast. Furthermore, the app needs to be able to add a great quantity of weird ingredients, as this is part of our tradition.
-
-### TO SEE
-All ingredients and their amount
-### TO DO
-Scale according to number of attendees
-Add and remove ingredients
+### MÅ SE
+Alle ingredienser og deres mengde
+### MÅ GJØRE
+Skalering etter antall som møter opp
+Legge til og fjerne mange ingredienser
