@@ -1,3 +1,3 @@
-open module core {
+module core {
     exports tacocalc.core;
 }
