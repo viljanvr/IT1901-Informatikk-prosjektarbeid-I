@@ -10,8 +10,10 @@ import org.junit.jupiter.api.Test;
 public class LogicTest {
     
     @Test
-    public void returnTrue() {
-        assertTrue(true);
+    public void testIngredientConstructor() {
+        Ingredient I1 = new Ingredient("kjøtt", 200);
+        assertEquals("kjøtt", I1.getName());
+        assertEquals(200, I1.getAmount());
     }
 
     //Checks if the value of an ingredient is set correctly 
@@ -19,6 +21,8 @@ public class LogicTest {
     public void testIngredientsAmount() {
         Ingredient I1 = new Ingredient("agurk", 3);
         assertEquals(3, I1.getAmount());
+        I1.setAmount(4);
+        assertEquals(4, I1.getAmount());
         assertThrows(IllegalArgumentException.class, () -> {
             I1.setAmount(-1);
         }
