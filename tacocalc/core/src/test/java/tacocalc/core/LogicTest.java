@@ -1,4 +1,4 @@
-package tacocalc;
+package tacocalc.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -28,6 +28,8 @@ public class LogicTest {
         }
         );
     }
+
+    
 
     @Test
     public void testIngredientsBought() {
@@ -80,4 +82,7 @@ public class LogicTest {
         }
         );
     }
+
+    // TODO: test tostring
+    // Might me an idea to test all throws
 }
