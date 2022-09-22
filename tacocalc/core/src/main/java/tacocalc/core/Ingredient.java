@@ -13,7 +13,7 @@ public class Ingredient {
 
     // No args constructor to be used in Gson reading
     protected Ingredient() {
-        
+
     }
 
     protected String getName() {

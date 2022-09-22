@@ -1,5 +1,7 @@
 package tacocalc.core;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -32,15 +34,16 @@ public class ShoppingList {
 
     public void setBought(String name, Boolean bought) {
         Ingredient ingredient = getIngredient(name);
-        if(ingredient == null) {
-            throw new IllegalStateException("The item doesn't exist in the list, and can therefore not be set to bought");
+        if (ingredient == null) {
+            throw new IllegalStateException(
+                    "The item doesn't exist in the list, and can therefore not be set to bought");
         }
         getIngredient(name).setBought(bought);
     }
 
     public boolean getBought(String name) {
         Ingredient ingredient = getIngredient(name);
-        if(ingredient == null) {
+        if (ingredient == null) {
             throw new IllegalStateException("This ingredient is not in the shoppinglist");
         }
         return getIngredient(name).getBought();
@@ -65,7 +68,7 @@ public class ShoppingList {
 
     public void setIngredientAmount(String name, int amount) {
         Ingredient ingredient = getIngredient(name);
-        if(ingredient == null) {
+        if (ingredient == null) {
             throw new IllegalStateException("The item doesn't exist in the list, and can therefore not set new amount");
         }
         getIngredient(name).setAmount(amount);
@@ -73,7 +76,7 @@ public class ShoppingList {
 
     public int getIngredientAmount(String name) {
         Ingredient ingredient = getIngredient(name);
-        if(ingredient == null) {
+        if (ingredient == null) {
             throw new IllegalStateException("This ingredient is not in the shoppinglist");
         }
         return getIngredient(name).getAmount();
@@ -87,15 +90,18 @@ public class ShoppingList {
         return s;
     }
 
-
     public void write(String fileName) {
         String fp = FILEPATH + fileName + ".json";
         System.out.println("write ran");
-        try (FileWriter fw = new FileWriter(fp)){
+        try (FileWriter fw = new FileWriter(fp)) {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             gson.toJson(list, fw);
             // list.stream().forEach(i -> gson.toJson(i, fw));
             System.out.println("Filewriter wrote");
+        } catch (FileNotFoundException e) {
+            new File(FILEPATH).mkdir();
+            write(fileName);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -103,13 +109,14 @@ public class ShoppingList {
 
     public static ShoppingList read(String fileName) {
         String fp = FILEPATH + fileName + ".json";
-        try (FileReader fr = new FileReader(fp)){
+        try (FileReader fr = new FileReader(fp)) {
             Gson gson = new Gson();
-            
+
             // Make Ingredient list from Gson
-            Type listType = new TypeToken<List<Ingredient>>() {}.getType(); 
+            Type listType = new TypeToken<List<Ingredient>>() {
+            }.getType();
             ArrayList<Ingredient> ingredients = gson.fromJson(fr, listType);
-            
+
             // Return shopping list from ArrayList
             return new ShoppingList(ingredients.toArray(new Ingredient[0]));
         } catch (Exception e) {
