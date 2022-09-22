@@ -23,13 +23,16 @@ public class LogicTest {
         assertEquals(3, I1.getAmount());
         I1.setAmount(4);
         assertEquals(4, I1.getAmount());
-        assertThrows(IllegalArgumentException.class, () -> {
-            I1.setAmount(-1);
-        }
-        );
     }
 
-    
+    @Test
+    public void testToStringmethods() {
+        Ingredient I1 = new Ingredient("tomat", 4);
+        assertEquals("[ ]: 4x tomat", I1.toString());
+        ShoppingList SL = new ShoppingList(I1);
+        SL.setBought("tomat", true);
+        assertEquals("[x]: 4x tomat\n", SL.toString());
+    }
 
     @Test
     public void testIngredientsBought() {
@@ -44,12 +47,12 @@ public class LogicTest {
         Ingredient I1 = new Ingredient("agurk", 3);
         Ingredient I2 = new Ingredient("ost", 1);
         ShoppingList SL = new ShoppingList(I1, I2);
-        assertEquals(1, SL.getingredientAmount("ost"));
-        assertEquals(3, SL.getingredientAmount("agurk"));
+        assertEquals(1, SL.getIngredientAmount("ost"));
+        assertEquals(3, SL.getIngredientAmount("agurk"));
         SL.setIngredientAmount("ost", 2);
         SL.setIngredientAmount("agurk", 2);
-        assertEquals(2, SL.getingredientAmount("ost"));
-        assertEquals(2, SL.getingredientAmount("agurk"));
+        assertEquals(2, SL.getIngredientAmount("ost"));
+        assertEquals(2, SL.getIngredientAmount("agurk"));
     }
 
     @Test
@@ -58,11 +61,6 @@ public class LogicTest {
         ShoppingList SL = new ShoppingList(I1);
         SL.setBought("agurk", true);
         assertTrue(SL.getBought("agurk"));
-        //Tries to do the same with an ingredient which is not in the list
-        assertThrows(IllegalStateException.class, () -> {
-            SL.getBought("ost");
-        }
-        );
     }
 
     @Test
@@ -74,15 +72,41 @@ public class LogicTest {
         // Adding the same ingredient again
         SL.addItem("ost", 3);
         assertFalse(SL.getBought("ost"));
-        assertEquals(3, SL.getingredientAmount("ost"));
+        assertEquals(3, SL.getIngredientAmount("ost"));
         SL.deleteItem("ost");
-        // "ost" shold no longer be in the ShoppingList, and should therefore throw an exception
         assertThrows(IllegalStateException.class, () -> {
-            SL.getBought("ost");
+            SL.deleteItem("ost");
         }
         );
     }
 
-    // TODO: test tostring
-    // Might me an idea to test all throws
+    @Test
+    public void testThrows() {
+        Ingredient I1 = new Ingredient("tomat", 3);
+        ShoppingList SL = new ShoppingList(I1);
+        assertThrows(IllegalArgumentException.class, () -> {
+            I1.setAmount(-1);
+        }
+        );
+        assertThrows(IllegalStateException.class, () -> {
+            SL.getBought("ost");
+        }
+        );
+        assertThrows(IllegalStateException.class, () -> {
+            SL.deleteItem("ost");
+        }
+        );
+        assertThrows(IllegalStateException.class, () -> {
+            SL.setBought("ost", true);
+        }
+        );
+        assertThrows(IllegalStateException.class, () -> {
+            SL.setIngredientAmount("ost", 2);
+        }
+        );
+        assertThrows(IllegalStateException.class, () -> {
+            SL.getIngredientAmount("ost");
+        }
+        );
+    }
 }
