@@ -23,16 +23,13 @@ public class AppController {
     private GridPane ingredientsList;
 
     @FXML
-    private TextField ingredientNameField, ingredientAmntField;
+    private TextField ingredientNameField, ingredientAmntField, nameField;
 
     @FXML
     private Button addIngredient;
 
     @FXML
     private Button editButton;
-
-    @FXML
-    private Button nameButton;
 
     private Boolean editMode = false;
 
@@ -70,11 +67,13 @@ public class AppController {
         try {
             String ingredientName = ingredientNameField.getText();
             String ingredientAmnt = ingredientAmntField.getText();
-            String name = nameButton.getText();
+            String name = nameField.getText();
 
             shoppingList.addItem(ingredientName, Integer.parseInt(ingredientAmnt));
 
             //Saving to file after shoppinglist has added the new thing
+            //Save to file
+            handleSaveToFile(name);
 
             CheckBox c = new CheckBox();
             Button deleteButton = new Button("Delete");
@@ -103,8 +102,6 @@ public class AppController {
 
             ingredientsList.addRow(ingredientsList.getRowCount(), c, t, deleteButton);
             
-            //Save to file
-            handleSaveToFile(name);
             
             // Clear out input fields
             ingredientAmntField.clear();
@@ -114,6 +111,7 @@ public class AppController {
             Alert a = new Alert(AlertType.ERROR);
             a.setContentText("Amount needs to be a valid inteeger");
             a.show();
+
         }
     }
 }
