@@ -31,6 +31,9 @@ public class AppController {
     @FXML
     private Button editButton;
 
+    @FXML
+    private Button nameButton;
+
     private Boolean editMode = false;
 
     private ShoppingList shoppingList = new ShoppingList();
@@ -58,13 +61,20 @@ public class AppController {
         }
     }
 
+    private void handleSaveToFile(String name){
+        shoppingList.write(name);
+    }
+
     @FXML
     private void handleAddIngredient() {
         try {
             String ingredientName = ingredientNameField.getText();
             String ingredientAmnt = ingredientAmntField.getText();
+            String name = nameButton.getText();
 
             shoppingList.addItem(ingredientName, Integer.parseInt(ingredientAmnt));
+
+            //Saving to file after shoppinglist has added the new thing
 
             CheckBox c = new CheckBox();
             Button deleteButton = new Button("Delete");
@@ -77,6 +87,7 @@ public class AppController {
                 @Override
                 public void handle(ActionEvent e) {
                     handleDelete(ingredientName, c, deleteButton);
+                    handleSaveToFile(name);
                 }
             });
 
@@ -86,11 +97,15 @@ public class AppController {
                 public void handle(MouseEvent e) {
                     shoppingList.setBought(ingredientName, ((CheckBox) e.getSource()).isSelected());
                     System.out.println(shoppingList.toString());
+                    handleSaveToFile(name);
                 }
             });
 
             ingredientsList.addRow(ingredientsList.getRowCount(), c, t, deleteButton);
-
+            
+            //Save to file
+            handleSaveToFile(name);
+            
             // Clear out input fields
             ingredientAmntField.clear();
             ingredientNameField.clear();
