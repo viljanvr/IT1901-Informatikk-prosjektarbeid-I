@@ -23,7 +23,7 @@ public class AppController {
     private GridPane ingredientsList;
 
     @FXML
-    private TextField ingredientNameField, ingredientAmntField;
+    private TextField ingredientNameField, ingredientAmntField, nameField;
 
     @FXML
     private Button addIngredient;
@@ -58,13 +58,22 @@ public class AppController {
         }
     }
 
+    private void handleSaveToFile(String name){
+        shoppingList.write(name);
+    }
+
     @FXML
     private void handleAddIngredient() {
         try {
             String ingredientName = ingredientNameField.getText();
             String ingredientAmnt = ingredientAmntField.getText();
+            String name = nameField.getText();
 
             shoppingList.addItem(ingredientName, Integer.parseInt(ingredientAmnt));
+
+            //Saving to file after shoppinglist has added the new thing
+            //Save to file
+            handleSaveToFile(name);
 
             CheckBox c = new CheckBox();
             Button deleteButton = new Button("Delete");
@@ -77,6 +86,7 @@ public class AppController {
                 @Override
                 public void handle(ActionEvent e) {
                     handleDelete(ingredientName, c, deleteButton);
+                    handleSaveToFile(name);
                 }
             });
 
@@ -86,11 +96,13 @@ public class AppController {
                 public void handle(MouseEvent e) {
                     shoppingList.setBought(ingredientName, ((CheckBox) e.getSource()).isSelected());
                     System.out.println(shoppingList.toString());
+                    handleSaveToFile(name);
                 }
             });
 
             ingredientsList.addRow(ingredientsList.getRowCount(), c, t, deleteButton);
-
+            
+            
             // Clear out input fields
             ingredientAmntField.clear();
             ingredientNameField.clear();
@@ -99,6 +111,7 @@ public class AppController {
             Alert a = new Alert(AlertType.ERROR);
             a.setContentText("Amount needs to be a valid inteeger");
             a.show();
+
         }
     }
 }
