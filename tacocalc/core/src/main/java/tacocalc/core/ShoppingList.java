@@ -22,6 +22,10 @@ public class ShoppingList {
         list.addAll(Arrays.asList(ingredients));
     }
 
+    public List<Ingredient> getList() {
+        return new ArrayList<>(list);
+    }
+
     public void addItem(String name, Integer amount) {
         Ingredient duplicate = getIngredient(name);
         if (duplicate != null) {
@@ -107,7 +111,7 @@ public class ShoppingList {
         }
     }
 
-    public static ShoppingList read(String fileName) {
+    public ShoppingList read(String fileName) {
         String fp = FILEPATH + fileName + ".json";
         try (FileReader fr = new FileReader(fp)) {
             Gson gson = new Gson();
