@@ -11,6 +11,11 @@ public class Ingredient {
         setAmount(amount);
     }
 
+    // No args constructor to be used in Gson reading
+    protected Ingredient() {
+        
+    }
+
     protected String getName() {
         return name;
     }
