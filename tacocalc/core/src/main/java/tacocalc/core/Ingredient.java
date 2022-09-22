@@ -16,7 +16,7 @@ public class Ingredient {
         
     }
 
-    protected String getName() {
+    public String getName() {
         return name;
     }
 
@@ -24,7 +24,7 @@ public class Ingredient {
         this.name = name;
     }
 
-    protected Boolean getBought() {
+    public Boolean getBought() {
         return bought;
     }
 
@@ -32,7 +32,7 @@ public class Ingredient {
         this.bought = bought;
     }
 
-    protected Integer getAmount() {
+    public Integer getAmount() {
         return amount;
     }
 

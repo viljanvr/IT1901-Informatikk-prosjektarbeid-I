@@ -29,7 +29,7 @@ public class AppController {
     private Button addIngredient;
 
     @FXML
-    private Button editButton;
+    private Button editButton, loadButton;
 
     private Boolean editMode = false;
 
@@ -48,14 +48,20 @@ public class AppController {
     private void handleDelete(String ingredient, CheckBox c, Button d) {
 
         shoppingList.deleteItem(ingredient); // delete from database
-        List<Node> z = ingredientsList.getChildren().stream().filter(n -> (n.equals(c)
+        List<Node> children = ingredientsList.getChildren().stream().filter(n -> (n.equals(c)
                 || n.equals(d)
                 // TODO: Change "contains" so you can't remove duplicates at the same time
                 || (n instanceof TextField && ((TextField) n).getText().contains(ingredient))))
                 .collect(Collectors.toList());
-        for (Node n : z) {
+        for (Node n : children) {
             ingredientsList.getChildren().remove(n);
         }
+        handleSaveToFile(getFileName());
+    }
+
+    private void handleToggleCheckbox(String ingredientName, CheckBox c){
+        shoppingList.setBought(ingredientName, c.isSelected());
+        handleSaveToFile(getFileName());
     }
 
     private void handleSaveToFile(String name){
@@ -63,55 +69,66 @@ public class AppController {
     }
 
     @FXML
+    private void handleLoadFile(){
+        this.ingredientsList.getChildren().clear();
+        this.shoppingList = shoppingList.read(getFileName());
+        shoppingList.getList().stream().forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
+    }
+
+    @FXML
     private void handleAddIngredient() {
         try {
             String ingredientName = ingredientNameField.getText();
-            String ingredientAmnt = ingredientAmntField.getText();
-            String name = nameField.getText();
+            Integer ingredientAmnt = Integer.parseInt(ingredientAmntField.getText());
+        
+            shoppingList.addItem(ingredientName, ingredientAmnt);
+            handleSaveToFile(getFileName());
 
-            shoppingList.addItem(ingredientName, Integer.parseInt(ingredientAmnt));
-
-            //Saving to file after shoppinglist has added the new thing
-            //Save to file
-            handleSaveToFile(name);
-
-            CheckBox c = new CheckBox();
-            Button deleteButton = new Button("Delete");
-            deleteButton.setVisible(editMode);
-            TextField t = new TextField(ingredientAmnt + "x " + ingredientName);
-            t.setEditable(false);
-
-            // Event handler for delete button
-            deleteButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent e) {
-                    handleDelete(ingredientName, c, deleteButton);
-                    handleSaveToFile(name);
-                }
-            });
-
-            // Event handler for checkbox
-            c.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent e) {
-                    shoppingList.setBought(ingredientName, ((CheckBox) e.getSource()).isSelected());
-                    System.out.println(shoppingList.toString());
-                    handleSaveToFile(name);
-                }
-            });
-
-            ingredientsList.addRow(ingredientsList.getRowCount(), c, t, deleteButton);
-            
-            
-            // Clear out input fields
-            ingredientAmntField.clear();
-            ingredientNameField.clear();
+            addItemToView(ingredientName, ingredientAmnt, false);
 
         } catch (Exception e) {
             Alert a = new Alert(AlertType.ERROR);
-            a.setContentText("Amount needs to be a valid inteeger");
+            a.setContentText("Amount needs to be a valid integer");
             a.show();
-
         }
+    }
+
+    private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked){
+    
+        CheckBox c = new CheckBox();
+        c.setSelected(checked);
+
+        Button deleteButton = new Button("Delete");
+        deleteButton.setVisible(editMode);
+        
+        TextField t = new TextField(ingredientAmnt + "x " + ingredientName);
+        t.setEditable(false);
+
+        // Event handler for delete button
+        deleteButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                handleDelete(ingredientName, c, deleteButton);
+            }
+        });
+
+        // Event handler for checkbox
+        c.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                handleToggleCheckbox(ingredientName, (CheckBox)e.getSource());
+            }
+        });
+
+        ingredientsList.addRow(ingredientsList.getRowCount(), c, t, deleteButton);
+        
+        // Clear out input fields
+        ingredientAmntField.clear();
+        ingredientNameField.clear();
+    }
+
+    private String getFileName(){
+        //TODO: Give nameField a better name
+        return nameField.getText();
     }
 }
