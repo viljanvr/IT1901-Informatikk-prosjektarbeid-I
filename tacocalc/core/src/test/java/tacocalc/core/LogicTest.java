@@ -1,4 +1,4 @@
-package tacocalc;
+package tacocalc.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 public class LogicTest {
-    
+
     @Test
     public void testIngredientConstructor() {
         Ingredient I1 = new Ingredient("kjøtt", 200);
@@ -16,7 +16,7 @@ public class LogicTest {
         assertEquals(200, I1.getAmount());
     }
 
-    //Checks if the value of an ingredient is set correctly 
+    // Checks if the value of an ingredient is set correctly
     @Test
     public void testIngredientsAmount() {
         Ingredient I1 = new Ingredient("agurk", 3);
@@ -25,8 +25,7 @@ public class LogicTest {
         assertEquals(4, I1.getAmount());
         assertThrows(IllegalArgumentException.class, () -> {
             I1.setAmount(-1);
-        }
-        );
+        });
     }
 
     @Test
@@ -56,11 +55,10 @@ public class LogicTest {
         ShoppingList SL = new ShoppingList(I1);
         SL.setBought("agurk", true);
         assertTrue(SL.getBought("agurk"));
-        //Tries to do the same with an ingredient which is not in the list
+        // Tries to do the same with an ingredient which is not in the list
         assertThrows(IllegalStateException.class, () -> {
             SL.getBought("ost");
-        }
-        );
+        });
     }
 
     @Test
@@ -74,10 +72,10 @@ public class LogicTest {
         assertFalse(SL.getBought("ost"));
         assertEquals(3, SL.getingredientAmount("ost"));
         SL.deleteItem("ost");
-        // "ost" shold no longer be in the ShoppingList, and should therefore throw an exception
+        // "ost" shold no longer be in the ShoppingList, and should therefore throw an
+        // exception
         assertThrows(IllegalStateException.class, () -> {
             SL.getBought("ost");
-        }
-        );
+        });
     }
 }
