@@ -21,7 +21,19 @@ public class ShoppingList {
     }
 
     public void setBought(String name, Boolean bought) {
+        Ingredient ingredient = getIngredient(name);
+        if(ingredient == null) {
+            throw new IllegalStateException("The item doesn't exist in the list, and can therefore not be set to bought");
+        }
         getIngredient(name).setBought(bought);
+    }
+
+    public boolean getBought(String name) {
+        Ingredient ingredient = getIngredient(name);
+        if(ingredient == null) {
+            throw new IllegalStateException("This ingredient is not in the shoppinglist");
+        }
+        return getIngredient(name).getBought();
     }
 
     public void deleteItem(String name) {
@@ -39,6 +51,22 @@ public class ShoppingList {
             }
         }
         return null;
+    }
+
+    public void setIngredientAmount(String name, int amount) {
+        Ingredient ingredient = getIngredient(name);
+        if(ingredient == null) {
+            throw new IllegalStateException("The item doesn't exist in the list, and can therefore not set new amount");
+        }
+        getIngredient(name).setAmount(amount);
+    }
+
+    public int getingredientAmount(String name) {
+        Ingredient ingredient = getIngredient(name);
+        if(ingredient == null) {
+            throw new IllegalStateException("This ingredient is not in the shoppinglist");
+        }
+        return getIngredient(name).getAmount();
     }
 
     public String toString() {
