@@ -14,7 +14,7 @@ import com.google.gson.reflect.TypeToken;
 
 public class ShoppingList {
     ArrayList<Ingredient> list = new ArrayList<>();
-    private final static String FILEPATH = "./tacocalc/core/src/main/resources/";
+    private final static String FILEPATH = "../core/src/main/resources/";
 
     public ShoppingList(Ingredient... ingredients) {
         list.addAll(Arrays.asList(ingredients));
@@ -90,10 +90,12 @@ public class ShoppingList {
 
     public void write(String fileName) {
         String fp = FILEPATH + fileName + ".json";
+        System.out.println("write ran");
         try (FileWriter fw = new FileWriter(fp)){
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             gson.toJson(list, fw);
             // list.stream().forEach(i -> gson.toJson(i, fw));
+            System.out.println("Filewriter wrote");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -113,8 +115,6 @@ public class ShoppingList {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
         return null;
     }
-
 }
