@@ -1,6 +1,11 @@
 #Ignore maven build folder
 tacocalc/fxui/target
 tacocalc/core/target
+tacocalc/.vscode
+tacocalc/core/src/main/resources
 
 #Ignore macOS DS_store files
 .DS_store
+
+#Ignore InetlliJ configurations files
+.idea/
