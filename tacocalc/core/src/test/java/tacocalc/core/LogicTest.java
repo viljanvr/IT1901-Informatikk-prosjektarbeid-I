@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 public class LogicTest {
 
+    //Tests for Ingredient class and its setters
     @Test
     public void testIngredientConstructor() {
         Ingredient I1 = new Ingredient("kjøtt", 200);
@@ -16,7 +17,6 @@ public class LogicTest {
         assertEquals(200, I1.getAmount());
     }
 
-    // Checks if the value of an ingredient is set correctly
     @Test
     public void testIngredientsAmount() {
         Ingredient I1 = new Ingredient("agurk", 3);
@@ -42,6 +42,7 @@ public class LogicTest {
         assertTrue(I2.getBought());
     }
 
+    //Tests for the Shoppinglist class
     @Test
     public void testMultipleingredients() {
         Ingredient I1 = new Ingredient("agurk", 3);
@@ -80,6 +81,7 @@ public class LogicTest {
         );
     }
 
+    //Tests for the shopping class that checks if throws are done correctly
     @Test
     public void testThrows() {
         Ingredient I1 = new Ingredient("tomat", 3);

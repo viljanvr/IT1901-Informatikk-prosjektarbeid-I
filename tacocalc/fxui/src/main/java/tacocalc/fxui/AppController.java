@@ -45,6 +45,12 @@ public class AppController {
         editButton.setText(editMode ? "Cancel" : "Edit");
     }
 
+    /* 
+        Finds and deletes the given ingredient from the current locally stored database as well as the Gridpane
+
+        @params: ingredient, c, d the String name of the ingredient, and the Checkbox and Button of the ingredient 
+
+    */
     private void handleDelete(String ingredient, CheckBox c, Button d) {
 
         shoppingList.deleteItem(ingredient); // delete from database
@@ -58,16 +64,29 @@ public class AppController {
         }
         handleSaveToFile(getFileName());
     }
-
+    
+    /**
+     * Toggles checkbox between checked or unchecked
+     * 
+     * @param ingredientName String with the name of the ingredient
+     * @param c Checkbox to be checked or unchecked
+     */
     private void handleToggleCheckbox(String ingredientName, CheckBox c){
         shoppingList.setBought(ingredientName, c.isSelected());
         handleSaveToFile(getFileName());
     }
 
+    // Delegates to shoppingList, where files are handled (for now)
+    //TODO: handle files seperately
     private void handleSaveToFile(String name){
         shoppingList.write(name);
     }
-
+    /*
+        Removes all items from local gridpane.
+        Reads file before adding all elements
+        found in file to the local shoppinglist.
+        Iterates over ShoppingList and adds all to view.
+    */
     @FXML
     private void handleLoadFile(){
         this.ingredientsList.getChildren().clear();
@@ -75,6 +94,14 @@ public class AppController {
         shoppingList.getList().stream().forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
     }
 
+    
+    /*
+        Adds ingredient to ShoppingList object.
+        Saves the current ShoppingList object to a JSON-file.
+        Updates the shopping list view with the new ingredient.
+
+        In case an illegal amount is specified, an alert is showed.
+     */
     @FXML
     private void handleAddIngredient() {
         try {
@@ -92,7 +119,19 @@ public class AppController {
             a.show();
         }
     }
+    /** 
+        Method takes in an Ingredient and adds it to the view
+        Adds the Ingredient with its children to the view,
+        and deletes the content of the textfields
 
+        Method also contains the eventhandlers for ToggleCheckbox, 
+        and the Delete function
+
+        
+        @param ingredientName the string of the name 
+        @param ingredientAmnt the integer of the amount 
+        @param checked the boolean state of the checkbox
+     */
     private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked){
     
         CheckBox c = new CheckBox();
@@ -122,7 +161,6 @@ public class AppController {
 
         ingredientsList.addRow(ingredientsList.getRowCount(), c, t, deleteButton);
         
-        // Clear out input fields
         ingredientAmntField.clear();
         ingredientNameField.clear();
     }
