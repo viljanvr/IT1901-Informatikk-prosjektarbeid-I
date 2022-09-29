@@ -59,17 +59,17 @@ public class AppController {
         handleSaveToFile(getFileName());
     }
 
-    private void handleToggleCheckbox(String ingredientName, CheckBox c){
+    private void handleToggleCheckbox(String ingredientName, CheckBox c) {
         shoppingList.setBought(ingredientName, c.isSelected());
         handleSaveToFile(getFileName());
     }
 
-    private void handleSaveToFile(String name){
+    private void handleSaveToFile(String name) {
         shoppingList.write(name);
     }
 
     @FXML
-    private void handleLoadFile(){
+    private void handleLoadFile() {
         this.ingredientsList.getChildren().clear();
         this.shoppingList = shoppingList.read(getFileName());
         shoppingList.getList().stream().forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
@@ -80,7 +80,7 @@ public class AppController {
         try {
             String ingredientName = ingredientNameField.getText();
             Integer ingredientAmnt = Integer.parseInt(ingredientAmntField.getText());
-        
+
             shoppingList.addItem(ingredientName, ingredientAmnt);
             handleSaveToFile(getFileName());
 
@@ -93,14 +93,14 @@ public class AppController {
         }
     }
 
-    private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked){
-    
+    private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked) {
+
         CheckBox c = new CheckBox();
         c.setSelected(checked);
 
         Button deleteButton = new Button("Delete");
         deleteButton.setVisible(editMode);
-        
+
         TextField t = new TextField(ingredientAmnt + "x " + ingredientName);
         t.setEditable(false);
 
@@ -116,19 +116,19 @@ public class AppController {
         c.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                handleToggleCheckbox(ingredientName, (CheckBox)e.getSource());
+                handleToggleCheckbox(ingredientName, (CheckBox) e.getSource());
             }
         });
 
         ingredientsList.addRow(ingredientsList.getRowCount(), c, t, deleteButton);
-        
+
         // Clear out input fields
         ingredientAmntField.clear();
         ingredientNameField.clear();
     }
 
-    private String getFileName(){
-        //TODO: Give nameField a better name
+    private String getFileName() {
+        // TODO: Give nameField a better name
         return nameField.getText();
     }
 }
