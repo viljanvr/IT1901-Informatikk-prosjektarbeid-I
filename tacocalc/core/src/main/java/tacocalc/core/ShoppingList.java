@@ -18,14 +18,28 @@ public class ShoppingList {
     ArrayList<Ingredient> list = new ArrayList<>();
     private final static String FILEPATH = "../core/src/main/resources/";
 
+    /** 
+        Adds all ingdredients to the objects list
+
+        @param ingredients the Ingredients to be added
+    */
     public ShoppingList(Ingredient... ingredients) {
         list.addAll(Arrays.asList(ingredients));
     }
-
+    
     public List<Ingredient> getList() {
         return new ArrayList<>(list);
     }
 
+    /**
+        Adds a new Ingredient to the ShoppingList
+        If it is already an Ingredient with the same name, 
+        the old Ingredient will be updated with the amount of the new,
+        and its bought status is set to false
+        
+        @param name the string to be added
+        @param amount the integer to be added
+     */
     public void addItem(String name, Integer amount) {
         Ingredient duplicate = getIngredient(name);
         if (duplicate != null) {
@@ -35,7 +49,7 @@ public class ShoppingList {
             list.add(new Ingredient(name, amount));
         }
     }
-
+    
     public void setBought(String name, Boolean bought) {
         Ingredient ingredient = getIngredient(name);
         if (ingredient == null) {
@@ -94,6 +108,12 @@ public class ShoppingList {
         return s;
     }
 
+    /**  
+        Takes a filename and stores the object in that given Json file.
+        If it does not exist then it simply creates it.
+        
+        @param fileName the String of the filename to be written to
+    */    
     public void write(String fileName) {
         String fp = FILEPATH + fileName + ".json";
         System.out.println("write ran");
@@ -110,7 +130,16 @@ public class ShoppingList {
             e.printStackTrace();
         }
     }
-
+    
+    /** 
+        Reads the file given by parameter fileName.
+        If file does not exist it throws an exception.
+        The contents of the file is stored and returned as a new object of type ShoppingList
+        
+        @param fileName the String that is the name of the file to be read from
+        
+        @return a ShoppingList created from the contents of the Json file
+    */
     public ShoppingList read(String fileName) {
         String fp = FILEPATH + fileName + ".json";
         try (FileReader fr = new FileReader(fp)) {
