@@ -11,20 +11,24 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import tacocalc.core.ShoppingList;
 
 public class AppController {
 
     // Connects the main Shoppingslist class to the FXML file
     @FXML
-    private GridPane ingredientsList;
-
+    private GridPane ingredientsList, ingredientsList2;
+    
     @FXML
     private TextField ingredientNameField, ingredientAmntField, nameField;
-
+    
     @FXML
     private Button addIngredient;
 
@@ -38,13 +42,17 @@ public class AppController {
     public void initialize() {
     }
 
+    //Keeps track of left or right. Rly simple
+    private int counter = 0;
+    
     @FXML
     private void handleEditButton() {
         editMode = !editMode;
-        ingredientsList.getChildren().stream().filter(a -> a instanceof Button).forEach(a -> a.setVisible(editMode));
+        ingredientsList.getChildren().stream().filter(a -> a instanceof MenuButton).forEach(a -> a.setVisible(editMode));
         editButton.setText(editMode ? "Cancel" : "Edit");
     }
 
+    //TODO: This takes in the dropdown editors delete function instead of the button. Must also change d to dropdown/popup
     private void handleDelete(String ingredient, CheckBox c, Button d) {
 
         shoppingList.deleteItem(ingredient); // delete from database
@@ -93,24 +101,49 @@ public class AppController {
         }
     }
 
+    @FXML
+    private void handleEditIngredient(String ingredient, MenuButton eB){
+        System.out.println("Hello");
+        TextField hello = new TextField("Hello");
+        MenuItem helloText = new MenuItem();
+        helloText.setGraphic(hello);;
+        eB.getItems().setAll(
+            helloText
+        );
+    }
+
     private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked){
     
         CheckBox c = new CheckBox();
         c.setSelected(checked);
 
-        Button deleteButton = new Button("Delete");
+        Button deleteButton = new Button("->");
         deleteButton.setVisible(editMode);
         
+        MenuButton editButton = new MenuButton("->");
+        editButton.setVisible(editMode);
+
         TextField t = new TextField(ingredientAmnt + "x " + ingredientName);
         t.setEditable(false);
 
-        // Event handler for delete button
-        deleteButton.setOnAction(new EventHandler<ActionEvent>() {
+        editButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                handleDelete(ingredientName, c, deleteButton);
+                //TODO: Call a function for dropdown menu instead of delete
+                handleEditIngredient(ingredientName, (MenuButton) e.getSource());
             }
         });
+
+        // Event handler for delete button
+        //TODO: Make this an edit button instead
+        /* deleteButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                //TODO: Call a function for dropdown menu instead of delete
+                handleEditIngredient(ingredientName);
+                //handleDelete(ingredientName, c, deleteButton);
+            }
+        }); */
 
         // Event handler for checkbox
         c.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
@@ -120,7 +153,22 @@ public class AppController {
             }
         });
 
-        ingredientsList.addRow(ingredientsList.getRowCount(), c, t, deleteButton);
+        if(counter==0){
+            ingredientsList.addRow(ingredientsList.getRowCount(), c, t, editButton);
+            counter = 1;
+        } else {
+            ingredientsList2.addRow(ingredientsList2.getRowCount(),c,t,editButton);
+            counter = 0;
+        }
+
+        //TODO: Remove old solution
+        /* if(counter==0){
+            ingredientsList.addRow(ingredientsList.getRowCount(), c, t, deleteButton);
+            counter = 1;
+        } else {
+            ingredientsList2.addRow(ingredientsList2.getRowCount(),c,t,deleteButton);
+            counter = 0;
+        } */
         
         // Clear out input fields
         ingredientAmntField.clear();
