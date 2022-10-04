@@ -101,8 +101,7 @@ public class AppController {
         }
     }
 
-    @FXML
-    private void handleEditIngredient(String ingredient, MenuButton eB){
+    private void handleEditButton(MenuButton eB){
         System.out.println("Hello");
         TextField hello = new TextField("Hello");
         MenuItem helloText = new MenuItem();
@@ -126,13 +125,8 @@ public class AppController {
         TextField t = new TextField(ingredientAmnt + "x " + ingredientName);
         t.setEditable(false);
 
-        editButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                //TODO: Call a function for dropdown menu instead of delete
-                handleEditIngredient(ingredientName, (MenuButton) e.getSource());
-            }
-        });
+        //Handles all editButton related shit
+        handleEditButton(editButton);
 
         // Event handler for delete button
         //TODO: Make this an edit button instead
