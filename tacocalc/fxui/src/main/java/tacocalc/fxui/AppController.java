@@ -12,6 +12,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import tacocalc.core.ShoppingList;
@@ -130,5 +131,13 @@ public class AppController {
     private String getFileName(){
         //TODO: Give nameField a better name
         return nameField.getText();
+    }
+
+    public TextField getIngredientAmntField() {
+        return this.ingredientAmntField;
+    }
+
+    public TextInputControl getIngredientNameField() {
+        return this.ingredientNameField;
     }
 }
