@@ -16,6 +16,7 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import tacocalc.core.ShoppingList;
+import tacocalc.persistence.TacoCalcFileHandler;
 
 public class AppController {
 
@@ -80,7 +81,8 @@ public class AppController {
     // Delegates to shoppingList, where files are handled (for now)
     //TODO: handle files seperately
     private void handleSaveToFile(String name){
-        shoppingList.write(name);
+        TacoCalcFileHandler fh = new TacoCalcFileHandler();
+        fh.write(shoppingList, name);
     }
     /*
         Removes all items from local gridpane.
@@ -91,7 +93,8 @@ public class AppController {
     @FXML
     private void handleLoadFile(){
         this.ingredientsList.getChildren().clear();
-        this.shoppingList = shoppingList.read(getFileName());
+        TacoCalcFileHandler fh = new TacoCalcFileHandler(); 
+        this.shoppingList = fh.read(shoppingList, getFileName());
         shoppingList.getList().stream().forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
     }
 
