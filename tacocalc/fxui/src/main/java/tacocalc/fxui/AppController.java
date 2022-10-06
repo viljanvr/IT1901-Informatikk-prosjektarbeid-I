@@ -53,7 +53,7 @@ public class AppController {
     }
 
     //TODO: This takes in the dropdown editors delete function instead of the button. Must also change d to dropdown/popup
-    private void handleDelete(String ingredient, CheckBox c, Button d) {
+    private void handleDelete(String ingredient, CheckBox c, MenuButton d) {
 
         shoppingList.deleteItem(ingredient); // delete from database
         List<Node> children = ingredientsList.getChildren().stream().filter(n -> (n.equals(c)
@@ -116,6 +116,7 @@ public class AppController {
         CheckBox c = new CheckBox();
         c.setSelected(checked);
 
+        //TODO: Delete this
         Button deleteButton = new Button("->");
         deleteButton.setVisible(editMode);
         
