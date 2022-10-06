@@ -26,7 +26,7 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
-        <!-- javafx -->
+        <!-- JavaFX -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -39,8 +39,7 @@
             <version>17.0.2</version>
         </dependency>
 
-        <!-- JUnit testing with jupiter -->
-
+        <!-- Testing with JUnit 5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -54,6 +53,7 @@
             <artifactId>junit-jupiter-params</artifactId>
         </dependency>
 
+        <!-- TestFX JUnit 5 -->
         <dependency>
 			<groupId>org.testfx</groupId>
 			<artifactId>testfx-junit5</artifactId>
@@ -110,7 +110,19 @@
                 </configuration>
             </plugin>
 
-            <!-- Configure jaCoCo code coverage -->
+            <!-- CheckStyle code quality tool -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+
+            <!-- Spotbugs code quality tool -->
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- jaCoCo test coverage tool -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>

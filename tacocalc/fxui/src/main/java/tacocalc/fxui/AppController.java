@@ -91,7 +91,7 @@ public class AppController {
         Iterates over ShoppingList and adds all to view.
     */
     @FXML
-    private void handleLoadFile(){
+    private void handleLoadFile() {
         this.ingredientsList.getChildren().clear();
         TacoCalcFileHandler fh = new TacoCalcFileHandler(); 
         this.shoppingList = fh.read(shoppingList, getFileName());
@@ -111,7 +111,7 @@ public class AppController {
         try {
             String ingredientName = ingredientNameField.getText();
             Integer ingredientAmnt = Integer.parseInt(ingredientAmntField.getText());
-        
+
             shoppingList.addItem(ingredientName, ingredientAmnt);
             handleSaveToFile(getFileName());
 
@@ -143,7 +143,7 @@ public class AppController {
 
         Button deleteButton = new Button("Delete");
         deleteButton.setVisible(editMode);
-        
+
         TextField t = new TextField(ingredientAmnt + "x " + ingredientName);
         t.setEditable(false);
 
@@ -159,7 +159,7 @@ public class AppController {
         c.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                handleToggleCheckbox(ingredientName, (CheckBox)e.getSource());
+                handleToggleCheckbox(ingredientName, (CheckBox) e.getSource());
             }
         });
 
@@ -169,8 +169,8 @@ public class AppController {
         ingredientNameField.clear();
     }
 
-    private String getFileName(){
-        //TODO: Give nameField a better name
+    private String getFileName() {
+        // TODO: Give nameField a better name
         return nameField.getText();
     }
 
