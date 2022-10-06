@@ -1,20 +1,31 @@
 package tacocalc.fxui;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import tacocalc.core.ShoppingList;
 import tacocalc.persistence.TacoCalcFileHandler;
 
@@ -22,13 +33,16 @@ public class AppController {
 
   // Connects the main Shoppingslist class to the FXML file
   @FXML
-  private GridPane ingredientsList;
+  private GridPane ingredientsListLeft, ingredientsListRight;
+
+  @FXML
+  private BorderPane popUpContain;
 
   @FXML
   private TextField ingredientNameField, ingredientAmntField, nameField;
 
   @FXML
-  private Button addIngredient;
+  private Button addIngredient, goBackButton;
 
   @FXML
   private Button editButton, loadButton;
@@ -37,12 +51,18 @@ public class AppController {
 
   private ShoppingList shoppingList = new ShoppingList();
 
+  // Keeps track of left or right.
+  private int counter = 0;
+
   public void initialize() {}
+
 
   @FXML
   private void handleEditButton() {
     editMode = !editMode;
-    ingredientsList.getChildren().stream().filter(a -> a instanceof Button)
+    ingredientsListLeft.getChildren().stream().filter(a -> a instanceof Button)
+        .forEach(a -> a.setVisible(editMode));
+    ingredientsListRight.getChildren().stream().filter(a -> a instanceof Button)
         .forEach(a -> a.setVisible(editMode));
     editButton.setText(editMode ? "Cancel" : "Edit");
   }
@@ -55,16 +75,23 @@ public class AppController {
    * ingredient
    * 
    */
-  private void handleDelete(String ingredient, CheckBox c, Button d) {
+  private void handleDelete(String ingredient, CheckBox c, MenuButton d) {
 
     shoppingList.deleteItem(ingredient); // delete from database
     List<Node> children =
-        ingredientsList.getChildren().stream().filter(n -> (n.equals(c) || n.equals(d)
+        ingredientsListLeft.getChildren().stream().filter(n -> (n.equals(c) || n.equals(d)
         // TODO: Change "contains" so you can't remove duplicates at the same time
             || (n instanceof TextField && ((TextField) n).getText().contains(ingredient))))
             .collect(Collectors.toList());
     for (Node n : children) {
-      ingredientsList.getChildren().remove(n);
+      ingredientsListLeft.getChildren().remove(n);
+    }
+    children = ingredientsListRight.getChildren().stream().filter(n -> (n.equals(c) || n.equals(d)
+    // TODO: Change "contains" so you can't remove duplicates at the same time
+        || (n instanceof TextField && ((TextField) n).getText().contains(ingredient))))
+        .collect(Collectors.toList());
+    for (Node n : children) {
+      ingredientsListRight.getChildren().remove(n);
     }
     handleSaveToFile(getFileName());
   }
@@ -80,8 +107,6 @@ public class AppController {
     handleSaveToFile(getFileName());
   }
 
-  // Delegates to shoppingList, where files are handled (for now)
-  // TODO: handle files seperately
   private void handleSaveToFile(String name) {
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
     fh.write(shoppingList, name);
@@ -93,13 +118,13 @@ public class AppController {
    */
   @FXML
   private void handleLoadFile() {
-    this.ingredientsList.getChildren().clear();
+    this.ingredientsListLeft.getChildren().clear();
+    this.ingredientsListRight.getChildren().clear();
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
     this.shoppingList = fh.read(shoppingList, getFileName());
     shoppingList.getList().stream()
         .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
   }
-
 
   /*
    * Adds ingredient to ShoppingList object. Saves the current ShoppingList object to a JSON-file.
@@ -107,6 +132,7 @@ public class AppController {
    * 
    * In case an illegal amount is specified, an alert is showed.
    */
+
   @FXML
   private void handleAddIngredient() {
     try {
@@ -122,6 +148,35 @@ public class AppController {
       Alert a = new Alert(AlertType.ERROR);
       a.setContentText("Amount needs to be a valid integer");
       a.show();
+      e.printStackTrace();
+    }
+  }
+
+  @FXML
+  public void handleGoBack() {
+    popUpContain.setVisible(false);
+  }
+
+  private void buildEditPane(String ingredientName) {
+    popUpContain.setVisible(true);
+    try {
+      popUpContain.setCenter(loadPopUp());
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+    // TODO: The Controller needs to make a correct controller for the given
+    // ingredientname
+  }
+
+  private Pane loadPopUp() throws IOException {
+    try {
+      Pane root = FXMLLoader.load(getClass().getResource("PopupMenu.fxml"));
+      return root;
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
     }
   }
 
@@ -137,21 +192,20 @@ public class AppController {
    * @param checked the boolean state of the checkbox
    */
   private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked) {
-
     CheckBox c = new CheckBox();
     c.setSelected(checked);
 
-    Button deleteButton = new Button("Delete");
-    deleteButton.setVisible(editMode);
+    Button editButton = new Button("->");
+    editButton.setVisible(editMode);
 
     TextField t = new TextField(ingredientAmnt + "x " + ingredientName);
     t.setEditable(false);
 
-    // Event handler for delete button
-    deleteButton.setOnAction(new EventHandler<ActionEvent>() {
+    // TODO: Make this an edit button instead
+    editButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent e) {
-        handleDelete(ingredientName, c, deleteButton);
+        buildEditPane(ingredientName);
       }
     });
 
@@ -163,7 +217,13 @@ public class AppController {
       }
     });
 
-    ingredientsList.addRow(ingredientsList.getRowCount(), c, t, deleteButton);
+    if (counter == 0) {
+      ingredientsListLeft.addRow(ingredientsListLeft.getRowCount(), c, t, editButton);
+      counter = 1;
+    } else {
+      ingredientsListRight.addRow(ingredientsListRight.getRowCount(), c, t, editButton);
+      counter = 0;
+    }
 
     ingredientAmntField.clear();
     ingredientNameField.clear();
