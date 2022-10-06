@@ -178,4 +178,8 @@ public class AppController {
     public TextInputControl getIngredientNameField() {
         return this.ingredientNameField;
     }
+
+    public GridPane getGridPane() {
+        return this.ingredientsList;
+    }
 }
