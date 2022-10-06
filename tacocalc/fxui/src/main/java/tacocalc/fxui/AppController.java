@@ -33,7 +33,7 @@ public class AppController {
 
   // Connects the main Shoppingslist class to the FXML file
   @FXML
-  private GridPane ingredientsList, ingredientsList2;
+  private GridPane ingredientsListLeft, ingredientsListRight;
 
   @FXML
   private BorderPane popUpContain;
@@ -51,22 +51,22 @@ public class AppController {
 
   private ShoppingList shoppingList = new ShoppingList();
 
-  public void initialize() {
-  }
-
   // Keeps track of left or right.
   private int counter = 0;
+
+  public void initialize() {}
+
 
   @FXML
   private void handleEditButton() {
     editMode = !editMode;
-    ingredientsList.getChildren().stream().filter(a -> a instanceof Button).forEach(a -> a.setVisible(editMode));
-    ingredientsList2.getChildren().stream().filter(a -> a instanceof Button).forEach(a -> a.setVisible(editMode));
+    ingredientsListLeft.getChildren().stream().filter(a -> a instanceof Button)
+        .forEach(a -> a.setVisible(editMode));
+    ingredientsListRight.getChildren().stream().filter(a -> a instanceof Button)
+        .forEach(a -> a.setVisible(editMode));
     editButton.setText(editMode ? "Cancel" : "Edit");
   }
 
-  // TODO: This takes in the dropdown editors delete function instead of the
-  // button. Must also change d to dropdown/popup
   /*
    * Finds and deletes the given ingredient from the current locally stored database as well as the
    * Gridpane
@@ -78,21 +78,20 @@ public class AppController {
   private void handleDelete(String ingredient, CheckBox c, MenuButton d) {
 
     shoppingList.deleteItem(ingredient); // delete from database
-    List<Node> children = ingredientsList.getChildren().stream().filter(n -> (n.equals(c)
-        || n.equals(d)
+    List<Node> children =
+        ingredientsListLeft.getChildren().stream().filter(n -> (n.equals(c) || n.equals(d)
         // TODO: Change "contains" so you can't remove duplicates at the same time
-        || (n instanceof TextField && ((TextField) n).getText().contains(ingredient))))
-        .collect(Collectors.toList());
+            || (n instanceof TextField && ((TextField) n).getText().contains(ingredient))))
+            .collect(Collectors.toList());
     for (Node n : children) {
-      ingredientsList.getChildren().remove(n);
+      ingredientsListLeft.getChildren().remove(n);
     }
-    List<Node> children = ingredientsList2.getChildren().stream().filter(n -> (n.equals(c)
-        || n.equals(d)
-        // TODO: Change "contains" so you can't remove duplicates at the same time
+    children = ingredientsListRight.getChildren().stream().filter(n -> (n.equals(c) || n.equals(d)
+    // TODO: Change "contains" so you can't remove duplicates at the same time
         || (n instanceof TextField && ((TextField) n).getText().contains(ingredient))))
         .collect(Collectors.toList());
     for (Node n : children) {
-      ingredientsList2.getChildren().remove(n);
+      ingredientsListRight.getChildren().remove(n);
     }
     handleSaveToFile(getFileName());
   }
@@ -108,8 +107,6 @@ public class AppController {
     handleSaveToFile(getFileName());
   }
 
-  // Delegates to shoppingList, where files are handled (for now)
-  // TODO: handle files seperately
   private void handleSaveToFile(String name) {
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
     fh.write(shoppingList, name);
@@ -121,8 +118,8 @@ public class AppController {
    */
   @FXML
   private void handleLoadFile() {
-    this.ingredientsList.getChildren().clear();
-    this.ingredientsList2.getChildren().clear();
+    this.ingredientsListLeft.getChildren().clear();
+    this.ingredientsListRight.getChildren().clear();
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
     this.shoppingList = fh.read(shoppingList, getFileName());
     shoppingList.getList().stream()
@@ -151,6 +148,7 @@ public class AppController {
       Alert a = new Alert(AlertType.ERROR);
       a.setContentText("Amount needs to be a valid integer");
       a.show();
+      e.printStackTrace();
     }
   }
 
@@ -159,9 +157,14 @@ public class AppController {
     popUpContain.setVisible(false);
   }
 
-  private void buildEditPane(String ingredientName) throws IOException {
+  private void buildEditPane(String ingredientName) {
     popUpContain.setVisible(true);
-    popUpContain.setCenter(loadPopUp());
+    try {
+      popUpContain.setCenter(loadPopUp());
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
 
     // TODO: The Controller needs to make a correct controller for the given
     // ingredientname
@@ -192,10 +195,6 @@ public class AppController {
     CheckBox c = new CheckBox();
     c.setSelected(checked);
 
-    // TODO: Delete this
-    Button deleteButton = new Button("->");
-    deleteButton.setVisible(editMode);
-
     Button editButton = new Button("->");
     editButton.setVisible(editMode);
 
@@ -206,12 +205,7 @@ public class AppController {
     editButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent e) {
-        // TODO: Call a function for dropdown menu instead of delete
-        try {
-          buildEditPane(ingredientName);
-        } catch (IOException e1) {
-          e1.printStackTrace();
-        }
+        buildEditPane(ingredientName);
       }
     });
 
@@ -224,10 +218,10 @@ public class AppController {
     });
 
     if (counter == 0) {
-      ingredientsList.addRow(ingredientsList.getRowCount(), c, t, editButton);
+      ingredientsListLeft.addRow(ingredientsListLeft.getRowCount(), c, t, editButton);
       counter = 1;
     } else {
-      ingredientsList2.addRow(ingredientsList2.getRowCount(), c, t, editButton);
+      ingredientsListRight.addRow(ingredientsListRight.getRowCount(), c, t, editButton);
       counter = 0;
     }
 

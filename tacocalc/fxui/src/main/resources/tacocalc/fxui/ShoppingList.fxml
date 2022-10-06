@@ -73,7 +73,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <GridPane fx:id="ingredientsList" maxHeight="30.0" prefHeight="10.0" prefWidth="430.0" GridPane.valignment="TOP">
+                  <GridPane fx:id="ingredientsListLeft" maxHeight="30.0" prefHeight="10.0" prefWidth="430.0" GridPane.valignment="TOP">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="136.0" minWidth="20.0" prefWidth="20.0" />
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="334.3333435058594" minWidth="10.0" prefWidth="281.0" />
@@ -86,7 +86,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </GridPane>
-                  <GridPane fx:id="ingredientsList2" maxHeight="30.0" GridPane.columnIndex="1" GridPane.valignment="TOP">
+                  <GridPane fx:id="ingredientsListRight" maxHeight="30.0" GridPane.columnIndex="1" GridPane.valignment="TOP">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="112.66668701171875" minWidth="20.0" prefWidth="20.0" />
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="323.0" minWidth="10.0" prefWidth="323.0" />
