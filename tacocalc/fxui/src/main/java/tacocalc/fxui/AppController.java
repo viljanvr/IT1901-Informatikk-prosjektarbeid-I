@@ -19,8 +19,11 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import tacocalc.core.ShoppingList;
 
@@ -31,10 +34,13 @@ public class AppController {
     private GridPane ingredientsList, ingredientsList2;
     
     @FXML
+    private BorderPane popUpContain;
+
+    @FXML
     private TextField ingredientNameField, ingredientAmntField, nameField;
     
     @FXML
-    private Button addIngredient;
+    private Button addIngredient, goBackButton;
 
     @FXML
     private Button editButton, loadButton;
@@ -46,13 +52,14 @@ public class AppController {
     public void initialize() {
     }
 
-    //Keeps track of left or right. Rly simple
+    //Keeps track of left or right.
     private int counter = 0;
     
     @FXML
     private void handleEditButton() {
         editMode = !editMode;
-        ingredientsList.getChildren().stream().filter(a -> a instanceof MenuButton).forEach(a -> a.setVisible(editMode));
+        ingredientsList.getChildren().stream().filter(a -> a instanceof Button).forEach(a -> a.setVisible(editMode));
+        ingredientsList2.getChildren().stream().filter(a -> a instanceof Button).forEach(a -> a.setVisible(editMode));
         editButton.setText(editMode ? "Cancel" : "Edit");
     }
 
@@ -112,22 +119,29 @@ public class AppController {
         }
     }
 
-    private void buildEditButton(MenuButton eB) throws IOException{
+    @FXML
+    public void handleGoBack(){
+        popUpContain.setVisible(false);
+    }
+
+    private void buildEditPane(String ingredientName) throws IOException{
+        popUpContain.setVisible(true);
+        popUpContain.setCenter(loadPopUp());
+
+        //TODO: The Controller needs to make a correct controller for the given ingredientname
+    }
+
+    private Pane loadPopUp() throws IOException{
         try {
-        System.out.println("Hello");
-        //TextField hello = new TextField("Hello");
-        Parent root = FXMLLoader.load(getClass().getResource("PopupMenu.fxml"));
-        AnchorPane anchor = (AnchorPane) root;
-        MenuItem helloText = new MenuItem();
-        helloText.setGraphic(anchor);;
-        eB.getItems().setAll(
-            helloText
-        );
-        } catch (Exception e){
-            System.out.println("Failed to read 2");
+            Pane root = FXMLLoader.load(getClass().getResource("PopupMenu.fxml"));
+            return root;
+        } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
     }
+
+
 
     private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked) throws IOException{
     
@@ -138,25 +152,25 @@ public class AppController {
         Button deleteButton = new Button("->");
         deleteButton.setVisible(editMode);
         
-        MenuButton editButton = new MenuButton("->");
+        Button editButton = new Button("->");
         editButton.setVisible(editMode);
 
         TextField t = new TextField(ingredientAmnt + "x " + ingredientName);
         t.setEditable(false);
 
-        //Handles all editButton related shit
-        buildEditButton(editButton);
-
         // Event handler for delete button
         //TODO: Make this an edit button instead
-        /* deleteButton.setOnAction(new EventHandler<ActionEvent>() {
+        editButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 //TODO: Call a function for dropdown menu instead of delete
-                handleEditIngredient(ingredientName);
-                //handleDelete(ingredientName, c, deleteButton);
+                try {
+                    buildEditPane(ingredientName);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
-        }); */
+        });
 
         // Event handler for checkbox
         c.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
