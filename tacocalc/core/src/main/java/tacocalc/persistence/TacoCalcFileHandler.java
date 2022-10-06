@@ -16,10 +16,11 @@ import tacocalc.core.ShoppingList;
 
 public class TacoCalcFileHandler {
 
-  public static final String FILEPATH = "../core/src/main/resources/";
+  public static final String FILEPATH = "../../../resources/";
 
   /**
-   * Takes a filename and stores the object in that given Json file. If it does not exist then it
+   * Takes a filename and stores the object in that given Json file. If it does
+   * not exist then it
    * simply creates it.
    *
    * @param fileName the String of the filename to be written to
@@ -41,8 +42,10 @@ public class TacoCalcFileHandler {
   }
 
   /**
-   * Reads the file given by parameter fileName. If file does not exist it throws an exception. The
-   * contents of the file is stored and returned as a new object of type ShoppingList
+   * Reads the file given by parameter fileName. If file does not exist it throws
+   * an exception. The
+   * contents of the file is stored and returned as a new object of type
+   * ShoppingList
    *
    * @param fileName the String that is the name of the file to be read from
    *
@@ -54,7 +57,8 @@ public class TacoCalcFileHandler {
       Gson gson = new Gson();
 
       // Make Ingredient list from Gson
-      Type listType = new TypeToken<List<Ingredient>>() {}.getType();
+      Type listType = new TypeToken<List<Ingredient>>() {
+      }.getType();
       ArrayList<Ingredient> ingredients = gson.fromJson(fr, listType);
 
       // Return shopping list from ArrayList
