@@ -1,12 +1,15 @@
 package tacocalc.fxui;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -15,6 +18,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -80,7 +84,14 @@ public class AppController {
     private void handleLoadFile(){
         this.ingredientsList.getChildren().clear();
         this.shoppingList = shoppingList.read(getFileName());
-        shoppingList.getList().stream().forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
+        shoppingList.getList().stream().forEach(n -> {
+            try {
+                addItemToView(n.getName(), n.getAmount(), n.getBought());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        });
     }
 
     @FXML
@@ -101,17 +112,24 @@ public class AppController {
         }
     }
 
-    private void handleEditButton(MenuButton eB){
+    private void buildEditButton(MenuButton eB) throws IOException{
+        try {
         System.out.println("Hello");
-        TextField hello = new TextField("Hello");
+        //TextField hello = new TextField("Hello");
+        Parent root = FXMLLoader.load(getClass().getResource("PopupMenu.fxml"));
+        AnchorPane anchor = (AnchorPane) root;
         MenuItem helloText = new MenuItem();
-        helloText.setGraphic(hello);;
+        helloText.setGraphic(anchor);;
         eB.getItems().setAll(
             helloText
         );
+        } catch (Exception e){
+            System.out.println("Failed to read 2");
+            e.printStackTrace();
+        }
     }
 
-    private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked){
+    private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked) throws IOException{
     
         CheckBox c = new CheckBox();
         c.setSelected(checked);
@@ -127,7 +145,7 @@ public class AppController {
         t.setEditable(false);
 
         //Handles all editButton related shit
-        handleEditButton(editButton);
+        buildEditButton(editButton);
 
         // Event handler for delete button
         //TODO: Make this an edit button instead
