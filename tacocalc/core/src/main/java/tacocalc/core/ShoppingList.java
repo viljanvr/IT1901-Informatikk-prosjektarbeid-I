@@ -83,6 +83,14 @@ public class ShoppingList {
     return null;
   }
 
+  public void changeIngredientName(String originalName, String newName) {
+    Ingredient ingredient = getIngredient(originalName);
+    if (ingredient == null) {
+      throw new IllegalStateException("The item doesn't exist in the list");
+    }
+    ingredient.setName(newName);
+  }
+
   public void setIngredientAmount(String name, int amount) {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
@@ -101,58 +109,11 @@ public class ShoppingList {
   }
 
   public String toString() {
+    StringBuilder sb = new StringBuilder();
     String s = "";
     for (Ingredient ingredient : list) {
-      s += ingredient.toString() + "\n";
+      s = sb.append(s).append(ingredient.toString()).append("\n").toString();
     }
     return s;
-  }
-
-  /**
-   * Takes a filename and stores the object in that given Json file. If it does not exist then it
-   * simply creates it.
-   *
-   * @param fileName the String of the filename to be written to
-   */
-  public void write(String fileName) {
-    String fp = FILEPATH + fileName + ".json";
-    System.out.println("write ran");
-    try (FileWriter fw = new FileWriter(fp)) {
-      Gson gson = new GsonBuilder().setPrettyPrinting().create();
-      gson.toJson(list, fw);
-      // list.stream().forEach(i -> gson.toJson(i, fw));
-      System.out.println("Filewriter wrote");
-    } catch (FileNotFoundException e) {
-      new File(FILEPATH).mkdir();
-      write(fileName);
-
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
-  /**
-   * Reads the file given by parameter fileName. If file does not exist it throws an exception. The
-   * contents of the file is stored and returned as a new object of type ShoppingList
-   *
-   * @param fileName the String that is the name of the file to be read from
-   *
-   * @return a ShoppingList created from the contents of the Json file
-   */
-  public ShoppingList read(String fileName) {
-    String fp = FILEPATH + fileName + ".json";
-    try (FileReader fr = new FileReader(fp)) {
-      Gson gson = new Gson();
-
-      // Make Ingredient list from Gson
-      Type listType = new TypeToken<List<Ingredient>>() {}.getType();
-      ArrayList<Ingredient> ingredients = gson.fromJson(fr, listType);
-
-      // Return shopping list from ArrayList
-      return new ShoppingList(ingredients.toArray(new Ingredient[0]));
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return null;
   }
 }

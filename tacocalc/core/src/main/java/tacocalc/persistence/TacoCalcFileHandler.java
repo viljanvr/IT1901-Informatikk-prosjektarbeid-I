@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import tacocalc.core.Ingredient;
@@ -27,12 +28,14 @@ public class TacoCalcFileHandler {
    */
   public void write(ShoppingList sl, String fileName) {
     String fp = FILEPATH + fileName + ".json";
-    try (FileWriter fw = new FileWriter(fp)) {
+    System.out.println("write ran");
+    try (FileWriter fw = new FileWriter(fp, StandardCharsets.UTF_8)) {
       Gson gson = new GsonBuilder().setPrettyPrinting().create();
       gson.toJson(sl.getList(), fw);
     } catch (FileNotFoundException e) {
-      new File(FILEPATH).mkdir();
-      write(sl, fileName);
+      if (new File(FILEPATH).mkdir()) {
+        write(sl, fileName);
+      }
 
     } catch (IOException e) {
       e.printStackTrace();
@@ -51,7 +54,7 @@ public class TacoCalcFileHandler {
    */
   public ShoppingList read(ShoppingList sl, String fileName) {
     String fp = FILEPATH + fileName + ".json";
-    try (FileReader fr = new FileReader(fp)) {
+    try (FileReader fr = new FileReader(fp, StandardCharsets.UTF_8)) {
       Gson gson = new Gson();
 
       // Make Ingredient list from Gson
