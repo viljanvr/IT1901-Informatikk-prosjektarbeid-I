@@ -57,6 +57,7 @@ public class IngredientEditController {
   @FXML
   private void handleDelete() {
     appController.handleGoBack();
+    appController.handleDeleteIngredient(ingredientName);
 
     // TODO: implement deleting
 

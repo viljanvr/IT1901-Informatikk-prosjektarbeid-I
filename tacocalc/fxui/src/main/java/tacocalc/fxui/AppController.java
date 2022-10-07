@@ -75,26 +75,24 @@ public class AppController {
    * ingredient
    * 
    */
-  // private void handleDelete(String ingredient, CheckBox c, MenuButton d) {
+  protected void handleDeleteIngredient(String ingredient) {
+    shoppingList.deleteItem(ingredient); // delete from database
 
-  // shoppingList.deleteItem(ingredient); // delete from database
-  // List<Node> children =
-  // ingredientsListLeft.getChildren().stream().filter(n -> (n.equals(c) || n.equals(d)
-  // // TODO: Change "contains" so you can't remove duplicates at the same time
-  // || (n instanceof TextField && ((TextField) n).getText().contains(ingredient))))
-  // .collect(Collectors.toList());
-  // for (Node n : children) {
-  // ingredientsListLeft.getChildren().remove(n);
-  // }
-  // children = ingredientsListRight.getChildren().stream().filter(n -> (n.equals(c) || n.equals(d)
-  // // TODO: Change "contains" so you can't remove duplicates at the same time
-  // || (n instanceof TextField && ((TextField) n).getText().contains(ingredient))))
-  // .collect(Collectors.toList());
-  // for (Node n : children) {
-  // ingredientsListRight.getChildren().remove(n);
-  // }
-  // handleSaveToFile();
-  // }
+    updateIngredientListView();
+
+    handleSaveToFile();
+  }
+
+  private void updateIngredientListView() {
+    ingredientsListLeft.getChildren().clear();
+    ingredientsListRight.getChildren().clear();
+
+    counter = 0;
+
+    shoppingList.getList().stream().forEach(i -> {
+      addItemToView(i.getName(), i.getAmount(), i.getBought());
+    });
+  }
 
   /**
    * Toggles checkbox between checked or unchecked
@@ -145,6 +143,9 @@ public class AppController {
 
       addItemToView(ingredientName, ingredientAmnt, false);
 
+      ingredientAmntField.clear();
+      ingredientNameField.clear();
+
     } catch (Exception e) {
       Alert a = new Alert(AlertType.ERROR);
       a.setContentText("Amount needs to be a valid integer");
@@ -157,9 +158,9 @@ public class AppController {
     shoppingList.setIngredientAmount(ingredient, amount);
     shoppingList.changeIngredientName(ingredient, newIngredientName);
 
-    TextField textField = ((TextField) getIngredientStream()
+    TextField textField = (TextField) getIngredientStream()
         .filter(i -> i instanceof TextField && ((TextField) i).getText().contains(ingredient))
-        .findFirst().get());
+        .findFirst().get();
 
     textField.setText(amount + "x " + newIngredientName);
 
@@ -240,9 +241,6 @@ public class AppController {
       ingredientsListRight.addRow(ingredientsListRight.getRowCount(), c, t, editButton);
       counter = 0;
     }
-
-    ingredientAmntField.clear();
-    ingredientNameField.clear();
   }
 
   private String getFileName() {
