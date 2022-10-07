@@ -69,6 +69,7 @@ public class AppController {
 
   public void initialize() {
     initIngredientEditOverlay();
+    loadRecipeFromRecipeBook(RecipeBookController.transferRecipe);
   }
 
 
@@ -101,6 +102,7 @@ public class AppController {
    * to files and updates the view.
    *
    * @param ingredient name of the ingredient to be removed
+   * 
    * 
    */
   protected void handleDeleteIngredient(String ingredient) {
@@ -325,5 +327,17 @@ public class AppController {
    */
   public TextInputControl getNewIngredientNameField() {
     return new TextField(this.newIngredientNameField.getText());
+  }
+
+  /**
+   * TODO: write JavaDoc
+   * 
+   * @param recipeName
+   */
+  public void loadRecipeFromRecipeBook(String recipeName) {
+    TacoCalcFileHandler fh = new TacoCalcFileHandler();
+    this.shoppingList = fh.read(shoppingList, recipeName);
+    shoppingList.getList().stream()
+        .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
   }
 }

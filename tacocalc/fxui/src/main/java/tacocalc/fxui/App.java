@@ -17,8 +17,9 @@ public class App extends Application {
 
   @Override
   public void start(Stage primaryStage) throws IOException {
-    Parent root = FXMLLoader.load(this.getClass().getResource("ShoppingList.fxml"));
+    Parent root = FXMLLoader.load(this.getClass().getResource("RecipeBook.fxml"));
     primaryStage.setScene(new Scene(root));
+    primaryStage.setTitle("Taco Calculator");
     primaryStage.show();
   }
 
