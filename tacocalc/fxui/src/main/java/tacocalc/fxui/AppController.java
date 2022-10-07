@@ -38,7 +38,6 @@ public class AppController {
   private ShoppingList shoppingList = new ShoppingList();
 
   public void initialize() {
-    System.out.println(RecipeBookController.transferRecipe);
     loadRecipeFromRecipeBook(RecipeBookController.transferRecipe);
   }
 

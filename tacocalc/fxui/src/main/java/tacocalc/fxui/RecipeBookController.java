@@ -49,7 +49,6 @@ public class RecipeBookController {
       @Override
       public void handle(ActionEvent event) {
         try {
-          System.out.println("button pressed");
           Stage thisStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
           changeToScene(recipeButton.getText(), thisStage);
         } catch (IOException e) {
@@ -68,11 +67,8 @@ public class RecipeBookController {
 
   public void changeToScene(String recipeName, Stage thisStage) throws IOException {
     RecipeBookController.transferRecipe = recipeName;
-    System.out.println(RecipeBookController.transferRecipe);
     FXMLLoader loader = new FXMLLoader(getClass().getResource("ShoppingList.fxml"));
-    System.out.println("loaded fxml");
     Parent root = loader.load();
-    System.out.println("loaded root");
 
     thisStage.setScene(new Scene(root));
 

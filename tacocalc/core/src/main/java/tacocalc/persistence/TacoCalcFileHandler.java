@@ -27,11 +27,9 @@ public class TacoCalcFileHandler {
    */
   public void write(ShoppingList sl, String fileName) {
     String fp = FILEPATH + fileName + ".json";
-    System.out.println("write ran");
     try (FileWriter fw = new FileWriter(fp)) {
       Gson gson = new GsonBuilder().setPrettyPrinting().create();
       gson.toJson(sl.getList(), fw);
-      System.out.println("Filewriter wrote");
     } catch (FileNotFoundException e) {
       new File(FILEPATH).mkdir();
       write(sl, fileName);
