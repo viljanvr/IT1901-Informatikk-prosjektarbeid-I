@@ -37,12 +37,12 @@
                         <Insets bottom="5.0" right="10.0" top="5.0" />
                      </HBox.margin>
                   </Button>
-                  <TextField fx:id="ingredientAmntField" prefHeight="44.0" prefWidth="63.0" promptText="Amount">
+                  <TextField fx:id="newIngredientAmntField" prefHeight="44.0" prefWidth="63.0" promptText="Amount">
                      <HBox.margin>
                         <Insets bottom="5.0" right="10.0" top="5.0" />
                      </HBox.margin>
                   </TextField>
-                  <TextField fx:id="ingredientNameField" prefHeight="47.0" prefWidth="183.0" promptText="Ingredient name">
+                  <TextField fx:id="newIngredientNameField" prefHeight="47.0" prefWidth="183.0" promptText="Ingredient name">
                      <HBox.margin>
                         <Insets bottom="5.0" right="10.0" top="5.0" />
                      </HBox.margin>
@@ -107,6 +107,5 @@
          </padding>
       </VBox>
       <BorderPane fx:id="popUpContain" prefHeight="600.0" prefWidth="901.0" visible="false" />
-      <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#handleGoBack" text="Fuck it Go back" />
    </children>
 </AnchorPane>
