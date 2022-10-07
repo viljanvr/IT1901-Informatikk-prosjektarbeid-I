@@ -50,12 +50,12 @@ public class AppController {
   private IngredientEditController ingredientEditController;
 
   public void initialize() {
+    loadRecipeFromRecipeBook(RecipeBookController.transferRecipe);
     ingredientEditController = new IngredientEditController(this);
     ingredientEditOverlay = loadIngredientEditOverlay();
     popUpContain.setCenter(ingredientEditOverlay);
     popUpContain.setVisible(false);
   }
-
 
   @FXML
   private void handleEditButton() {
@@ -67,16 +67,28 @@ public class AppController {
     editButton.setText(editMode ? "Cancel" : "Edit");
   }
 
-  /*
-   * Finds and deletes the given ingredient from the current locally stored database as well as the
+  /**
+   * Finds and deletes the given ingredient from the current locally stored
+   * database as well as the
    * Gridpane
    * 
-   * @params: ingredient, c, d the String name of the ingredient, and the Checkbox and Button of the
-   * ingredient
+   * @params: ingredient, c, d the String name of the ingredient, and the Checkbox
+   *          and Button of the
+   *          ingredient
    * 
    */
   protected void handleDeleteIngredient(String ingredient) {
     shoppingList.deleteItem(ingredient); // delete from database
+<<<<<<< tacocalc/fxui/src/main/java/tacocalc/fxui/AppController.java
+    List<Node> children = ingredientsList.getChildren().stream().filter(n -> (n.equals(c) || n.equals(d)
+    // TODO: Change "contains" so you can't remove duplicates at the same time
+        || (n instanceof TextField && ((TextField) n).getText().contains(ingredient))))
+        .collect(Collectors.toList());
+    for (Node n : children) {
+      ingredientsList.getChildren().remove(n);
+    }
+    handleSaveToFile(getFileName());
+=======
 
     updateIngredientListView();
 
@@ -92,13 +104,14 @@ public class AppController {
     shoppingList.getList().stream().forEach(i -> {
       addItemToView(i.getName(), i.getAmount(), i.getBought());
     });
+>>>>>>> tacocalc/fxui/src/main/java/tacocalc/fxui/AppController.java
   }
 
   /**
    * Toggles checkbox between checked or unchecked
    * 
    * @param ingredientName String with the name of the ingredient
-   * @param c Checkbox to be checked or unchecked
+   * @param c              Checkbox to be checked or unchecked
    */
   private void handleToggleCheckbox(String ingredientName, CheckBox c) {
     shoppingList.setBought(ingredientName, c.isSelected());
@@ -111,9 +124,11 @@ public class AppController {
   }
 
   /*
-   * Removes all items from local gridpane. Reads file before adding all elements found in file to
+   * Removes all items from local gridpane. Reads file before adding all elements
+   * found in file to
    * the local shoppinglist. Iterates over ShoppingList and adds all to view.
    */
+
   @FXML
   private void handleLoadFile() {
     this.ingredientsListLeft.getChildren().clear();
@@ -126,7 +141,8 @@ public class AppController {
   }
 
   /*
-   * Adds ingredient to ShoppingList object. Saves the current ShoppingList object to a JSON-file.
+   * Adds ingredient to ShoppingList object. Saves the current ShoppingList object
+   * to a JSON-file.
    * Updates the shopping list view with the new ingredient.
    * 
    * In case an illegal amount is specified, an alert is showed.
@@ -198,15 +214,17 @@ public class AppController {
   }
 
   /**
-   * Method takes in an Ingredient and adds it to the view Adds the Ingredient with its children to
+   * Method takes in an Ingredient and adds it to the view Adds the Ingredient
+   * with its children to
    * the view, and deletes the content of the textfields
    * 
-   * Method also contains the eventhandlers for ToggleCheckbox, and the Delete function
+   * Method also contains the eventhandlers for ToggleCheckbox, and the Delete
+   * function
    * 
    * 
    * @param ingredientName the string of the name
    * @param ingredientAmnt the integer of the amount
-   * @param checked the boolean state of the checkbox
+   * @param checked        the boolean state of the checkbox
    */
   private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked) {
     CheckBox c = new CheckBox();
@@ -254,5 +272,12 @@ public class AppController {
 
   public TextInputControl getIngredientNameField() {
     return new TextField(this.ingredientNameField.getText());
+  }
+
+  public void loadRecipeFromRecipeBook(String recipeName) {
+    TacoCalcFileHandler fh = new TacoCalcFileHandler();
+    this.shoppingList = fh.read(shoppingList, recipeName);
+    shoppingList.getList().stream()
+        .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
   }
 }
