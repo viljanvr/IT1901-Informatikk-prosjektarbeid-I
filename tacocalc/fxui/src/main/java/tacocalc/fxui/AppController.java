@@ -1,31 +1,22 @@
 package tacocalc.fxui;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import java.util.stream.Stream;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import tacocalc.core.ShoppingList;
 import tacocalc.persistence.TacoCalcFileHandler;
 
@@ -54,7 +45,16 @@ public class AppController {
   // Keeps track of left or right.
   private int counter = 0;
 
-  public void initialize() {}
+  private Pane ingredientEditOverlay;
+
+  private IngredientEditController ingredientEditController;
+
+  public void initialize() {
+    ingredientEditController = new IngredientEditController(this);
+    ingredientEditOverlay = loadIngredientEditOverlay();
+    popUpContain.setCenter(ingredientEditOverlay);
+    popUpContain.setVisible(false);
+  }
 
 
   @FXML
@@ -75,25 +75,23 @@ public class AppController {
    * ingredient
    * 
    */
-  private void handleDelete(String ingredient, CheckBox c, MenuButton d) {
-
+  protected void handleDeleteIngredient(String ingredient) {
     shoppingList.deleteItem(ingredient); // delete from database
-    List<Node> children =
-        ingredientsListLeft.getChildren().stream().filter(n -> (n.equals(c) || n.equals(d)
-        // TODO: Change "contains" so you can't remove duplicates at the same time
-            || (n instanceof TextField && ((TextField) n).getText().contains(ingredient))))
-            .collect(Collectors.toList());
-    for (Node n : children) {
-      ingredientsListLeft.getChildren().remove(n);
-    }
-    children = ingredientsListRight.getChildren().stream().filter(n -> (n.equals(c) || n.equals(d)
-    // TODO: Change "contains" so you can't remove duplicates at the same time
-        || (n instanceof TextField && ((TextField) n).getText().contains(ingredient))))
-        .collect(Collectors.toList());
-    for (Node n : children) {
-      ingredientsListRight.getChildren().remove(n);
-    }
-    handleSaveToFile(getFileName());
+
+    updateIngredientListView();
+
+    handleSaveToFile();
+  }
+
+  private void updateIngredientListView() {
+    ingredientsListLeft.getChildren().clear();
+    ingredientsListRight.getChildren().clear();
+
+    counter = 0;
+
+    shoppingList.getList().stream().forEach(i -> {
+      addItemToView(i.getName(), i.getAmount(), i.getBought());
+    });
   }
 
   /**
@@ -104,12 +102,12 @@ public class AppController {
    */
   private void handleToggleCheckbox(String ingredientName, CheckBox c) {
     shoppingList.setBought(ingredientName, c.isSelected());
-    handleSaveToFile(getFileName());
+    handleSaveToFile();
   }
 
-  private void handleSaveToFile(String name) {
+  protected void handleSaveToFile() {
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
-    fh.write(shoppingList, name);
+    fh.write(shoppingList, getFileName());
   }
 
   /*
@@ -120,6 +118,7 @@ public class AppController {
   private void handleLoadFile() {
     this.ingredientsListLeft.getChildren().clear();
     this.ingredientsListRight.getChildren().clear();
+    counter = 0;
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
     this.shoppingList = fh.read(shoppingList, getFileName());
     shoppingList.getList().stream()
@@ -140,9 +139,12 @@ public class AppController {
       Integer ingredientAmnt = Integer.parseInt(ingredientAmntField.getText());
 
       shoppingList.addItem(ingredientName, ingredientAmnt);
-      handleSaveToFile(getFileName());
+      handleSaveToFile();
 
       addItemToView(ingredientName, ingredientAmnt, false);
+
+      ingredientAmntField.clear();
+      ingredientNameField.clear();
 
     } catch (Exception e) {
       Alert a = new Alert(AlertType.ERROR);
@@ -152,6 +154,24 @@ public class AppController {
     }
   }
 
+  protected void updateIngredient(String ingredient, String newIngredientName, int amount) {
+    shoppingList.setIngredientAmount(ingredient, amount);
+    shoppingList.changeIngredientName(ingredient, newIngredientName);
+
+    TextField textField = (TextField) getIngredientStream()
+        .filter(i -> i instanceof TextField && ((TextField) i).getText().contains(ingredient))
+        .findFirst().get();
+
+    textField.setText(amount + "x " + newIngredientName);
+
+    handleSaveToFile();
+  }
+
+  private Stream<Node> getIngredientStream() {
+    return Stream.concat(ingredientsListLeft.getChildren().stream(),
+        ingredientsListRight.getChildren().stream());
+  }
+
   @FXML
   public void handleGoBack() {
     popUpContain.setVisible(false);
@@ -159,21 +179,18 @@ public class AppController {
 
   private void buildEditPane(String ingredientName) {
     popUpContain.setVisible(true);
-    try {
-      popUpContain.setCenter(loadPopUp());
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+    ingredientEditController.showNewIngredient(ingredientName, shoppingList);
+
 
     // TODO: The Controller needs to make a correct controller for the given
     // ingredientname
   }
 
-  private Pane loadPopUp() throws IOException {
+  private Pane loadIngredientEditOverlay() {
+    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("PopupMenu.fxml"));
+    fxmlLoader.setController(ingredientEditController);
     try {
-      Pane root = FXMLLoader.load(getClass().getResource("PopupMenu.fxml"));
-      return root;
+      return fxmlLoader.load();
     } catch (IOException e) {
       e.printStackTrace();
       return null;
@@ -224,9 +241,6 @@ public class AppController {
       ingredientsListRight.addRow(ingredientsListRight.getRowCount(), c, t, editButton);
       counter = 0;
     }
-
-    ingredientAmntField.clear();
-    ingredientNameField.clear();
   }
 
   private String getFileName() {
@@ -235,10 +249,10 @@ public class AppController {
   }
 
   public TextField getIngredientAmntField() {
-    return this.ingredientAmntField;
+    return new TextField(this.ingredientAmntField.getText());
   }
 
   public TextInputControl getIngredientNameField() {
-    return this.ingredientNameField;
+    return new TextField(this.ingredientNameField.getText());
   }
 }

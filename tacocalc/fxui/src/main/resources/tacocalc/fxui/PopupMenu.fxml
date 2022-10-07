@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <Pane fx:id="popup" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="450.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <BorderPane prefHeight="350.0" prefWidth="450.0">
@@ -18,21 +17,21 @@
                   <Insets left="150.0" right="150.0" top="100.0" />
                </padding>
                <children>
-                  <TextField promptText="Navn">
+                  <TextField fx:id="ingredientNameField" promptText="Navn">
                      <VBox.margin>
                         <Insets top="-30.0" />
                      </VBox.margin>
                   </TextField>
-                  <TextField promptText="Måleenhet">
+                  <TextField fx:id="measuringUnitField" promptText="Måleenhet">
                      <VBox.margin>
                         <Insets top="20.0" />
                      </VBox.margin>
                   </TextField>
                   <Pane prefHeight="82.0" prefWidth="450.0">
                      <children>
-                        <TextField alignment="CENTER" layoutX="25.0" layoutY="29.0" prefHeight="25.0" prefWidth="100.0" />
-                        <Button layoutX="-1.0" layoutY="29.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="26.0" text="-" />
-                        <Button layoutX="124.0" layoutY="29.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="26.0" text="+" />
+                        <TextField fx:id="quantityField" alignment="CENTER" layoutX="25.0" layoutY="29.0" prefHeight="25.0" prefWidth="100.0" />
+                        <Button fx:id="decreaseButton" layoutX="-1.0" layoutY="29.0" mnemonicParsing="false" onAction="#handleDecrease" prefHeight="25.0" prefWidth="26.0" text="-" />
+                        <Button fx:id="increaseButton" layoutX="124.0" layoutY="29.0" mnemonicParsing="false" onAction="#handleIncrease" prefHeight="25.0" prefWidth="26.0" text="+" />
                      </children>
                   </Pane>
                </children>
@@ -44,12 +43,12 @@
          <bottom>
             <Pane prefHeight="110.0" prefWidth="450.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button layoutX="175.0" layoutY="14.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="SAVE">
+                  <Button fx:id="saveButton" layoutX="175.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleSave" prefHeight="40.0" prefWidth="100.0" text="SAVE">
                      <font>
                         <Font name="Calisto MT" size="18.0" />
                      </font>
                   </Button>
-                  <Button layoutX="195.0" layoutY="63.0" mnemonicParsing="false" prefWidth="60.0" style="-fx-background-color: #fc3838;" text="Delete">
+                  <Button fx:id="deleteButton" layoutX="195.0" layoutY="63.0" mnemonicParsing="false" onAction="#handleDelete" prefWidth="60.0" style="-fx-background-color: #fc3838;" text="Delete">
                      <font>
                         <Font name="Calisto MT" size="12.0" />
                      </font>
