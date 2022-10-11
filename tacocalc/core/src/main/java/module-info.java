@@ -1,4 +1,6 @@
 open module core {
-    exports tacocalc.core;
-    requires com.google.gson;
+  exports tacocalc.core;
+  exports tacocalc.persistence;
+
+  requires com.google.gson;
 }

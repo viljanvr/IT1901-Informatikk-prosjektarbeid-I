@@ -1,11 +1,11 @@
 package tacocalc.fxui;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import java.io.IOException;
+import java.util.stream.Stream;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -14,172 +14,369 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import tacocalc.core.ShoppingList;
+import tacocalc.persistence.TacoCalcFileHandler;
 
+/**
+ * Main controller for screen where the user can see their shopping list.
+ */
 public class AppController {
+  // Connects the main Shoppingslist class to the FXML file
+  @FXML
+  private GridPane ingredientsListLeft;
 
-    // Connects the main Shoppingslist class to the FXML file
-    @FXML
-    private GridPane ingredientsList;
+  @FXML
+  private GridPane ingredientsListRight;
 
-    @FXML
-    private TextField ingredientNameField, ingredientAmntField, nameField;
+  @FXML
+  private BorderPane popUpContain;
 
-    @FXML
-    private Button addIngredient;
+  @FXML
+  private TextField newIngredientNameField;
 
-    @FXML
-    private Button editButton, loadButton;
+  @FXML
+  private TextField newIngredientAmntField;
 
-    private Boolean editMode = false;
+  @FXML
+  private TextField nameField;
 
-    private ShoppingList shoppingList = new ShoppingList();
+  @FXML
+  private Button addIngredient;
 
-    public void initialize() {
-    }
+  @FXML
+  private Button goBackButton;
 
-    @FXML
-    private void handleEditButton() {
-        editMode = !editMode;
-        ingredientsList.getChildren().stream().filter(a -> a instanceof Button).forEach(a -> a.setVisible(editMode));
-        editButton.setText(editMode ? "Cancel" : "Edit");
-    }
+  @FXML
+  private Button editButton;
 
-    /* 
-        Finds and deletes the given ingredient from the current locally stored database as well as the Gridpane
+  @FXML
+  private Button loadButton;
 
-        @params: ingredient, c, d the String name of the ingredient, and the Checkbox and Button of the ingredient 
+  private Boolean editMode = false;
 
-    */
-    private void handleDelete(String ingredient, CheckBox c, Button d) {
+  private ShoppingList shoppingList = new ShoppingList();
 
-        shoppingList.deleteItem(ingredient); // delete from database
-        List<Node> children = ingredientsList.getChildren().stream().filter(n -> (n.equals(c)
-                || n.equals(d)
-                // TODO: Change "contains" so you can't remove duplicates at the same time
-                || (n instanceof TextField && ((TextField) n).getText().contains(ingredient))))
-                .collect(Collectors.toList());
-        for (Node n : children) {
-            ingredientsList.getChildren().remove(n);
+  // Keeps track of left or right.
+  private int columnCounter = 0;
+
+  private Pane ingredientEditOverlay;
+
+  private IngredientEditController ingredientEditController;
+
+  public void initialize() {
+    initIngredientEditOverlay();
+    loadRecipeFromRecipeBook(RecipeBookController.transferRecipe);
+  }
+
+  /**
+   * Enables/disables edit view when pressing the edit button. When entering edit mode a button to
+   * the right of each ingredient is shown. The button opens an overlay where you can edit the
+   * properties of the given ingredient.
+   */
+  @FXML
+  private void handleEditButton() {
+    editMode = !editMode;
+    getIngredientViewStream()
+      .filter(a -> a instanceof Button)
+      .forEach(a -> a.setVisible(editMode));
+    editButton.setText(editMode ? "Cancel" : "Edit");
+  }
+
+  /**
+   * Update the bought-value of a given ingredient in the shoppingList object when a checkBox is
+   * clicked. The updated shoppingList is then saved to file.
+   *
+   * @param ingredientName String with the name of the ingredient
+   * @param c Checkbox that has been clicked
+   */
+  private void handleToggleCheckbox(String ingredientName, CheckBox c) {
+    shoppingList.setBought(ingredientName, c.isSelected());
+    handleSaveToFile();
+  }
+
+  /**
+   * Finds and deletes the given ingredient in the shoppingList object. Saves updated shoppingList
+   * to files and updates the view.
+   *
+   * @param ingredient name of the ingredient to be removed
+   *
+   *
+   */
+  protected void handleDeleteIngredient(String ingredient) {
+    shoppingList.deleteItem(ingredient); // delete from database
+    updateIngredientListView();
+    handleSaveToFile();
+  }
+
+  /**
+   * Clears the view and adds all items in shoppingList again.
+   */
+  private void updateIngredientListView() {
+    clearIngredientListView();
+
+    shoppingList
+      .getList()
+      .stream()
+      .forEach(
+        i -> {
+          addItemToView(i.getName(), i.getAmount(), i.getBought());
         }
-        handleSaveToFile(getFileName());
+      );
+  }
+
+  /**
+   * Clears the view of all ingredients.
+   */
+  private void clearIngredientListView() {
+    ingredientsListLeft.getChildren().clear();
+    ingredientsListRight.getChildren().clear();
+
+    columnCounter = 0;
+  }
+
+  /**
+   * Updates the internal value of a single ingredient in the shoppingList object. Updated
+   * shoppingList is then saved to file and the view is updated.
+   *
+   * @param ingredient ingredient to be changed
+   * @param newIngredientName new ingredient name
+   * @param amount new amount to be set
+   */
+  protected void updateIngredient(
+    String ingredient,
+    String newIngredientName,
+    int amount
+  ) {
+    shoppingList.setIngredientAmount(ingredient, amount);
+    shoppingList.changeIngredientName(ingredient, newIngredientName);
+
+    TextField textField = (TextField) getIngredientViewStream()
+      .filter(
+        i ->
+          i instanceof TextField &&
+          ((TextField) i).getText().contains(ingredient)
+      )
+      .findFirst()
+      .get();
+
+    textField.setText(amount + "x " + newIngredientName);
+
+    handleSaveToFile();
+  }
+
+  /**
+   * Adds ingredient to the ShoppingList object. Saves the updated shoppingList object to file and
+   * updates the view.
+   *
+   * <p>
+   * In case an illegal amount is specified, an alert is showed.
+   */
+
+  @FXML
+  private void handleAddIngredient() {
+    try {
+      String ingredientName = newIngredientNameField.getText();
+      Integer ingredientAmnt = Integer.parseInt(
+        newIngredientAmntField.getText()
+      );
+
+      shoppingList.addItem(ingredientName, ingredientAmnt);
+      handleSaveToFile();
+
+      addItemToView(ingredientName, ingredientAmnt, false);
+
+      newIngredientAmntField.clear();
+      newIngredientNameField.clear();
+    } catch (Exception e) {
+      Alert a = new Alert(AlertType.ERROR);
+      a.setContentText("Amount needs to be a valid integer");
+      a.show();
+      e.printStackTrace();
     }
-    
-    /**
-     * Toggles checkbox between checked or unchecked
-     * 
-     * @param ingredientName String with the name of the ingredient
-     * @param c Checkbox to be checked or unchecked
-     */
-    private void handleToggleCheckbox(String ingredientName, CheckBox c){
-        shoppingList.setBought(ingredientName, c.isSelected());
-        handleSaveToFile(getFileName());
-    }
+  }
 
-    // Delegates to shoppingList, where files are handled (for now)
-    //TODO: handle files seperately
-    private void handleSaveToFile(String name){
-        shoppingList.write(name);
-    }
-    /*
-        Removes all items from local gridpane.
-        Reads file before adding all elements
-        found in file to the local shoppinglist.
-        Iterates over ShoppingList and adds all to view.
-    */
-    @FXML
-    private void handleLoadFile(){
-        this.ingredientsList.getChildren().clear();
-        this.shoppingList = shoppingList.read(getFileName());
-        shoppingList.getList().stream().forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
-    }
+  /**
+   * Method takes in the properties of an ingredient and adds it to the view.
+   *
+   * <p>
+   * Method also initialises the eventhandlers for the new checkbox and the edit-button for the new
+   * ingredient.
+   *
+   * @param ingredientName the string of the name
+   * @param ingredientAmnt the integer of the amount
+   * @param checked the boolean state of the checkbox
+   */
+  private void addItemToView(
+    String ingredientName,
+    Integer ingredientAmnt,
+    Boolean checked
+  ) {
+    CheckBox checkBox = new CheckBox();
+    checkBox.setSelected(checked);
 
-    
-    /*
-        Adds ingredient to ShoppingList object.
-        Saves the current ShoppingList object to a JSON-file.
-        Updates the shopping list view with the new ingredient.
+    Button editButton = new Button("->");
+    editButton.setVisible(editMode);
 
-        In case an illegal amount is specified, an alert is showed.
-     */
-    @FXML
-    private void handleAddIngredient() {
-        try {
-            String ingredientName = ingredientNameField.getText();
-            Integer ingredientAmnt = Integer.parseInt(ingredientAmntField.getText());
-        
-            shoppingList.addItem(ingredientName, ingredientAmnt);
-            handleSaveToFile(getFileName());
+    TextField textField = new TextField(ingredientAmnt + "x " + ingredientName);
+    textField.setEditable(false);
 
-            addItemToView(ingredientName, ingredientAmnt, false);
+    // Event handler for ingredient edit button
+    editButton.setOnAction(
+      new EventHandler<ActionEvent>() {
 
-        } catch (Exception e) {
-            Alert a = new Alert(AlertType.ERROR);
-            a.setContentText("Amount needs to be a valid integer");
-            a.show();
+        @Override
+        public void handle(ActionEvent e) {
+          openIngredientEditOverlay(ingredientName);
         }
+      }
+    );
+
+    // Event handler for checkbox
+    checkBox.addEventHandler(
+      MouseEvent.MOUSE_CLICKED,
+      new EventHandler<MouseEvent>() {
+
+        @Override
+        public void handle(MouseEvent e) {
+          handleToggleCheckbox(ingredientName, (CheckBox) e.getSource());
+        }
+      }
+    );
+
+    if (columnCounter == 0) {
+      ingredientsListLeft.addRow(
+        ingredientsListLeft.getRowCount(),
+        checkBox,
+        textField,
+        editButton
+      );
+      columnCounter = 1;
+    } else {
+      ingredientsListRight.addRow(
+        ingredientsListRight.getRowCount(),
+        checkBox,
+        textField,
+        editButton
+      );
+      columnCounter = 0;
     }
-    /** 
-        Method takes in an Ingredient and adds it to the view
-        Adds the Ingredient with its children to the view,
-        and deletes the content of the textfields
+  }
 
-        Method also contains the eventhandlers for ToggleCheckbox, 
-        and the Delete function
+  /**
+   * Combines a stream of Nodes from the left and right ingredient column.
+   *
+   * @return returns a stream with Nodes.
+   */
+  private Stream<Node> getIngredientViewStream() {
+    return Stream.concat(
+      ingredientsListLeft.getChildren().stream(),
+      ingredientsListRight.getChildren().stream()
+    );
+  }
 
-        
-        @param ingredientName the string of the name 
-        @param ingredientAmnt the integer of the amount 
-        @param checked the boolean state of the checkbox
-     */
-    private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked){
-    
-        CheckBox c = new CheckBox();
-        c.setSelected(checked);
+  /**
+   * Closes the overlay where you can edit the properties of an ingredient.
+   */
+  protected void closeIngredientEditOverlay() {
+    popUpContain.setVisible(false);
+  }
 
-        Button deleteButton = new Button("Delete");
-        deleteButton.setVisible(editMode);
-        
-        TextField t = new TextField(ingredientAmnt + "x " + ingredientName);
-        t.setEditable(false);
+  /**
+   * Opens the overlay where you can edit the properties of a given ingredient. Updates the overlay
+   * with the values of the given ingredient.
+   *
+   * @param ingredientName the ingredient to be edited
+   */
+  private void openIngredientEditOverlay(String ingredientName) {
+    popUpContain.setVisible(true);
+    ingredientEditController.showNewIngredient(ingredientName, shoppingList);
+  }
 
-        // Event handler for delete button
-        deleteButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                handleDelete(ingredientName, c, deleteButton);
-            }
-        });
+  /**
+   * Initalises the overlay for editing the properties of single ingredients.
+   */
+  private void initIngredientEditOverlay() {
+    ingredientEditController = new IngredientEditController(this);
 
-        // Event handler for checkbox
-        c.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                handleToggleCheckbox(ingredientName, (CheckBox)e.getSource());
-            }
-        });
-
-        ingredientsList.addRow(ingredientsList.getRowCount(), c, t, deleteButton);
-        
-        ingredientAmntField.clear();
-        ingredientNameField.clear();
+    FXMLLoader fxmlLoader = new FXMLLoader(
+      getClass().getResource("PopupMenu.fxml")
+    );
+    fxmlLoader.setController(ingredientEditController);
+    try {
+      ingredientEditOverlay = fxmlLoader.load();
+    } catch (IOException e) {
+      e.printStackTrace();
     }
+    popUpContain.setCenter(ingredientEditOverlay);
+  }
 
-    private String getFileName(){
-        //TODO: Give nameField a better name
-        return nameField.getText();
-    }
+  /**
+   * Saves the shoppingList object to a file with the name from the nameField text field.
+   */
+  protected void handleSaveToFile() {
+    TacoCalcFileHandler fh = new TacoCalcFileHandler();
+    fh.write(shoppingList, getFileName());
+  }
 
-    public TextField getIngredientAmntField() {
-        return this.ingredientAmntField;
-    }
+  /**
+   * Clears the ingredient view. Reads a file with ingredients and adds all elements to the a
+   * shoppingList object. All elements of shoppingList is then added to the view.
+   */
+  @FXML
+  private void handleLoadFile() {
+    clearIngredientListView();
+    TacoCalcFileHandler fh = new TacoCalcFileHandler();
+    this.shoppingList = fh.read(shoppingList, getFileName());
+    shoppingList
+      .getList()
+      .stream()
+      .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
+  }
 
-    public TextInputControl getIngredientNameField() {
-        return this.ingredientNameField;
-    }
+  /**
+   * Gets the name from a text field of a file to be read or written to.
+   *
+   * <p>
+   * TODO: Implement possibility to have different recipies and files
+   *
+   * @return returns filename as a String
+   */
+  private String getFileName() {
+    return nameField.getText();
+  }
 
-    public GridPane getGridPane() {
-        return this.ingredientsList;
-    }
+  /**
+   * returns the TextField object for the amount of a new ingredient to be added.
+   *
+   * @return returns the TextField object
+   */
+  public TextField getNewIngredientAmntField() {
+    return new TextField(this.newIngredientAmntField.getText());
+  }
+
+  /**
+   * returns the TextField object for the name of a new ingredient to be added.
+   *
+   * @return returns the TextField object
+   */
+  public TextInputControl getNewIngredientNameField() {
+    return new TextField(this.newIngredientNameField.getText());
+  }
+
+  /**
+   * TODO: write JavaDoc
+   *
+   * @param recipeName
+   */
+  public void loadRecipeFromRecipeBook(String recipeName) {
+    TacoCalcFileHandler fh = new TacoCalcFileHandler();
+    this.shoppingList = fh.read(shoppingList, recipeName);
+    shoppingList
+      .getList()
+      .stream()
+      .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
+  }
 }
