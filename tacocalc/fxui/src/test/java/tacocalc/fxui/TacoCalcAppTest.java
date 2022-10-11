@@ -27,10 +27,10 @@ public class TacoCalcAppTest extends ApplicationTest {
 
   @Test
   public void testAddIngredient() {
-    clickOn("#ingredientAmntField").write("4");
-    clickOn("#ingredientNameField").write("flinke proggere");
-    Assertions.assertEquals("4", controller.getIngredientAmntField().getText());
-    Assertions.assertEquals("flinke proggere", controller.getIngredientNameField().getText());
+    clickOn("#newIngredientAmntField").write("4");
+    clickOn("#newIngredientNameField").write("flinke proggere");
+    Assertions.assertEquals("4", controller.getNewIngredientAmntField().getText());
+    Assertions.assertEquals("flinke proggere", controller.getNewIngredientNameField().getText());
     clickOn("#addIngredient");
   }
 
