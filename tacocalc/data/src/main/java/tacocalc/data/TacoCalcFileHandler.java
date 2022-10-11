@@ -1,4 +1,4 @@
-package tacocalc.persistence;
+package tacocalc.data;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

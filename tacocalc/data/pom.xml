@@ -12,7 +12,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>core</artifactId>
+    <artifactId>data</artifactId>
     <groupId>it1901.tacocalc</groupId>
     <version>0.0.1-SNAPSHOT</version>
 
