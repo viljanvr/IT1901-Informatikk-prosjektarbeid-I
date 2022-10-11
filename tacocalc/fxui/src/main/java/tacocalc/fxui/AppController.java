@@ -18,7 +18,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import tacocalc.core.ShoppingList;
-import tacocalc.persistence.TacoCalcFileHandler;
+import tacocalc.data.TacoCalcFileHandler;
 
 /**
  * Main controller for screen where the user can see their shopping list.

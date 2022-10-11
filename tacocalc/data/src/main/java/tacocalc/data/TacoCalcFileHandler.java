@@ -1,4 +1,4 @@
-package tacocalc.persistence;
+package tacocalc.data;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -16,7 +16,6 @@ import tacocalc.core.Ingredient;
 import tacocalc.core.ShoppingList;
 
 public class TacoCalcFileHandler {
-
   public static final String FILEPATH = "../../../resources/";
 
   /**
@@ -36,7 +35,6 @@ public class TacoCalcFileHandler {
       if (new File(FILEPATH).mkdir()) {
         write(sl, fileName);
       }
-
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -58,8 +56,7 @@ public class TacoCalcFileHandler {
       Gson gson = new Gson();
 
       // Make Ingredient list from Gson
-      Type listType = new TypeToken<List<Ingredient>>() {
-      }.getType();
+      Type listType = new TypeToken<List<Ingredient>>() {}.getType();
       ArrayList<Ingredient> ingredients = gson.fromJson(fr, listType);
 
       // Return shopping list from ArrayList
