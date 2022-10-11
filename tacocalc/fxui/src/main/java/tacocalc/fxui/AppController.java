@@ -24,7 +24,6 @@ import tacocalc.persistence.TacoCalcFileHandler;
  * Main controller for screen where the user can see their shopping list.
  */
 public class AppController {
-
   // Connects the main Shoppingslist class to the FXML file
   @FXML
   private GridPane ingredientsListLeft;
@@ -72,7 +71,6 @@ public class AppController {
     loadRecipeFromRecipeBook(RecipeBookController.transferRecipe);
   }
 
-
   /**
    * Enables/disables edit view when pressing the edit button. When entering edit mode a button to
    * the right of each ingredient is shown. The button opens an overlay where you can edit the
@@ -81,7 +79,9 @@ public class AppController {
   @FXML
   private void handleEditButton() {
     editMode = !editMode;
-    getIngredientViewStream().filter(a -> a instanceof Button).forEach(a -> a.setVisible(editMode));
+    getIngredientViewStream()
+      .filter(a -> a instanceof Button)
+      .forEach(a -> a.setVisible(editMode));
     editButton.setText(editMode ? "Cancel" : "Edit");
   }
 
@@ -102,8 +102,8 @@ public class AppController {
    * to files and updates the view.
    *
    * @param ingredient name of the ingredient to be removed
-   * 
-   * 
+   *
+   *
    */
   protected void handleDeleteIngredient(String ingredient) {
     shoppingList.deleteItem(ingredient); // delete from database
@@ -117,9 +117,14 @@ public class AppController {
   private void updateIngredientListView() {
     clearIngredientListView();
 
-    shoppingList.getList().stream().forEach(i -> {
-      addItemToView(i.getName(), i.getAmount(), i.getBought());
-    });
+    shoppingList
+      .getList()
+      .stream()
+      .forEach(
+        i -> {
+          addItemToView(i.getName(), i.getAmount(), i.getBought());
+        }
+      );
   }
 
   /**
@@ -140,13 +145,22 @@ public class AppController {
    * @param newIngredientName new ingredient name
    * @param amount new amount to be set
    */
-  protected void updateIngredient(String ingredient, String newIngredientName, int amount) {
+  protected void updateIngredient(
+    String ingredient,
+    String newIngredientName,
+    int amount
+  ) {
     shoppingList.setIngredientAmount(ingredient, amount);
     shoppingList.changeIngredientName(ingredient, newIngredientName);
 
     TextField textField = (TextField) getIngredientViewStream()
-        .filter(i -> i instanceof TextField && ((TextField) i).getText().contains(ingredient))
-        .findFirst().get();
+      .filter(
+        i ->
+          i instanceof TextField &&
+          ((TextField) i).getText().contains(ingredient)
+      )
+      .findFirst()
+      .get();
 
     textField.setText(amount + "x " + newIngredientName);
 
@@ -156,7 +170,7 @@ public class AppController {
   /**
    * Adds ingredient to the ShoppingList object. Saves the updated shoppingList object to file and
    * updates the view.
-   * 
+   *
    * <p>
    * In case an illegal amount is specified, an alert is showed.
    */
@@ -165,7 +179,9 @@ public class AppController {
   private void handleAddIngredient() {
     try {
       String ingredientName = newIngredientNameField.getText();
-      Integer ingredientAmnt = Integer.parseInt(newIngredientAmntField.getText());
+      Integer ingredientAmnt = Integer.parseInt(
+        newIngredientAmntField.getText()
+      );
 
       shoppingList.addItem(ingredientName, ingredientAmnt);
       handleSaveToFile();
@@ -174,7 +190,6 @@ public class AppController {
 
       newIngredientAmntField.clear();
       newIngredientNameField.clear();
-
     } catch (Exception e) {
       Alert a = new Alert(AlertType.ERROR);
       a.setContentText("Amount needs to be a valid integer");
@@ -185,7 +200,7 @@ public class AppController {
 
   /**
    * Method takes in the properties of an ingredient and adds it to the view.
-   * 
+   *
    * <p>
    * Method also initialises the eventhandlers for the new checkbox and the edit-button for the new
    * ingredient.
@@ -194,7 +209,11 @@ public class AppController {
    * @param ingredientAmnt the integer of the amount
    * @param checked the boolean state of the checkbox
    */
-  private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked) {
+  private void addItemToView(
+    String ingredientName,
+    Integer ingredientAmnt,
+    Boolean checked
+  ) {
     CheckBox checkBox = new CheckBox();
     checkBox.setSelected(checked);
 
@@ -205,32 +224,46 @@ public class AppController {
     textField.setEditable(false);
 
     // Event handler for ingredient edit button
-    editButton.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent e) {
-        openIngredientEditOverlay(ingredientName);
+    editButton.setOnAction(
+      new EventHandler<ActionEvent>() {
+
+        @Override
+        public void handle(ActionEvent e) {
+          openIngredientEditOverlay(ingredientName);
+        }
       }
-    });
+    );
 
     // Event handler for checkbox
-    checkBox.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
-        handleToggleCheckbox(ingredientName, (CheckBox) e.getSource());
+    checkBox.addEventHandler(
+      MouseEvent.MOUSE_CLICKED,
+      new EventHandler<MouseEvent>() {
+
+        @Override
+        public void handle(MouseEvent e) {
+          handleToggleCheckbox(ingredientName, (CheckBox) e.getSource());
+        }
       }
-    });
+    );
 
     if (columnCounter == 0) {
-      ingredientsListLeft.addRow(ingredientsListLeft.getRowCount(), checkBox, textField,
-          editButton);
+      ingredientsListLeft.addRow(
+        ingredientsListLeft.getRowCount(),
+        checkBox,
+        textField,
+        editButton
+      );
       columnCounter = 1;
     } else {
-      ingredientsListRight.addRow(ingredientsListRight.getRowCount(), checkBox, textField,
-          editButton);
+      ingredientsListRight.addRow(
+        ingredientsListRight.getRowCount(),
+        checkBox,
+        textField,
+        editButton
+      );
       columnCounter = 0;
     }
   }
-
 
   /**
    * Combines a stream of Nodes from the left and right ingredient column.
@@ -238,8 +271,10 @@ public class AppController {
    * @return returns a stream with Nodes.
    */
   private Stream<Node> getIngredientViewStream() {
-    return Stream.concat(ingredientsListLeft.getChildren().stream(),
-        ingredientsListRight.getChildren().stream());
+    return Stream.concat(
+      ingredientsListLeft.getChildren().stream(),
+      ingredientsListRight.getChildren().stream()
+    );
   }
 
   /**
@@ -266,7 +301,9 @@ public class AppController {
   private void initIngredientEditOverlay() {
     ingredientEditController = new IngredientEditController(this);
 
-    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("PopupMenu.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(
+      getClass().getResource("PopupMenu.fxml")
+    );
     fxmlLoader.setController(ingredientEditController);
     try {
       ingredientEditOverlay = fxmlLoader.load();
@@ -293,14 +330,15 @@ public class AppController {
     clearIngredientListView();
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
     this.shoppingList = fh.read(shoppingList, getFileName());
-    shoppingList.getList().stream()
-        .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
+    shoppingList
+      .getList()
+      .stream()
+      .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
   }
-
 
   /**
    * Gets the name from a text field of a file to be read or written to.
-   * 
+   *
    * <p>
    * TODO: Implement possibility to have different recipies and files
    *
@@ -311,7 +349,7 @@ public class AppController {
   }
 
   /**
-   * returns the TextField object for the amount of a new ingredient to be added.
+   * A getter that maskes the newIngredientAmntField vivsble to other classes
    *
    * @return returns the TextField object
    */
@@ -319,9 +357,8 @@ public class AppController {
     return new TextField(this.newIngredientAmntField.getText());
   }
 
-
   /**
-   * returns the TextField object for the name of a new ingredient to be added.
+   * A getter that makes the newingredientNameField vivible to other classes
    *
    * @return returns the TextField object
    */
@@ -330,14 +367,25 @@ public class AppController {
   }
 
   /**
+   * A getter that makes this controller's shoppingList vivible to other classes
+   *
+   * @return returns shoppingList
+   */
+  public ShoppingList getShoppingList() {
+    return this.shoppingList;
+  }
+
+  /**
    * TODO: write JavaDoc
-   * 
+   *
    * @param recipeName
    */
   public void loadRecipeFromRecipeBook(String recipeName) {
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
     this.shoppingList = fh.read(shoppingList, recipeName);
-    shoppingList.getList().stream()
-        .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
+    shoppingList
+      .getList()
+      .stream()
+      .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
   }
 }
