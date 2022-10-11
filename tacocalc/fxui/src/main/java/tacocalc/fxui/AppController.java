@@ -349,7 +349,7 @@ public class AppController {
   }
 
   /**
-   * returns the TextField object for the amount of a new ingredient to be added.
+   * A getter that maskes the newIngredientAmntField vivsble to other classes
    *
    * @return returns the TextField object
    */
@@ -358,12 +358,21 @@ public class AppController {
   }
 
   /**
-   * returns the TextField object for the name of a new ingredient to be added.
+   * A getter that makes the newingredientNameField vivible to other classes
    *
    * @return returns the TextField object
    */
   public TextInputControl getNewIngredientNameField() {
     return new TextField(this.newIngredientNameField.getText());
+  }
+
+  /**
+   * A getter that makes this controller's shoppingList vivible to other classes
+   *
+   * @return returns shoppingList
+   */
+  public ShoppingList getShoppingList() {
+    return this.shoppingList;
   }
 
   /**

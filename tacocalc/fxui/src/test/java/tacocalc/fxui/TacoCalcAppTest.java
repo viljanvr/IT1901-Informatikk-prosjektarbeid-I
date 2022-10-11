@@ -32,10 +32,13 @@ public class TacoCalcAppTest extends ApplicationTest {
     // If no name is given, it will be made a .json file with no name
     clickOn("#nameField").write("TestTaco");
     // Checks if textfield contains expected text
-    Assertions.assertEquals("4", controller.getIngredientAmntField().getText());
+    Assertions.assertEquals(
+      "4",
+      controller.getNewIngredientAmntField().getText()
+    );
     Assertions.assertEquals(
       "agurk",
-      controller.getIngredientNameField().getText()
+      controller.getNewIngredientNameField().getText()
     );
     clickOn("#addIngredient");
   }
@@ -44,9 +47,16 @@ public class TacoCalcAppTest extends ApplicationTest {
   @Test
   public void testErrorMessage() {
     addIngredient();
-    clickOn("#ingredientAmntField").write("NotAnInteger");
-    clickOn("#ingredientNameField").write("Should give popup error");
+    Assertions.assertEquals(
+      ("4"),
+      controller.getShoppingList().getIngredient("agurk")
+    );
+    clickOn("#newIngredientAmntField").write("NotAnInteger");
+    clickOn("#newIngredientNameField").write("Should give popup error");
     clickOn("#addIngredient");
+    Assertions.assertNull(
+      controller.getShoppingList().getIngredient("NotAnInteger")
+    );
   }
 
   // Tests other important button with a lot of logic
