@@ -38,6 +38,7 @@ public class TacoCalcAppTest extends ApplicationTest{
         clickOn("#addIngredient");
     }
 
+    // Tests the error message for wrong input in integer field
     @Test
     public void testErrorMessage() {
         addIngredient();
@@ -46,9 +47,11 @@ public class TacoCalcAppTest extends ApplicationTest{
         clickOn("#addIngredient");
     }
 
+    // Tests other important button with a lot of logic
     @Test
-    public void testDeleteIngredient() {
-        addIngredient();
+    public void testImportantButtons() {
+        clickOn("#nameField").write("TestTaco");
+        clickOn("#loadButton");
         clickOn("#editButton");
     }
 }
