@@ -13,8 +13,13 @@ public class RecipeBook {
     }
   }
 
+  public void setOwner(String owner) {
+    this.owner = owner;
+  }
+
+
   public String getOwner() {
-    return this.owner;
+    return owner;
   }
 
   public ArrayList<Recipe> getRecipes() {

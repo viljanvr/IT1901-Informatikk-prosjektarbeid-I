@@ -29,9 +29,9 @@ public class LogicTest {
   public void testToStringmethods() {
     Ingredient I1 = new Ingredient("tomat", 4);
     assertEquals("[ ]: 4x tomat", I1.toString());
-    ShoppingList SL = new ShoppingList(I1);
-    SL.setBought("tomat", true);
-    assertEquals("[x]: 4x tomat\n", SL.toString());
+    Recipe r = new Recipe(I1);
+    r.setBought("tomat", true);
+    assertEquals("[x]: 4x tomat\n", r.toString());
   }
 
   @Test
@@ -47,36 +47,38 @@ public class LogicTest {
   public void testMultipleingredients() {
     Ingredient I1 = new Ingredient("agurk", 3);
     Ingredient I2 = new Ingredient("ost", 1);
-    ShoppingList SL = new ShoppingList(I1, I2);
-    assertEquals(1, SL.getIngredientAmount("ost"));
-    assertEquals(3, SL.getIngredientAmount("agurk"));
-    SL.setIngredientAmount("ost", 2);
-    SL.setIngredientAmount("agurk", 2);
-    assertEquals(2, SL.getIngredientAmount("ost"));
-    assertEquals(2, SL.getIngredientAmount("agurk"));
+    Recipe r = new Recipe(I1, I2);
+    r.setPersons(1);
+    assertEquals(1, r.getIngredientAmount("ost"));
+    assertEquals(3, r.getIngredientAmount("agurk"));
+    r.setIngredientAmount("ost", 2);
+    r.setIngredientAmount("agurk", 2);
+    assertEquals(2, r.getIngredientAmount("ost"));
+    assertEquals(2, r.getIngredientAmount("agurk"));
   }
 
   @Test
   public void testShoppingListBought() {
     Ingredient I1 = new Ingredient("agurk", 3);
-    ShoppingList SL = new ShoppingList(I1);
-    SL.setBought("agurk", true);
-    assertTrue(SL.getBought("agurk"));
+    Recipe r = new Recipe(I1);
+    r.setBought("agurk", true);
+    assertTrue(r.getBought("agurk"));
   }
 
   @Test
   public void testAddAndDelete() {
-    ShoppingList SL = new ShoppingList();
-    SL.addItem("ost", 1);
-    SL.setBought("ost", true);
-    assertTrue(SL.getBought("ost"));
+    Recipe r = new Recipe();
+    r.setPersons(1);
+    r.addItem("ost", 1);
+    r.setBought("ost", true);
+    assertTrue(r.getBought("ost"));
     // Adding the same ingredient again
-    SL.addItem("ost", 3);
-    assertFalse(SL.getBought("ost"));
-    assertEquals(3, SL.getIngredientAmount("ost"));
-    SL.deleteItem("ost");
+    r.addItem("ost", 3);
+    assertFalse(r.getBought("ost"));
+    assertEquals(3, r.getIngredientAmount("ost"));
+    r.deleteItem("ost");
     assertThrows(IllegalStateException.class, () -> {
-      SL.deleteItem("ost");
+      r.deleteItem("ost");
     });
   }
 
@@ -84,24 +86,25 @@ public class LogicTest {
   @Test
   public void testThrows() {
     Ingredient I1 = new Ingredient("tomat", 3);
-    ShoppingList SL = new ShoppingList(I1);
+    Recipe r = new Recipe(I1);
+    r.setPersons(1);
     assertThrows(IllegalArgumentException.class, () -> {
       I1.setAmount(-1);
     });
     assertThrows(IllegalStateException.class, () -> {
-      SL.getBought("ost");
+      r.getBought("ost");
     });
     assertThrows(IllegalStateException.class, () -> {
-      SL.deleteItem("ost");
+      r.deleteItem("ost");
     });
     assertThrows(IllegalStateException.class, () -> {
-      SL.setBought("ost", true);
+      r.setBought("ost", true);
     });
     assertThrows(IllegalStateException.class, () -> {
-      SL.setIngredientAmount("ost", 2);
+      r.setIngredientAmount("ost", 2);
     });
     assertThrows(IllegalStateException.class, () -> {
-      SL.getIngredientAmount("ost");
+      r.getIngredientAmount("ost");
     });
   }
 }

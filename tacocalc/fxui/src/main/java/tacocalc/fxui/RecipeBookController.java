@@ -60,7 +60,8 @@ public class RecipeBookController {
     });
     List<Node> children = recipeList.getChildren();
     int columnPosition = (children.size() % 2 == 0) ? 0 : 1;
-    int rowPosition = (children.size() % 2 == 0) ? recipeList.getRowCount() : recipeList.getRowCount() - 1;
+    int rowPosition =
+        (children.size() % 2 == 0) ? recipeList.getRowCount() : recipeList.getRowCount() - 1;
     recipeList.add(recipeButton, columnPosition, rowPosition);
 
   }

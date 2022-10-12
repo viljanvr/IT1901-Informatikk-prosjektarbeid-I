@@ -14,9 +14,7 @@ public class TacoCalcAppTest extends ApplicationTest {
 
   @Override
   public void start(final Stage stage) throws Exception {
-    FXMLLoader loader = new FXMLLoader(
-      getClass().getResource("ShoppingList.fxml")
-    );
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("ShoppingList.fxml"));
     Parent root = loader.load();
     stage.setScene(new Scene(root));
     controller = loader.getController();
@@ -32,14 +30,8 @@ public class TacoCalcAppTest extends ApplicationTest {
     // If no name is given, it will be made a .json file with no name
     clickOn("#nameField").write("TestTaco");
     // Checks if textfield contains expected text
-    Assertions.assertEquals(
-      "4",
-      controller.getNewIngredientAmntField().getText()
-    );
-    Assertions.assertEquals(
-      "agurk",
-      controller.getNewIngredientNameField().getText()
-    );
+    Assertions.assertEquals("4", controller.getNewIngredientAmntField().getText());
+    Assertions.assertEquals("agurk", controller.getNewIngredientNameField().getText());
     clickOn("#addIngredient");
   }
 
@@ -47,16 +39,11 @@ public class TacoCalcAppTest extends ApplicationTest {
   @Test
   public void testErrorMessage() {
     addIngredient();
-    Assertions.assertEquals(
-      ("4"),
-      controller.getShoppingList().getIngredient("agurk")
-    );
+    Assertions.assertEquals(("4"), controller.getRecipe().getIngredient("agurk"));
     clickOn("#newIngredientAmntField").write("NotAnInteger");
     clickOn("#newIngredientNameField").write("Should give popup error");
     clickOn("#addIngredient");
-    Assertions.assertNull(
-      controller.getShoppingList().getIngredient("NotAnInteger")
-    );
+    Assertions.assertNull(controller.getRecipe().getIngredient("NotAnInteger"));
   }
 
   // Tests other important button with a lot of logic

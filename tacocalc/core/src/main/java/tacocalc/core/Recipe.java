@@ -4,16 +4,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ShoppingList {
+public class Recipe {
   ArrayList<Ingredient> list = new ArrayList<>();
+  private String name;
+  private int persons;
 
   /**
-   * Adds all ingdredients to the objects list.
-   *
+   * Adds all ingdredients to the objects list
+   * 
    * @param ingredients the Ingredients to be added
    */
-  public ShoppingList(Ingredient... ingredients) {
+  public Recipe(Ingredient... ingredients) {
     list.addAll(Arrays.asList(ingredients));
+
+  }
+
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public List<Ingredient> getList() {
@@ -23,8 +31,8 @@ public class ShoppingList {
   /**
    * Adds a new Ingredient to the ShoppingList If it is already an Ingredient with the same name,
    * the old Ingredient will be updated with the amount of the new, and its bought status is set to
-   * false.
-   *
+   * false
+   * 
    * @param name the string to be added
    * @param amount the integer to be added
    */
@@ -42,8 +50,7 @@ public class ShoppingList {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
       throw new IllegalStateException(
-        "The item doesn't exist in the list, and can therefore not be set to bought"
-      );
+          "The item doesn't exist in the list, and can therefore not be set to bought");
     }
     getIngredient(name).setBought(bought);
   }
@@ -51,9 +58,7 @@ public class ShoppingList {
   public boolean getBought(String name) {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
-      throw new IllegalStateException(
-        "This ingredient is not in the shoppinglist"
-      );
+      throw new IllegalStateException("This ingredient is not in the shoppinglist");
     }
     return getIngredient(name).getBought();
   }
@@ -62,8 +67,7 @@ public class ShoppingList {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
       throw new IllegalStateException(
-        "The item doesn't exist in the list, and can therefore not be removed"
-      );
+          "The item doesn't exist in the list, and can therefore not be removed");
     }
     list.remove(getIngredient(name));
   }
@@ -77,32 +81,33 @@ public class ShoppingList {
     return null;
   }
 
+  public void setIngredientAmount(String name, Integer amountPerPerson) {
+    Ingredient ingredient = getIngredient(name);
+    if (ingredient == null) {
+      throw new IllegalStateException(
+          "The item doesn't exist in the list, and can therefore not set new amount");
+    }
+    getIngredient(name).setAmount(amountPerPerson);
+  }
+
+  public int getIngredientAmount(String name) {
+    Ingredient ingredient = getIngredient(name);
+    if (ingredient == null) {
+      throw new IllegalStateException("This ingredient is not in the shoppinglist");
+    }
+    return (int) getIngredient(name).getAmount() * persons;
+  }
+
+  public String getName() {
+    return name;
+  }
+
   public void changeIngredientName(String originalName, String newName) {
     Ingredient ingredient = getIngredient(originalName);
     if (ingredient == null) {
       throw new IllegalStateException("The item doesn't exist in the list");
     }
     ingredient.setName(newName);
-  }
-
-  public void setIngredientAmount(String name, int amount) {
-    Ingredient ingredient = getIngredient(name);
-    if (ingredient == null) {
-      throw new IllegalStateException(
-        "The item doesn't exist in the list, and can therefore not set new amount"
-      );
-    }
-    getIngredient(name).setAmount(amount);
-  }
-
-  public int getIngredientAmount(String name) {
-    Ingredient ingredient = getIngredient(name);
-    if (ingredient == null) {
-      throw new IllegalStateException(
-        "This ingredient is not in the shoppinglist"
-      );
-    }
-    return getIngredient(name).getAmount();
   }
 
   public String toString() {
@@ -112,5 +117,16 @@ public class ShoppingList {
       s = sb.append(s).append(ingredient.toString()).append("\n").toString();
     }
     return s;
+  }
+
+  public int getPersons() {
+    return persons;
+  }
+
+  public void setPersons(int persons) {
+    if (persons < 1) {
+      throw new IllegalArgumentException("A recipe must be for 1 or more persons");
+    }
+    this.persons = persons;
   }
 }
