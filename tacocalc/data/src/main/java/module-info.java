@@ -1,6 +1,6 @@
 open module data {
-  exports tacocalc.data ;
+  exports tacocalc.data;
 
-  requires core;
+  requires transitive core;
   requires com.google.gson;
 }

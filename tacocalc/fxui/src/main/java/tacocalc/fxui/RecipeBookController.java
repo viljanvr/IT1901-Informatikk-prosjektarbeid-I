@@ -31,7 +31,7 @@ public class RecipeBookController {
   }
 
   private void getRecipesFromFile() {
-    File dir = new File("../core/src/main/resources/");
+    File dir = new File("../data/src/main/resources/");
     File[] listOfRecipes = dir.listFiles();
     List<String> recipeNames = Arrays.stream(listOfRecipes).map(f -> f.getName().split("\\.")[0])
         .collect(Collectors.toList());
