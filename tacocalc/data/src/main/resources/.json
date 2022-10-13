@@ -1,12 +1,7 @@
 [
   {
-    "name": "agurk",
+    "name": "paprika",
     "amount": 4,
-    "bought": false
-  },
-  {
-    "name": "tomtat",
-    "amount": 5,
     "bought": false
   }
 ]

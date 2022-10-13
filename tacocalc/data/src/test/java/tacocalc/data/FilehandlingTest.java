@@ -35,5 +35,14 @@ public class FilehandlingTest {
   }
 
   @Test
-  public void testRead() {}
+  public void testRead() {
+    TacoCalcFileHandler th = new TacoCalcFileHandler();
+    Recipe r1 = new Recipe();
+    r1.addItem("genus", 3);
+    th.write(r1, "testRead");
+    Recipe r2 = th.read("testRead");
+    Assertions.assertEquals(r1.getIngredientAmount("genus"), r2.getIngredientAmount("genus"));
+    // If file doesn't exist it returns a new Recipe
+    Assertions.assertEquals(0, th.read("NonFileNameOnlyForTesting").getList().size());
+  }
 }
