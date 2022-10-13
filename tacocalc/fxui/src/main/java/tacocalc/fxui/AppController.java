@@ -13,10 +13,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import tacocalc.core.Recipe;
 import tacocalc.data.TacoCalcFileHandler;
 
@@ -55,6 +57,9 @@ public class AppController {
   @FXML
   private Button loadButton;
 
+  @FXML
+  private VBox container;
+
   private Boolean editMode = false;
 
   private Recipe recipe = new Recipe();
@@ -65,6 +70,8 @@ public class AppController {
   private Pane ingredientEditOverlay;
 
   private IngredientEditController ingredientEditController;
+
+  private BoxBlur blur = new BoxBlur(30, 30, 3);
 
   public void initialize() {
     initIngredientEditOverlay();
@@ -155,7 +162,8 @@ public class AppController {
    * Adds ingredient to the ShoppingList object. Saves the updated recipe object to file and updates
    * the view.
    *
-   * <p>In case an illegal amount is specified, an alert is showed.
+   * <p>
+   * In case an illegal amount is specified, an alert is showed.
    */
 
   @FXML
@@ -182,8 +190,9 @@ public class AppController {
   /**
    * Method takes in the properties of an ingredient and adds it to the view.
    *
-   * <p>Method also initialises the eventhandlers for the new checkbox and the 
-   * edit-button for the new ingredient.
+   * <p>
+   * Method also initialises the eventhandlers for the new checkbox and the edit-button for the new
+   * ingredient.
    *
    * @param ingredientName the string of the name
    * @param ingredientAmnt the integer of the amount
@@ -243,6 +252,7 @@ public class AppController {
    */
   protected void closeIngredientEditOverlay() {
     popUpContain.setVisible(false);
+    container.setEffect(null);
   }
 
   /**
@@ -254,6 +264,7 @@ public class AppController {
   private void openIngredientEditOverlay(String ingredientName) {
     popUpContain.setVisible(true);
     ingredientEditController.showNewIngredient(ingredientName, recipe);
+    container.setEffect(blur);
   }
 
   /**
@@ -296,7 +307,8 @@ public class AppController {
   /**
    * Gets the name from a text field of a file to be read or written to.
    *
-   * <p>TODO: Implement possibility to have different recipes and files
+   * <p>
+   * TODO: Implement possibility to have different recipes and files
    *
    * @return returns filename as a String
    */

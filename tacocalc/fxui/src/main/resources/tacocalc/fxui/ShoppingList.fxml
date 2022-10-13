@@ -4,108 +4,121 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.BoxBlur?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tacocalc.fxui.AppController">
+<AnchorPane style="-fx-background-color: #2C2C2C;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tacocalc.fxui.AppController">
    <children>
-      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0">
+      <VBox fx:id="container" prefHeight="600.0" prefWidth="900.0">
          <children>
-            <AnchorPane prefHeight="77.0" prefWidth="900.0">
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="900.0" style="-fx-background-color: #1F1F1F; -fx-background-radius: 0 0 10 10;">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
                <children>
-                  <Text fx:id="amogus" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Taco-kalkulator">
+                  <Text fx:id="amogus" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Taco-kalkulator" textOrigin="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
-                        <Font size="50.0" />
+                        <Font name="System Bold" size="50.0" />
                      </font>
                   </Text>
                </children>
             </AnchorPane>
-            <HBox prefHeight="44.0" prefWidth="1339.0">
+            <VBox prefHeight="600.0" prefWidth="900.0">
                <children>
-                  <Button fx:id="addIngredient" mnemonicParsing="false" onAction="#handleAddIngredient" prefHeight="54.0" prefWidth="112.0" text="Add ingredient">
-                     <HBox.margin>
-                        <Insets bottom="5.0" right="10.0" top="5.0" />
-                     </HBox.margin>
-                  </Button>
-                  <TextField fx:id="newIngredientAmntField" prefHeight="44.0" prefWidth="63.0" promptText="Amount">
-                     <HBox.margin>
-                        <Insets bottom="5.0" right="10.0" top="5.0" />
-                     </HBox.margin>
-                  </TextField>
-                  <TextField fx:id="newIngredientNameField" prefHeight="47.0" prefWidth="183.0" promptText="Ingredient name">
-                     <HBox.margin>
-                        <Insets bottom="5.0" right="10.0" top="5.0" />
-                     </HBox.margin>
-                  </TextField>
-                  <Button fx:id="loadButton" mnemonicParsing="false" onAction="#handleLoadFile" prefHeight="47.0" text="Load" translateX="220.0">
-                     <HBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </HBox.margin>
-                  </Button>
-                  <TextField fx:id="nameField" prefHeight="47.0" promptText="Name" translateX="220.0">
-                     <HBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </HBox.margin>
-                  </TextField>
-                  <Button fx:id="editButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleEditButton" prefHeight="69.0" prefWidth="61.0" text="Edit" translateX="220.0">
-                     <HBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </HBox.margin>
-                  </Button>
-               </children>
-            </HBox>
-            <GridPane prefHeight="426.0" prefWidth="860.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <GridPane fx:id="ingredientsListLeft" maxHeight="30.0" prefHeight="10.0" prefWidth="430.0" GridPane.valignment="TOP">
+                  <HBox prefHeight="44.0" prefWidth="1339.0">
+                     <children>
+                        <Button fx:id="addIngredient" mnemonicParsing="false" onAction="#handleAddIngredient" prefHeight="54.0" prefWidth="112.0" text="Add ingredient">
+                           <HBox.margin>
+                              <Insets bottom="5.0" right="5.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <TextField fx:id="newIngredientAmntField" prefHeight="44.0" prefWidth="68.0" promptText="Amount">
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </HBox.margin>
+                        </TextField>
+                        <TextField fx:id="newIngredientNameField" prefHeight="47.0" prefWidth="183.0" promptText="Ingredient name">
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </HBox.margin>
+                        </TextField>
+                        <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="loadButton" mnemonicParsing="false" onAction="#handleLoadFile" prefHeight="47.0" prefWidth="61.0" text="Load">
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <TextField fx:id="nameField" prefHeight="47.0" promptText="Name">
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </HBox.margin>
+                        </TextField>
+                        <Button fx:id="editButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleEditButton" prefHeight="69.0" prefWidth="61.0" text="Edit">
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <GridPane hgap="40.0" prefHeight="426.0" prefWidth="860.0">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="136.0" minWidth="20.0" prefWidth="20.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="334.3333435058594" minWidth="10.0" prefWidth="281.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="151.66665649414062" minWidth="10.0" prefWidth="117.33331298828125" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </GridPane>
-                  <GridPane fx:id="ingredientsListRight" maxHeight="30.0" GridPane.columnIndex="1" GridPane.valignment="TOP">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="112.66668701171875" minWidth="20.0" prefWidth="20.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="323.0" minWidth="10.0" prefWidth="323.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="136.33331298828125" minWidth="10.0" prefWidth="79.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
+                     <children>
+                        <GridPane fx:id="ingredientsListLeft" hgap="5.0" maxHeight="30.0" prefHeight="10.0" prefWidth="430.0" vgap="10.0" GridPane.valignment="TOP">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="330" minWidth="10.0" prefWidth="280.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="40.0" minWidth="10.0" prefWidth="30.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </GridPane>
+                        <GridPane fx:id="ingredientsListRight" hgap="5.0" maxHeight="30.0" vgap="10.0" GridPane.columnIndex="1" GridPane.valignment="TOP">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="330.0" minWidth="10.0" prefWidth="280.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="40" minWidth="10.0" prefWidth="30.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </GridPane>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="10.0" />
+                     </VBox.margin>
                   </GridPane>
                </children>
-            </GridPane>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </VBox>
          </children>
-         <padding>
-            <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
-         </padding>
       </VBox>
-      <BorderPane fx:id="popUpContain" prefHeight="600.0" prefWidth="901.0" visible="false" />
+      <BorderPane fx:id="popUpContain" prefHeight="600.0" prefWidth="900.0" visible="false" />
    </children>
 </AnchorPane>

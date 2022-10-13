@@ -1,6 +1,7 @@
 package tacocalc.fxui;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +38,15 @@ public class RecipeBookController {
    */
   private void getRecipesFromFile() {
     File dir = new File("../data/src/main/resources/");
-    File[] listOfRecipes = dir.listFiles();
+
+    FilenameFilter filter = new FilenameFilter() {
+      @Override
+      public boolean accept(File f, String name) {
+        return name.endsWith(".json");
+      }
+    };
+
+    File[] listOfRecipes = dir.listFiles(filter);
     List<String> recipeNames = Arrays.stream(listOfRecipes).map(f -> f.getName().split("\\.")[0])
         .collect(Collectors.toList());
     for (String recipeName : recipeNames) {
@@ -97,10 +106,10 @@ public class RecipeBookController {
   }
 
   /**
-  * Method to set the static variable that passes data between scenes.
-  *
-  * @param recipeName the string that will be passed to the next scene
-  */
+   * Method to set the static variable that passes data between scenes.
+   *
+   * @param recipeName the string that will be passed to the next scene
+   */
   private static synchronized void setTransfer(String recipeName) {
     RecipeBookController.transferRecipe = recipeName;
   }
