@@ -6,7 +6,12 @@ En app som enkelt lar deg fylle inn hvor mange personer man er og som gir bruker
 Kildekoden til applikasjonen ligger i [tacocalc](/tacocalc/) og dokumentasjonen til de ulike versjonene ligger i [docs](/docs/).
 <p>
     <figure align="center">
-        <img src="docs/release%201/resources/deliverable_1_screenshot.png" alt="Mockup" width="600"/>
-        <figcaption><i>Skermbilde av applikasjonen (release 1)</i></figcaption>
+        <img src="docs/release%202/resources/ingredientMenu.png" alt="Mockup" width="600"/>
+    </figure>
+</p>
+<p>
+    <figure align="center">
+        <img src="docs/release%202/resources/ingredientEditMenu.png" alt="Mockup" width="600"/>
+        <figcaption><i>Skjermbilder av applikasjonen (release 2)</i></figcaption>
     </figure>
 </p>

@@ -3,7 +3,7 @@ tacocalc/fxui/target
 tacocalc/core/target
 gr02/target
 tacocalc/.vscode
-tacocalc/data/src/main/resources
+#tacocalc/data/src/main/resources [this will change once we have database implemented]
 tacocalc/core/src/main/resources
 tacocalc/data/target
 

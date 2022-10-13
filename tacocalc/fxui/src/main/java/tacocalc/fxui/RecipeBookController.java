@@ -34,7 +34,9 @@ public class RecipeBookController {
   }
 
   /**
-   * Adds buttons with all the names of the saved recipe to the view.
+   *
+   * new directory Fills this with files of
+   *
    */
   private void getRecipesFromFile() {
     File dir = new File("../data/src/main/resources/");
@@ -81,6 +83,7 @@ public class RecipeBookController {
     List<Node> children = recipeList.getChildren();
     int columnPosition = (children.size() % 2 == 0) ? 0 : 1;
     int rowPosition =
+
         (children.size() % 2 == 0) ? recipeList.getRowCount() : recipeList.getRowCount() - 1;
     recipeList.add(recipeButton, columnPosition, rowPosition);
 
