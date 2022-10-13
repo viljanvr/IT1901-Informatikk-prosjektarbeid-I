@@ -36,9 +36,7 @@ public class AppTest extends ApplicationTest {
   public void addNewIngredientTest() {
     clickOn("#newIngredientAmntField").write("4");
     clickOn("#newIngredientNameField").write("agurk");
-    // Gives our testTaco file a name
-    // If no name is given, it will be made a .json file with no name
-    // clickOn("#nameField").write("TestTaco");
+
     // Checks if textfield contains expected text
     Assertions.assertEquals("4", controller.getNewIngredientAmntField().getText());
     Assertions.assertEquals("agurk", controller.getNewIngredientNameField().getText());
