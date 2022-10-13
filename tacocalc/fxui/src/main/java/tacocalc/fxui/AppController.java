@@ -155,8 +155,7 @@ public class AppController {
    * Adds ingredient to the ShoppingList object. Saves the updated recipe object to file and updates
    * the view.
    *
-   * <p>
-   * In case an illegal amount is specified, an alert is showed.
+   * <p>In case an illegal amount is specified, an alert is showed.
    */
 
   @FXML
@@ -183,9 +182,8 @@ public class AppController {
   /**
    * Method takes in the properties of an ingredient and adds it to the view.
    *
-   * <p>
-   * Method also initialises the eventhandlers for the new checkbox and the edit-button for the new
-   * ingredient.
+   * <p>Method also initialises the eventhandlers for the new checkbox and the 
+   * edit-button for the new ingredient.
    *
    * @param ingredientName the string of the name
    * @param ingredientAmnt the integer of the amount
@@ -235,7 +233,7 @@ public class AppController {
    *
    * @return returns a stream with Nodes.
    */
-  private Stream<Node> getIngredientViewStream() {
+  protected Stream<Node> getIngredientViewStream() {
     return Stream.concat(ingredientsListLeft.getChildren().stream(),
         ingredientsListRight.getChildren().stream());
   }
@@ -290,7 +288,7 @@ public class AppController {
   private void handleLoadFile() {
     clearIngredientListView();
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
-    this.recipe = fh.read(recipe, getFileName());
+    this.recipe = fh.read(getFileName());
     recipe.getList().stream()
         .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
   }
@@ -298,8 +296,7 @@ public class AppController {
   /**
    * Gets the name from a text field of a file to be read or written to.
    *
-   * <p>
-   * TODO: Implement possibility to have different recipies and files
+   * <p>TODO: Implement possibility to have different recipes and files
    *
    * @return returns filename as a String
    */
@@ -308,7 +305,7 @@ public class AppController {
   }
 
   /**
-   * A getter that maskes the newIngredientAmntField vivsble to other classes
+   * A getter that maskes the newIngredientAmntField visible to other classes Is used in tests.
    *
    * @return returns the TextField object
    */
@@ -317,7 +314,7 @@ public class AppController {
   }
 
   /**
-   * A getter that makes the newingredientNameField vivible to other classes
+   * A getter that makes the newingredientNameField visible to other classes Is used in test.
    *
    * @return returns the TextField object
    */
@@ -326,22 +323,27 @@ public class AppController {
   }
 
   /**
-   * A getter that makes this controller's recipe vivible to other classes
+   * A getter that makes this controller's recipe visible to other classes.
    *
    * @return returns recipe
    */
-  public Recipe getRecipe() {
-    return this.recipe;
+  public int getIngredientAmount(String name) {
+    return recipe.getIngredientAmount(name);
+
+  }
+
+  public String getIngredient(String name) {
+    return recipe.getIngredient(name).getName();
   }
 
   /**
-   * TODO: write JavaDoc
+   * TODO: write JavaDoc.
    *
-   * @param recipeName
+   * @param recipeName name of the recipie to load
    */
   public void loadRecipeFromRecipeBook(String recipeName) {
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
-    this.recipe = fh.read(recipe, recipeName);
+    this.recipe = fh.read(recipeName);
     updateIngredientListView();
   }
 }
