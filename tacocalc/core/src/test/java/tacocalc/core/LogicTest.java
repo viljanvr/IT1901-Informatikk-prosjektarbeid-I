@@ -48,7 +48,7 @@ public class LogicTest {
     Ingredient I1 = new Ingredient("agurk", 3);
     Ingredient I2 = new Ingredient("ost", 1);
     Recipe r = new Recipe(I1, I2);
-    r.setPersons(1);
+    r.setPeople(1);
     assertEquals(1, r.getIngredientAmount("ost"));
     assertEquals(3, r.getIngredientAmount("agurk"));
     r.setIngredientAmount("ost", 2);
@@ -68,7 +68,7 @@ public class LogicTest {
   @Test
   public void testAddAndDelete() {
     Recipe r = new Recipe();
-    r.setPersons(1);
+    r.setPeople(1);
     r.addItem("ost", 1);
     r.setBought("ost", true);
     assertTrue(r.getBought("ost"));
@@ -87,7 +87,7 @@ public class LogicTest {
   public void testThrows() {
     Ingredient I1 = new Ingredient("tomat", 3);
     Recipe r = new Recipe(I1);
-    r.setPersons(1);
+    r.setPeople(1);
     assertThrows(IllegalArgumentException.class, () -> {
       I1.setAmount(-1);
     });

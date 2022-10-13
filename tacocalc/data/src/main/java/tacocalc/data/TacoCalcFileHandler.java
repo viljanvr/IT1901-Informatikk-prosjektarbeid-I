@@ -15,6 +15,9 @@ import java.util.List;
 import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
 
+/**
+ * Class for reading and writing recipies to file.
+ */
 public class TacoCalcFileHandler {
   public static final String FILEPATH = "../data/src/main/resources/";
 
@@ -45,9 +48,8 @@ public class TacoCalcFileHandler {
    * @param fileName the String that is the name of the file to be read from
    *
    * @return a ShoppingList created from the contents of the Json file
-   * @throws IOException
    */
-  public Recipe read(Recipe r, String fileName) {
+  public Recipe read(String fileName) {
     String fp = FILEPATH + fileName + ".json";
     try (FileReader fr = new FileReader(fp, StandardCharsets.UTF_8)) {
       Gson gson = new Gson();
@@ -61,6 +63,6 @@ public class TacoCalcFileHandler {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    return null;
+    return new Recipe();
   }
 }

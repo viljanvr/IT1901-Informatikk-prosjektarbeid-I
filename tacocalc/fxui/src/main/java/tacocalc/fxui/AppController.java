@@ -235,7 +235,7 @@ public class AppController {
    *
    * @return returns a stream with Nodes.
    */
-  private Stream<Node> getIngredientViewStream() {
+  protected Stream<Node> getIngredientViewStream() {
     return Stream.concat(ingredientsListLeft.getChildren().stream(),
         ingredientsListRight.getChildren().stream());
   }
@@ -290,7 +290,7 @@ public class AppController {
   private void handleLoadFile() {
     clearIngredientListView();
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
-    this.recipe = fh.read(recipe, getFileName());
+    this.recipe = fh.read(getFileName());
     recipe.getList().stream()
         .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
   }
@@ -308,7 +308,7 @@ public class AppController {
   }
 
   /**
-   * A getter that maskes the newIngredientAmntField vivsble to other classes
+   * A getter that maskes the newIngredientAmntField visible to other classes Is used in tests.
    *
    * @return returns the TextField object
    */
@@ -317,7 +317,7 @@ public class AppController {
   }
 
   /**
-   * A getter that makes the newingredientNameField vivible to other classes
+   * A getter that makes the newingredientNameField visible to other classes Is used in test.
    *
    * @return returns the TextField object
    */
@@ -326,22 +326,27 @@ public class AppController {
   }
 
   /**
-   * A getter that makes this controller's recipe vivible to other classes
+   * A getter that makes this controller's recipe visible to other classes.
    *
    * @return returns recipe
    */
-  public Recipe getRecipe() {
-    return this.recipe;
+  public int getIngredientAmount(String name) {
+    return recipe.getIngredientAmount(name);
+
+  }
+
+  public String getIngredient(String name) {
+    return recipe.getIngredient(name).getName();
   }
 
   /**
-   * TODO: write JavaDoc
+   * TODO: write JavaDoc.
    *
-   * @param recipeName
+   * @param recipeName name of the recipie to load
    */
   public void loadRecipeFromRecipeBook(String recipeName) {
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
-    this.recipe = fh.read(recipe, recipeName);
+    this.recipe = fh.read(recipeName);
     updateIngredientListView();
   }
 }

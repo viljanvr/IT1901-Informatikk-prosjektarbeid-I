@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,12 +15,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import tacocalc.core.RecipeBook;
+// import tacocalc.core.RecipeBook;
 
 public class RecipeBookController {
 
-  private RecipeBook recipeBook;
-  public static String transferRecipe;
+  // private RecipeBook recipeBook;
+  static String transferRecipe;
 
   @FXML
   private GridPane recipeList;
@@ -30,6 +29,9 @@ public class RecipeBookController {
     getRecipesFromFile();
   }
 
+  /**
+   * Adds buttons with all the names of the recipes saved in
+   */
   private void getRecipesFromFile() {
     File dir = new File("../data/src/main/resources/");
     File[] listOfRecipes = dir.listFiles();
@@ -40,6 +42,13 @@ public class RecipeBookController {
 
     }
   }
+
+  /**
+   * Adds a button with the name of the recipe to the view
+   * 
+   * @param recipeName the name of the recipe which will be added
+   */
+
 
   private void addItemToView(String recipeName) {
     Button recipeButton = new Button(recipeName);
@@ -66,12 +75,24 @@ public class RecipeBookController {
 
   }
 
+  /**
+   * Changes scene to show a given recipie.
+   * 
+   * @param recipeName the name of the recipie to open
+   * @param thisStage the current window
+   * @throws IOException throws exception if specified FXML is not found
+   */
   public void changeToScene(String recipeName, Stage thisStage) throws IOException {
-    RecipeBookController.transferRecipe = recipeName;
+    setTransfer(recipeName);
     FXMLLoader loader = new FXMLLoader(getClass().getResource("ShoppingList.fxml"));
     Parent root = loader.load();
 
     thisStage.setScene(new Scene(root));
 
+  }
+
+
+  private static synchronized void setTransfer(String recipeName) {
+    RecipeBookController.transferRecipe = recipeName;
   }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 public class Recipe {
   ArrayList<Ingredient> list = new ArrayList<>();
   private String name;
-  private int persons;
+  private int people;
 
   /**
    * Adds all ingdredients to the objects list
@@ -16,14 +16,24 @@ public class Recipe {
    */
   public Recipe(Ingredient... ingredients) {
     list.addAll(Arrays.asList(ingredients));
+    this.people = 1;
 
   }
 
-
+  /**
+   * Give this recipie a new name.
+   * 
+   * @param name the new name to be set
+   */
   public void setName(String name) {
     this.name = name;
   }
 
+  /**
+   * Get all ingridients in this recipie
+   * 
+   * @return a list of Recipie objects
+   */
   public List<Ingredient> getList() {
     return new ArrayList<>(list);
   }
@@ -95,7 +105,7 @@ public class Recipe {
     if (ingredient == null) {
       throw new IllegalStateException("This ingredient is not in the shoppinglist");
     }
-    return (int) getIngredient(name).getAmount() * persons;
+    return (int) getIngredient(name).getAmount() * people;
   }
 
   public String getName() {
@@ -119,14 +129,14 @@ public class Recipe {
     return s;
   }
 
-  public int getPersons() {
-    return persons;
+  public int getPeople() {
+    return people;
   }
 
-  public void setPersons(int persons) {
-    if (persons < 1) {
-      throw new IllegalArgumentException("A recipe must be for 1 or more persons");
+  public void setPeople(int people) {
+    if (people < 1) {
+      throw new IllegalArgumentException("A recipe must be for 1 or more people");
     }
-    this.persons = persons;
+    this.people = people;
   }
 }

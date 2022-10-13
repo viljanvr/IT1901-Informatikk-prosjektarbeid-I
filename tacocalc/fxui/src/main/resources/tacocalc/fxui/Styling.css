@@ -1,0 +1,27 @@
+.btn {
+    -fx-font-family: Roboto, sans-serif;
+    -fx-font-weight: 0;
+    -fx-font-size: 14;
+    -fx-background-color: #ffa012;
+    -fx-padding: 10px 30px;
+    -fx-box-shadow: rgb(0, 0, 0) 0px 0px 0px 0px;
+    -fx-border-radius: 1;
+    -fx-background-radius: 1;
+    -fx-transition: 1000ms;
+    -fx-transform: translateY(0);
+    -fx-display: flex;
+    -fx-flex-direction: row;
+    -fx-align-items: center;
+    -fx-cursor: pointer;
+}
+
+.btn:hover {
+    -fx-transition: 1000ms;
+    -fx-padding: 10px 30px;
+    -fx-transform: translateY(-0px);
+    -fx-background-color: #fff;
+    -fx-color: #ffa012;
+    -fx-border-style: solid;
+    -fx-border-color: #ffa012;
+    -fx-border-radius: 2;
+}
