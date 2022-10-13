@@ -9,7 +9,7 @@ public class Ingredient {
 
   private Boolean bought = false;
 
-  protected Ingredient(String name, Integer amount) {
+  public Ingredient(String name, Integer amount) {
     setName(name);
     setAmount(amount);
   }
