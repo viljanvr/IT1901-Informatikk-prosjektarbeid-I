@@ -64,7 +64,7 @@ public class AppTest extends ApplicationTest {
 
     // Cheks that a second ingredient is added at the correct position
     clickOn("#newIngredientAmntField").write("5");
-    clickOn("#newIngredientNameField").write("tomtat");
+    clickOn("#newIngredientNameField").write("tomat");
     clickOn("#addIngredient");
     Assertions.assertEquals("5x tomat", getIngredientTextField(1));
   }
@@ -96,6 +96,17 @@ public class AppTest extends ApplicationTest {
     clickOn("#increaseButton");
     clickOn("#saveButton");
     Assertions.assertEquals("4x paprika", getIngredientTextField(0));
+  }
+
+  @Test
+  @DisplayName("Test that you can change the name of an ingredient")
+  public void testIngredientNameChange() {
+    addIngredient("3", "bacon");
+    clickOn("#editButton");
+    clickOn(getIngredientEditButton(0));
+    clickOn("#ingredientNameField").eraseText(5).write("bacon terninger");
+    clickOn("#ingredientNameField").clickOn("#saveButton");
+    Assertions.assertEquals("3x bacon terninger", getIngredientTextField(0));
   }
 
   // Tests other important button with a lot of logic
