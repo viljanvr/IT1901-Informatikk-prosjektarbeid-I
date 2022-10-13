@@ -1,0 +1,12 @@
+[
+    {
+        "name": "agurk",
+        "amount": 4,
+        "bought": false
+    },
+    {
+        "name": "paprika",
+        "amount": 6,
+        "bought": false
+    }
+]
