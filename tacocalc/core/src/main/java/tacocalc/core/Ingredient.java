@@ -1,5 +1,8 @@
 package tacocalc.core;
 
+/**
+ * Class for an ingredient with the properties: name, amount and bought.
+ */
 public class Ingredient {
   private String name;
   private Integer amount;
