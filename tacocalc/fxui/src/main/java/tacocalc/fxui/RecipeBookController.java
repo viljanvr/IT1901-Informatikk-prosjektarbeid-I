@@ -17,6 +17,9 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 // import tacocalc.core.RecipeBook;
 
+/**
+ * Class that controlls the scene where the user picks the recipe.
+ */
 public class RecipeBookController {
 
   // private RecipeBook recipeBook;
@@ -30,7 +33,7 @@ public class RecipeBookController {
   }
 
   /**
-   * Adds buttons with all the names of the recipes saved in
+   * Adds buttons with all the names of the saved recipe to the view.
    */
   private void getRecipesFromFile() {
     File dir = new File("../data/src/main/resources/");
@@ -44,11 +47,10 @@ public class RecipeBookController {
   }
 
   /**
-   * Adds a button with the name of the recipe to the view
-   * 
+   * Adds a button with the name of the recipe to the view.
+   *
    * @param recipeName the name of the recipe which will be added
    */
-
 
   private void addItemToView(String recipeName) {
     Button recipeButton = new Button(recipeName);
@@ -76,12 +78,15 @@ public class RecipeBookController {
   }
 
   /**
-   * Changes scene to show a given recipie.
-   * 
+   * Changes scene to show a given recipe.
+   *
    * @param recipeName the name of the recipie to open
+   *
    * @param thisStage the current window
+   *
    * @throws IOException throws exception if specified FXML is not found
    */
+
   public void changeToScene(String recipeName, Stage thisStage) throws IOException {
     setTransfer(recipeName);
     FXMLLoader loader = new FXMLLoader(getClass().getResource("ShoppingList.fxml"));
@@ -91,7 +96,11 @@ public class RecipeBookController {
 
   }
 
-
+  /**
+  * Method to set the static variable that passes data between scenes.
+  *
+  * @param recipeName the string that will be passed to the next scene
+  */
   private static synchronized void setTransfer(String recipeName) {
     RecipeBookController.transferRecipe = recipeName;
   }
