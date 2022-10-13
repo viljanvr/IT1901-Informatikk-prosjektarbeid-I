@@ -86,7 +86,9 @@ public class AppController {
   @FXML
   private void handleEditButton() {
     editMode = !editMode;
-    getIngredientViewStream().filter(a -> a instanceof Button).forEach(a -> a.setVisible(editMode));
+    getIngredientViewStream()
+      .filter(a -> a instanceof Button)
+      .forEach(a -> a.setVisible(editMode));
     editButton.setText(editMode ? "Cancel" : "Edit");
   }
 
@@ -122,9 +124,14 @@ public class AppController {
   private void updateIngredientListView() {
     clearIngredientListView();
 
-    recipe.getList().stream().forEach(i -> {
-      addItemToView(i.getName(), i.getAmount(), i.getBought());
-    });
+    recipe
+      .getList()
+      .stream()
+      .forEach(
+        i -> {
+          addItemToView(i.getName(), i.getAmount(), i.getBought());
+        }
+      );
   }
 
   /**
@@ -145,13 +152,22 @@ public class AppController {
    * @param newIngredientName new ingredient name
    * @param amount new amount to be set
    */
-  protected void updateIngredient(String ingredient, String newIngredientName, int amount) {
+  protected void updateIngredient(
+    String ingredient,
+    String newIngredientName,
+    int amount
+  ) {
     recipe.setIngredientAmount(ingredient, amount);
     recipe.changeIngredientName(ingredient, newIngredientName);
 
     TextField textField = (TextField) getIngredientViewStream()
-        .filter(i -> i instanceof TextField && ((TextField) i).getText().contains(ingredient))
-        .findFirst().get();
+      .filter(
+        i ->
+          i instanceof TextField &&
+          ((TextField) i).getText().contains(ingredient)
+      )
+      .findFirst()
+      .get();
 
     textField.setText(amount + "x " + newIngredientName);
 
@@ -170,7 +186,9 @@ public class AppController {
   private void handleAddIngredient() {
     try {
       String ingredientName = newIngredientNameField.getText();
-      Integer ingredientAmnt = Integer.parseInt(newIngredientAmntField.getText());
+      Integer ingredientAmnt = Integer.parseInt(
+        newIngredientAmntField.getText()
+      );
 
       recipe.addItem(ingredientName, ingredientAmnt);
       handleSaveToFile();
@@ -198,7 +216,11 @@ public class AppController {
    * @param ingredientAmnt the integer of the amount
    * @param checked the boolean state of the checkbox
    */
-  private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked) {
+  private void addItemToView(
+    String ingredientName,
+    Integer ingredientAmnt,
+    Boolean checked
+  ) {
     CheckBox checkBox = new CheckBox();
     checkBox.setSelected(checked);
 
@@ -209,30 +231,43 @@ public class AppController {
     textField.setEditable(false);
 
     // Event handler for ingredient edit button
-    editButton.setOnAction(new EventHandler<ActionEvent>() {
+    editButton.setOnAction(
+      new EventHandler<ActionEvent>() {
 
-      @Override
-      public void handle(ActionEvent e) {
-        openIngredientEditOverlay(ingredientName);
+        @Override
+        public void handle(ActionEvent e) {
+          openIngredientEditOverlay(ingredientName);
+        }
       }
-    });
+    );
 
     // Event handler for checkbox
-    checkBox.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+    checkBox.addEventHandler(
+      MouseEvent.MOUSE_CLICKED,
+      new EventHandler<MouseEvent>() {
 
-      @Override
-      public void handle(MouseEvent e) {
-        handleToggleCheckbox(ingredientName, (CheckBox) e.getSource());
+        @Override
+        public void handle(MouseEvent e) {
+          handleToggleCheckbox(ingredientName, (CheckBox) e.getSource());
+        }
       }
-    });
+    );
 
     if (columnCounter == 0) {
-      ingredientsListLeft.addRow(ingredientsListLeft.getRowCount(), checkBox, textField,
-          editButton);
+      ingredientsListLeft.addRow(
+        ingredientsListLeft.getRowCount(),
+        checkBox,
+        textField,
+        editButton
+      );
       columnCounter = 1;
     } else {
-      ingredientsListRight.addRow(ingredientsListRight.getRowCount(), checkBox, textField,
-          editButton);
+      ingredientsListRight.addRow(
+        ingredientsListRight.getRowCount(),
+        checkBox,
+        textField,
+        editButton
+      );
       columnCounter = 0;
     }
   }
@@ -243,8 +278,10 @@ public class AppController {
    * @return returns a stream with Nodes.
    */
   protected Stream<Node> getIngredientViewStream() {
-    return Stream.concat(ingredientsListLeft.getChildren().stream(),
-        ingredientsListRight.getChildren().stream());
+    return Stream.concat(
+      ingredientsListLeft.getChildren().stream(),
+      ingredientsListRight.getChildren().stream()
+    );
   }
 
   /**
@@ -273,7 +310,9 @@ public class AppController {
   private void initIngredientEditOverlay() {
     ingredientEditController = new IngredientEditController(this);
 
-    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("PopupMenu.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(
+      getClass().getResource("PopupMenu.fxml")
+    );
     fxmlLoader.setController(ingredientEditController);
     try {
       ingredientEditOverlay = fxmlLoader.load();
@@ -300,8 +339,10 @@ public class AppController {
     clearIngredientListView();
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
     this.recipe = fh.read(getFileName());
-    recipe.getList().stream()
-        .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
+    recipe
+      .getList()
+      .stream()
+      .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
   }
 
   /**
@@ -332,20 +373,6 @@ public class AppController {
    */
   public TextInputControl getNewIngredientNameField() {
     return new TextField(this.newIngredientNameField.getText());
-  }
-
-  /**
-   * A getter that makes this controller's recipe visible to other classes.
-   *
-   * @return returns recipe
-   */
-  public int getIngredientAmount(String name) {
-    return recipe.getIngredientAmount(name);
-
-  }
-
-  public String getIngredient(String name) {
-    return recipe.getIngredient(name).getName();
   }
 
   /**

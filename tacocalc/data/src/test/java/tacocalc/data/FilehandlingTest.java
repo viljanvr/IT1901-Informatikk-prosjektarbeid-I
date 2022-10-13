@@ -1,17 +1,17 @@
 package tacocalc.data;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import tacocalc.core.*;
 
 public class FilehandlingTest {
 
   @Test
-  private void testWrite() {
+  public void testWrite() {
     TacoCalcFileHandler th = new TacoCalcFileHandler();
     Recipe r1 = new Recipe();
     r1.addItem("agurk", 4);
@@ -32,12 +32,8 @@ public class FilehandlingTest {
       System.out.println("Files failed to load");
       e.printStackTrace();
     }
-
   }
 
   @Test
-  public void testRead() {
-
-  }
-
+  public void testRead() {}
 }

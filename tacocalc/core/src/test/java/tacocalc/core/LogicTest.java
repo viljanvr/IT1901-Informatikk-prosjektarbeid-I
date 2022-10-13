@@ -2,9 +2,11 @@ package tacocalc.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class LogicTest {
@@ -77,9 +79,25 @@ public class LogicTest {
     assertFalse(r.getBought("ost"));
     assertEquals(3, r.getIngredientAmount("ost"));
     r.deleteItem("ost");
-    assertThrows(IllegalStateException.class, () -> {
-      r.deleteItem("ost");
-    });
+    assertThrows(
+      IllegalStateException.class,
+      () -> {
+        r.deleteItem("ost");
+      }
+    );
+  }
+
+  @Test
+  @DisplayName("Test that changeName method changes name of ingredient")
+  public void testChangeName() {
+    Recipe r = new Recipe();
+    r.setPeople(1);
+    r.addItem("ost", 1);
+    assertEquals("[ ]: 1x ost", r.getIngredient("ost").toString());
+    r.changeIngredientName("ost", "avokado");
+    // Avokado should now be in reipe, and ost not
+    assertEquals("[ ]: 1x avokado", r.getIngredient("avokado").toString());
+    assertNull(r.getIngredient("ost"));
   }
 
   // Tests for the shopping class that checks if throws are done correctly
@@ -88,23 +106,41 @@ public class LogicTest {
     Ingredient I1 = new Ingredient("tomat", 3);
     Recipe r = new Recipe(I1);
     r.setPeople(1);
-    assertThrows(IllegalArgumentException.class, () -> {
-      I1.setAmount(-1);
-    });
-    assertThrows(IllegalStateException.class, () -> {
-      r.getBought("ost");
-    });
-    assertThrows(IllegalStateException.class, () -> {
-      r.deleteItem("ost");
-    });
-    assertThrows(IllegalStateException.class, () -> {
-      r.setBought("ost", true);
-    });
-    assertThrows(IllegalStateException.class, () -> {
-      r.setIngredientAmount("ost", 2);
-    });
-    assertThrows(IllegalStateException.class, () -> {
-      r.getIngredientAmount("ost");
-    });
+    assertThrows(
+      IllegalArgumentException.class,
+      () -> {
+        I1.setAmount(-1);
+      }
+    );
+    assertThrows(
+      IllegalStateException.class,
+      () -> {
+        r.getBought("ost");
+      }
+    );
+    assertThrows(
+      IllegalStateException.class,
+      () -> {
+        r.deleteItem("ost");
+      }
+    );
+    assertThrows(
+      IllegalStateException.class,
+      () -> {
+        r.setBought("ost", true);
+      }
+    );
+    assertThrows(
+      IllegalStateException.class,
+      () -> {
+        r.setIngredientAmount("ost", 2);
+      }
+    );
+    assertThrows(
+      IllegalStateException.class,
+      () -> {
+        r.getIngredientAmount("ost");
+      }
+    );
   }
 }
