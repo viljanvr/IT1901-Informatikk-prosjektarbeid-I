@@ -3,7 +3,7 @@ package tacocalc.fxui;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import tacocalc.core.ShoppingList;
+import tacocalc.core.Recipe;
 
 /**
  * Controller for the overlay where you can edit the properties of a single ingredient.
@@ -32,7 +32,7 @@ public class IngredientEditController {
   private Button deleteButton;
 
   String ingredientName;
-  ShoppingList shoppingList;
+  Recipe recipe;
   AppController appController;
 
   protected IngredientEditController(AppController appController) {
@@ -43,14 +43,14 @@ public class IngredientEditController {
    * Updates the edit screen to show the name, amount and measuring unit of a single ingredient.
    *
    * @param ingredientName name of the given ingredient
-   * @param shoppingList internal object containing all ingredient objects
+   * @param recipe internal object containing all ingredient objects
    */
-  protected void showNewIngredient(String ingredientName, ShoppingList shoppingList) {
+  protected void showNewIngredient(String ingredientName, Recipe recipe) {
     this.ingredientName = ingredientName;
-    this.shoppingList = shoppingList;
+    this.recipe = recipe;
 
     ingredientNameField.setText(ingredientName);
-    quantityField.setText(Integer.toString(shoppingList.getIngredientAmount(ingredientName)));
+    quantityField.setText(Integer.toString(recipe.getIngredientAmount(ingredientName)));
 
     // TODO: add logic to set measuring unit
     measuringUnitField.setText("stk");
@@ -61,8 +61,8 @@ public class IngredientEditController {
    */
   @FXML
   private void handleDecrease() {
-    int amount = shoppingList.getIngredientAmount(ingredientName);
-    shoppingList.setIngredientAmount(ingredientName, amount - 1);
+    int amount = recipe.getIngredientAmount(ingredientName);
+    recipe.setIngredientAmount(ingredientName, amount - 1);
     quantityField.setText(Integer.toString(amount - 1));
   }
 
@@ -71,8 +71,8 @@ public class IngredientEditController {
    */
   @FXML
   private void handleIncrease() {
-    int amount = shoppingList.getIngredientAmount(ingredientName);
-    shoppingList.setIngredientAmount(ingredientName, amount + 1);
+    int amount = recipe.getIngredientAmount(ingredientName);
+    recipe.setIngredientAmount(ingredientName, amount + 1);
     quantityField.setText(Integer.toString(amount + 1));
   }
 

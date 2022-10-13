@@ -31,7 +31,7 @@ public class RecipeBookController {
   }
 
   private void getRecipesFromFile() {
-    File dir = new File("../core/src/main/resources/");
+    File dir = new File("../data/src/main/resources/");
     File[] listOfRecipes = dir.listFiles();
     List<String> recipeNames = Arrays.stream(listOfRecipes).map(f -> f.getName().split("\\.")[0])
         .collect(Collectors.toList());
@@ -60,7 +60,8 @@ public class RecipeBookController {
     });
     List<Node> children = recipeList.getChildren();
     int columnPosition = (children.size() % 2 == 0) ? 0 : 1;
-    int rowPosition = (children.size() % 2 == 0) ? recipeList.getRowCount() : recipeList.getRowCount() - 1;
+    int rowPosition =
+        (children.size() % 2 == 0) ? recipeList.getRowCount() : recipeList.getRowCount() - 1;
     recipeList.add(recipeButton, columnPosition, rowPosition);
 
   }
