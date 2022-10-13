@@ -155,8 +155,7 @@ public class AppController {
    * Adds ingredient to the ShoppingList object. Saves the updated recipe object to file and updates
    * the view.
    *
-   * <p>
-   * In case an illegal amount is specified, an alert is showed.
+   * <p>In case an illegal amount is specified, an alert is showed.
    */
 
   @FXML
@@ -183,9 +182,8 @@ public class AppController {
   /**
    * Method takes in the properties of an ingredient and adds it to the view.
    *
-   * <p>
-   * Method also initialises the eventhandlers for the new checkbox and the edit-button for the new
-   * ingredient.
+   * <p>Method also initialises the eventhandlers for the new checkbox and the 
+   * edit-button for the new ingredient.
    *
    * @param ingredientName the string of the name
    * @param ingredientAmnt the integer of the amount
@@ -298,8 +296,7 @@ public class AppController {
   /**
    * Gets the name from a text field of a file to be read or written to.
    *
-   * <p>
-   * TODO: Implement possibility to have different recipies and files
+   * <p>TODO: Implement possibility to have different recipes and files
    *
    * @return returns filename as a String
    */
