@@ -79,12 +79,9 @@ public class LogicTest {
     assertFalse(r.getBought("ost"));
     assertEquals(3, r.getIngredientAmount("ost"));
     r.deleteItem("ost");
-    assertThrows(
-      IllegalStateException.class,
-      () -> {
-        r.deleteItem("ost");
-      }
-    );
+    assertThrows(IllegalStateException.class, () -> {
+      r.deleteItem("ost");
+    });
   }
 
   @Test
@@ -106,41 +103,23 @@ public class LogicTest {
     Ingredient I1 = new Ingredient("tomat", 3);
     Recipe r = new Recipe(I1);
     r.setPeople(1);
-    assertThrows(
-      IllegalArgumentException.class,
-      () -> {
-        I1.setAmount(-1);
-      }
-    );
-    assertThrows(
-      IllegalStateException.class,
-      () -> {
-        r.getBought("ost");
-      }
-    );
-    assertThrows(
-      IllegalStateException.class,
-      () -> {
-        r.deleteItem("ost");
-      }
-    );
-    assertThrows(
-      IllegalStateException.class,
-      () -> {
-        r.setBought("ost", true);
-      }
-    );
-    assertThrows(
-      IllegalStateException.class,
-      () -> {
-        r.setIngredientAmount("ost", 2);
-      }
-    );
-    assertThrows(
-      IllegalStateException.class,
-      () -> {
-        r.getIngredientAmount("ost");
-      }
-    );
+    assertThrows(IllegalArgumentException.class, () -> {
+      I1.setAmount(-1);
+    });
+    assertThrows(IllegalStateException.class, () -> {
+      r.getBought("ost");
+    });
+    assertThrows(IllegalStateException.class, () -> {
+      r.deleteItem("ost");
+    });
+    assertThrows(IllegalStateException.class, () -> {
+      r.setBought("ost", true);
+    });
+    assertThrows(IllegalStateException.class, () -> {
+      r.setIngredientAmount("ost", 2);
+    });
+    assertThrows(IllegalStateException.class, () -> {
+      r.getIngredientAmount("ost");
+    });
   }
 }
