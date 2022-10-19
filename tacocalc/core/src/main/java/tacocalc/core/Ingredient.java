@@ -36,16 +36,12 @@ public class Ingredient {
 
   protected void setAmount(Integer amount) {
     if (amount <= 0) {
-      throw new IllegalArgumentException(
-        "Amount must be a positive number, but was " + amount
-      );
+      throw new IllegalArgumentException("Amount must be a positive number, but was " + amount);
     }
     this.amount = amount;
   }
 
   public String toString() {
-    return (
-      "[" + (getBought() ? "x" : " ") + "]: " + getAmount() + "x " + getName()
-    );
+    return ("[" + (getBought() ? "x" : " ") + "]: " + getAmount() + "x " + getName());
   }
 }
