@@ -34,8 +34,7 @@ public class RecipeBookController {
   }
 
   /**
-   *
-   * new directory Fills this with files of
+   * new directory Fills this with files of.
    *
    */
   private void getRecipesFromFile() {
@@ -62,7 +61,6 @@ public class RecipeBookController {
    *
    * @param recipeName the name of the recipe which will be added
    */
-
   private void addItemToView(String recipeName) {
     Button recipeButton = new Button(recipeName);
     recipeButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -98,7 +96,6 @@ public class RecipeBookController {
    *
    * @throws IOException throws exception if specified FXML is not found
    */
-
   public void changeToScene(String recipeName, Stage thisStage) throws IOException {
     setTransfer(recipeName);
     FXMLLoader loader = new FXMLLoader(getClass().getResource("ShoppingList.fxml"));

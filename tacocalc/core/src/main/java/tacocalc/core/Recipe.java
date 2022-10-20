@@ -68,8 +68,7 @@ public class Recipe {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
       throw new IllegalStateException(
-        "The item doesn't exist in the list, and can therefore not be set to bought"
-      );
+          "The item doesn't exist in the list, and can therefore not be set to bought");
     }
     getIngredient(name).setBought(bought);
   }
@@ -83,9 +82,7 @@ public class Recipe {
   public boolean getBought(String name) {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
-      throw new IllegalStateException(
-        "This ingredient is not in the shoppinglist"
-      );
+      throw new IllegalStateException("This ingredient is not in the shoppinglist");
     }
     return getIngredient(name).getBought();
   }
@@ -100,8 +97,7 @@ public class Recipe {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
       throw new IllegalStateException(
-        "The item doesn't exist in the list, and can therefore not be removed"
-      );
+          "The item doesn't exist in the list, and can therefore not be removed");
     }
     list.remove(getIngredient(name));
   }
@@ -131,8 +127,7 @@ public class Recipe {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
       throw new IllegalStateException(
-        "The item doesn't exist in the list, and can therefore not set new amount"
-      );
+          "The item doesn't exist in the list, and can therefore not set new amount");
     }
     getIngredient(name).setAmount(amountPerPerson);
   }
@@ -146,9 +141,7 @@ public class Recipe {
   public int getIngredientAmount(String name) {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
-      throw new IllegalStateException(
-        "This ingredient is not in the shoppinglist"
-      );
+      throw new IllegalStateException("This ingredient is not in the shoppinglist");
     }
     return (int) getIngredient(name).getAmount() * people;
   }
@@ -204,9 +197,7 @@ public class Recipe {
    */
   public void setPeople(int people) {
     if (people < 1) {
-      throw new IllegalArgumentException(
-        "A recipe must be for 1 or more people"
-      );
+      throw new IllegalArgumentException("A recipe must be for 1 or more people");
     }
     this.people = people;
   }

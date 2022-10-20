@@ -22,9 +22,7 @@ public class AppTest extends ApplicationTest {
 
   @Override
   public void start(final Stage stage) throws Exception {
-    FXMLLoader loader = new FXMLLoader(
-      getClass().getResource("ShoppingList.fxml")
-    );
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("ShoppingList.fxml"));
     Parent root = loader.load();
     stage.setScene(new Scene(root));
     controller = loader.getController();
@@ -41,26 +39,14 @@ public class AppTest extends ApplicationTest {
     clickOn("#newIngredientNameField").write("agurk");
 
     // Checks if textfield contains expected text
-    Assertions.assertEquals(
-      "4",
-      controller.getNewIngredientAmntField().getText()
-    );
-    Assertions.assertEquals(
-      "agurk",
-      controller.getNewIngredientNameField().getText()
-    );
+    Assertions.assertEquals("4", controller.getNewIngredientAmntField().getText());
+    Assertions.assertEquals("agurk", controller.getNewIngredientNameField().getText());
     clickOn("#addIngredient");
     Assertions.assertEquals("4x agurk", getIngredientTextField(0));
 
     // Checks that the input fiels are cleared after adding an ingredient
-    Assertions.assertEquals(
-      "",
-      controller.getNewIngredientAmntField().getText()
-    );
-    Assertions.assertEquals(
-      "",
-      controller.getNewIngredientNameField().getText()
-    );
+    Assertions.assertEquals("", controller.getNewIngredientAmntField().getText());
+    Assertions.assertEquals("", controller.getNewIngredientNameField().getText());
 
     // Cheks that a second ingredient is added at the correct position
     clickOn("#newIngredientAmntField").write("5");
@@ -71,9 +57,7 @@ public class AppTest extends ApplicationTest {
 
   // Tests the error message for wrong input in integer field
   @Test
-  @DisplayName(
-    "Test that adding an ingredient with an invalid amount doesn't do"
-  )
+  @DisplayName("Test that adding an ingredient with an invalid amount doesn't do")
   public void testInvalidAmount() {
     addIngredient("NotAnInteger", "Should give popup error");
     Assertions.assertEquals(0, controller.getIngredientViewStream().count());
@@ -81,9 +65,7 @@ public class AppTest extends ApplicationTest {
 
   // Tests Functions in the ingredient edit controller
   @Test
-  @DisplayName(
-    "Test that you can increase and decrease the amount of an ingredient"
-  )
+  @DisplayName("Test that you can increase and decrease the amount of an ingredient")
   public void testIncreaseAndDecrease() {
     addIngredient("3", "paprika");
     clickOn("#editButton");
@@ -143,30 +125,16 @@ public class AppTest extends ApplicationTest {
   }
 
   private String getIngredientTextField(int index) {
-    return (
-      (TextField) controller
-        .getIngredientViewStream()
-        .skip(3 * index + 1)
-        .findAny()
-        .get()
-    ).getText();
+    return ((TextField) controller.getIngredientViewStream().skip(3 * index + 1).findAny().get())
+        .getText();
   }
 
   private Button getIngredientEditButton(int index) {
-    return (
-      (Button) controller
-        .getIngredientViewStream()
-        .skip(3 * index + 2)
-        .findAny()
-        .get()
-    );
+    return ((Button) controller.getIngredientViewStream().skip(3 * index + 2).findAny().get());
   }
 
   private void createTestFile() {
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
-    fh.write(
-      new Recipe(new Ingredient("tomat", 5), new Ingredient("avocado", 2)),
-      "testFile"
-    );
+    fh.write(new Recipe(new Ingredient("tomat", 5), new Ingredient("avocado", 2)), "testFile");
   }
 }

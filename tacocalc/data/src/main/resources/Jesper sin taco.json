@@ -1,42 +1,42 @@
 [
-    {
-        "name": "agurk",
-        "amount": 4,
-        "bought": false
-    },
-    {
-        "name": "kjøttdeig",
-        "amount": 400,
-        "bought": false
-    },
-    {
-        "name": "tomat",
-        "amount": 1,
-        "bought": false
-    },
-    {
-        "name": "løk",
-        "amount": 1,
-        "bought": false
-    },
-    {
-        "name": "avokado",
-        "amount": 2,
-        "bought": false
-    },
-    {
-        "name": "lefser",
-        "amount": 6,
-        "bought": false
-    },
-    {
-        "name": "mais",
-        "amount": 1,
-        "bought": false
-    },
-    {
-        "name": "salat",
-        "amount": 1,
-        "bought": false
-    }
+  {
+    "name": "agurk",
+    "amount": 4,
+    "bought": false
+  },
+  {
+    "name": "kjøttdeig",
+    "amount": 400,
+    "bought": false
+  },
+  {
+    "name": "tomat",
+    "amount": 1,
+    "bought": false
+  },
+  {
+    "name": "løk",
+    "amount": 1,
+    "bought": false
+  },
+  {
+    "name": "avokado",
+    "amount": 2,
+    "bought": false
+  },
+  {
+    "name": "lefser",
+    "amount": 6,
+    "bought": false
+  },
+  {
+    "name": "mais",
+    "amount": 1,
+    "bought": false
+  },
+  {
+    "name": "salat",
+    "amount": 1,
+    "bought": false
+  }
 ]

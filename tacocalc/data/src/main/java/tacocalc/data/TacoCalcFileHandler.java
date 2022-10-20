@@ -31,6 +31,7 @@ public class TacoCalcFileHandler {
     String fp = FILEPATH + fileName + ".json";
     try (FileWriter fw = new FileWriter(fp, StandardCharsets.UTF_8)) {
       Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
       gson.toJson(r.getList(), fw);
     } catch (FileNotFoundException e) {
       if (new File(FILEPATH).mkdir()) {
