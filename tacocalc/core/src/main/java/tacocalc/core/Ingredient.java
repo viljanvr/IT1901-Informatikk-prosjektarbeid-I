@@ -6,6 +6,7 @@ package tacocalc.core;
 public class Ingredient {
   private String name;
   private Integer amount;
+  private Double perPerson = 0.0d;
 
   private Boolean bought = false;
 
@@ -39,6 +40,18 @@ public class Ingredient {
       throw new IllegalArgumentException("Amount must be a positive number, but was " + amount);
     }
     this.amount = amount;
+  }
+
+  public Double getPerPerson() {
+    return perPerson;
+  }
+
+  protected void setPerPerson(Double perPerson) {
+    if (perPerson <= 0) {
+      throw new IllegalArgumentException(
+          "perPerson must be a positive number, but was " + perPerson);
+    }
+    this.perPerson = perPerson;
   }
 
   public String toString() {
