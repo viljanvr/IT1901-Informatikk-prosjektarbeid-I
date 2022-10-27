@@ -158,6 +158,17 @@ public class AppController {
     handleSaveToFile();
   }
 
+  private boolean isDuplicate(String name) {
+    try {
+      getIngredientViewStream()
+          .filter(i -> i instanceof TextField && ((TextField) i).getText().contains(name))
+          .findFirst().get();
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
   /**
    * Adds ingredient to the ShoppingList object. Saves the updated recipe object to file and updates
    * the view.
@@ -174,7 +185,12 @@ public class AppController {
       recipe.addItem(ingredientName, ingredientAmnt);
       handleSaveToFile();
 
-      addItemToView(ingredientName, ingredientAmnt, false);
+      if (isDuplicate(ingredientName)) {
+        updateIngredient(ingredientName, ingredientName, ingredientAmnt);
+        updateIngredientListView();
+      } else {
+        addItemToView(ingredientName, ingredientAmnt, false);
+      }
 
       newIngredientAmntField.clear();
       newIngredientNameField.clear();
