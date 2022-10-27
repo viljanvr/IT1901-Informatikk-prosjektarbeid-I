@@ -43,6 +43,9 @@ public class AppController {
   private TextField newIngredientAmntField;
 
   @FXML
+  private TextField newMeasurementField;
+
+  @FXML
   private TextField nameField;
 
   @FXML
@@ -127,7 +130,7 @@ public class AppController {
     clearIngredientListView();
 
     recipe.getList().stream().forEach(i -> {
-      addItemToView(i.getName(), i.getAmount(), i.getBought());
+      addItemToView(i.getName(), i.getAmount(), i.getBought(), i.getMeasuringUnit());
     });
   }
 
@@ -152,6 +155,7 @@ public class AppController {
    */
   protected void updateIngredient(String ingredient, String newIngredientName, int amount, String measuringUnit) {
     recipe.setIngredientAmount(ingredient, amount);
+    recipe.setIngredientMeasurement(ingredient, measuringUnit);
     recipe.changeIngredientName(ingredient, newIngredientName);
 
     // TODO: Update the textfields for measuringUnit
@@ -160,7 +164,7 @@ public class AppController {
         .filter(i -> i instanceof TextField && ((TextField) i).getText().contains(ingredient))
         .findFirst().get();
 
-    textField.setText(amount + "x " + newIngredientName);
+    textField.setText(amount + "x " + newIngredientName + " " + measuringUnit);
 
     handleSaveToFile();
   }
@@ -178,16 +182,16 @@ public class AppController {
     try {
       String ingredientName = newIngredientNameField.getText();
       Integer ingredientAmnt = Integer.parseInt(newIngredientAmntField.getText());
-      // TODO: Add seperate field for measurement unit
-      String ingredientUnit = "DEFAULT";
+      String ingredientUnit = newMeasurementField.getText();
 
       recipe.addItem(ingredientName, ingredientAmnt, ingredientUnit);
       handleSaveToFile();
 
-      addItemToView(ingredientName, ingredientAmnt, false);
+      addItemToView(ingredientName, ingredientAmnt, false, ingredientUnit);
 
       newIngredientAmntField.clear();
       newIngredientNameField.clear();
+      newMeasurementField.clear();
     } catch (Exception e) {
       Alert a = new Alert(AlertType.ERROR);
       a.setContentText("Amount needs to be a valid integer");
@@ -207,17 +211,17 @@ public class AppController {
    * @param ingredientName the string of the name
    * @param ingredientAmnt the integer of the amount
    * @param checked        the boolean state of the checkbox
+   * @param measuringUnit  the string of the measuring unit
    */
-  private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked) {
+  private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked, String measuringUnit) {
     CheckBox checkBox = new CheckBox();
     checkBox.setSelected(checked);
 
     Button editButton = new Button("->");
     editButton.setVisible(editMode);
 
-    TextField textField = new TextField(ingredientAmnt + "x " + ingredientName);
+    TextField textField = new TextField(ingredientAmnt + "x " + ingredientName + " " + measuringUnit);
     textField.setEditable(false);
-    // TODO: Add textfield for measuring unit
     // Event handler for ingredient edit button
     editButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -315,7 +319,7 @@ public class AppController {
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
     this.recipe = fh.read(getFileName());
     recipe.getList().stream()
-        .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
+        .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought(), n.getMeasuringUnit()));
   }
 
   /**

@@ -21,6 +21,8 @@ import tacocalc.core.Recipe;
 public class TacoCalcFileHandler {
   public static final String FILEPATH = "../data/src/main/resources/";
 
+  // TODO: Save the measuring Unit as well
+
   /**
    * Takes a filename and stores the object in that given Json file. If it does not exist then it
    * simply creates it.

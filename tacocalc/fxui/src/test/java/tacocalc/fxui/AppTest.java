@@ -135,6 +135,6 @@ public class AppTest extends ApplicationTest {
 
   private void createTestFile() {
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
-    fh.write(new Recipe(new Ingredient("tomat", 5), new Ingredient("avocado", 2)), "testFile");
+    fh.write(new Recipe(new Ingredient("tomat", 5, "default"), new Ingredient("avocado", 2, "default")), "testFile");
   }
 }
