@@ -41,27 +41,29 @@ public class Recipe {
   }
 
   /**
-   * Adds a new Ingredient to the ShoppingList If it is already an Ingredient with the same name,
-   * the old Ingredient will be updated with the amount of the new, and its bought status is set to
+   * Adds a new Ingredient to the ShoppingList If it is already an Ingredient with
+   * the same name,
+   * the old Ingredient will be updated with the amount of the new, and its bought
+   * status is set to
    * false.
    *
-   * @param name the string to be added
+   * @param name   the string to be added
    * @param amount the integer to be added
    */
-  public void addItem(String name, Integer amount) {
+  public void addItem(String name, Integer amount, String measuringUnit) {
     Ingredient duplicate = getIngredient(name);
     if (duplicate != null) {
       duplicate.setAmount(amount);
       duplicate.setBought(false);
     } else {
-      list.add(new Ingredient(name, amount));
+      list.add(new Ingredient(name, amount, measuringUnit));
     }
   }
 
   /**
    * Update the bought propeperty of given ingredient.
    *
-   * @param name name of the ingredient to update
+   * @param name   name of the ingredient to update
    * @param bought the new value to be set
    */
   public void setBought(String name, Boolean bought) {
@@ -88,7 +90,8 @@ public class Recipe {
   }
 
   /**
-   * Delete an ingredient from this recipie. Will throw an IllegalStateException if the ingredient
+   * Delete an ingredient from this recipie. Will throw an IllegalStateException
+   * if the ingredient
    * is not present.
    *
    * @param name the name of the ingredient to be deleted.
@@ -118,9 +121,38 @@ public class Recipe {
   }
 
   /**
+   * Set the measuring unit of a given ingredient.
+   * 
+   * @param name
+   * @param measuringUnit
+   */
+  public void setIngredientMeasurement(String name, String measuringUnit) {
+    Ingredient ingredient = getIngredient(name);
+    if (ingredient == null) {
+      throw new IllegalStateException(
+          "The item doesn't exist in the list, and can therefore not give a new measuring unit");
+    }
+    getIngredient(name).setMeasuringUnit(measuringUnit);
+  }
+
+  /**
+   * Get the measuring unit of a given ingredient.
+   *
+   * @param name the ingredient to get the value from
+   * @return the measuring unit
+   */
+  public String getMeasuringUnit(String name) {
+    Ingredient ingredient = getIngredient(name);
+    if (ingredient == null) {
+      throw new IllegalStateException("This ingredient is not in the shoppinglist");
+    }
+    return getIngredient(name).getMeasuringUnit();
+  }
+
+  /**
    * Set the amount per person of a given ingredient.
    *
-   * @param name The ingredient to be set
+   * @param name            The ingredient to be set
    * @param amountPerPerson The updated amount per person
    */
   public void setIngredientAmount(String name, Integer amountPerPerson) {
@@ -159,7 +191,7 @@ public class Recipe {
    * Change the name of a given ingredient.
    *
    * @param originalName The ingredient which the name is to be changed
-   * @param newName The new name to be set
+   * @param newName      The new name to be set
    */
   public void changeIngredientName(String originalName, String newName) {
     Ingredient ingredient = getIngredient(originalName);

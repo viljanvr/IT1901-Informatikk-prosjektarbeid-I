@@ -6,13 +6,15 @@ package tacocalc.core;
 public class Ingredient {
   private String name;
   private Integer amount;
+  private String measuringUnit;
   private Double perPerson = 0.0d;
 
   private Boolean bought = false;
 
-  public Ingredient(String name, Integer amount) {
+  public Ingredient(String name, Integer amount, String measuringUnit) {
     setName(name);
     setAmount(amount);
+    setMeasuringUnit(measuringUnit);
   }
 
   public String getName() {
@@ -21,6 +23,14 @@ public class Ingredient {
 
   protected void setName(String name) {
     this.name = name;
+  }
+
+  protected void setMeasuringUnit(String measuringUnit) {
+    this.measuringUnit = measuringUnit;
+  }
+
+  public String getMeasuringUnit() {
+    return measuringUnit;
   }
 
   public Boolean getBought() {
