@@ -57,6 +57,8 @@ public class TacoCalcFileHandler {
     try (FileReader fr = new FileReader(fp, StandardCharsets.UTF_8)) {
       Gson gson = new Gson();
 
+      // TODO: Load measuringUnit and perPerson
+
       // Make Ingredient list from Gson
       Type listType = new TypeToken<List<Ingredient>>() {}.getType();
       ArrayList<Ingredient> ingredients = gson.fromJson(fr, listType);

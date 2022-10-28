@@ -6,11 +6,18 @@ package tacocalc.core;
 public class Ingredient {
   private String name;
   private Integer amount;
-  private String measuringUnit;
+  private String measuringUnit = "Default";
   private Double perPerson = 0.0d;
 
   private Boolean bought = false;
 
+  /**
+   * Hello LOL.
+   *
+   * @param name          another thing
+   * @param amount        the other thing
+   * @param measuringUnit the thing
+   */
   public Ingredient(String name, Integer amount, String measuringUnit) {
     setName(name);
     setAmount(amount);
@@ -67,4 +74,10 @@ public class Ingredient {
   public String toString() {
     return ("[" + (getBought() ? "x" : " ") + "]: " + getAmount() + "x " + getName());
   }
+
+  public static void main(String[] args) {
+    Ingredient i = new Ingredient("Hei", 10, "lol");
+    System.out.println(i.getMeasuringUnit());
+  }
+
 }

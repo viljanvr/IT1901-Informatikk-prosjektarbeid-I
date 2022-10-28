@@ -47,8 +47,9 @@ public class Recipe {
    * status is set to
    * false.
    *
-   * @param name   the string to be added
-   * @param amount the integer to be added
+   * @param name          the string to be added
+   * @param amount        the integer to be added
+   * @param measuringUnit the other string to be added
    */
   public void addItem(String name, Integer amount, String measuringUnit) {
     Ingredient duplicate = getIngredient(name);
@@ -123,8 +124,11 @@ public class Recipe {
   /**
    * Set the measuring unit of a given ingredient.
    * 
-   * @param name
-   * @param measuringUnit
+   *
+   * @param name          the name
+   *
+   * @param measuringUnit the other thing
+   * 
    */
   public void setIngredientMeasurement(String name, String measuringUnit) {
     Ingredient ingredient = getIngredient(name);

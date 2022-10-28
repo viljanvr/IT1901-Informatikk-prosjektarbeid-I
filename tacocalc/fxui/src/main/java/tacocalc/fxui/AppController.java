@@ -153,7 +153,8 @@ public class AppController {
    * @param newIngredientName new ingredient name
    * @param amount            new amount to be set
    */
-  protected void updateIngredient(String ingredient, String newIngredientName, int amount, String measuringUnit) {
+  protected void updateIngredient(String ingredient, String newIngredientName, int amount,
+      String measuringUnit) {
     recipe.setIngredientAmount(ingredient, amount);
     recipe.setIngredientMeasurement(ingredient, measuringUnit);
     recipe.changeIngredientName(ingredient, newIngredientName);
@@ -213,14 +214,16 @@ public class AppController {
    * @param checked        the boolean state of the checkbox
    * @param measuringUnit  the string of the measuring unit
    */
-  private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked, String measuringUnit) {
+  private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked,
+      String measuringUnit) {
     CheckBox checkBox = new CheckBox();
     checkBox.setSelected(checked);
 
     Button editButton = new Button("->");
     editButton.setVisible(editMode);
 
-    TextField textField = new TextField(ingredientAmnt + "x " + ingredientName + " " + measuringUnit);
+    TextField textField = new TextField(ingredientAmnt + "x " + ingredientName + " "
+        + measuringUnit);
     textField.setEditable(false);
     // Event handler for ingredient edit button
     editButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -319,7 +322,8 @@ public class AppController {
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
     this.recipe = fh.read(getFileName());
     recipe.getList().stream()
-        .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought(), n.getMeasuringUnit()));
+        .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought(),
+            n.getMeasuringUnit()));
   }
 
   /**
