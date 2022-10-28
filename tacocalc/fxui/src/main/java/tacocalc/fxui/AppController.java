@@ -160,8 +160,8 @@ public class AppController {
 
   /**
    * Methods takes in the name of the ingredient we want to add to our recipe and checks if that
-   * ingredient is already in recipe
-   * 
+   * ingredient is already in recipe.
+   *
    * @param name the String of the ingredients name
    * @return true if an ingredient with that name exists in view
    */
@@ -186,7 +186,7 @@ public class AppController {
   @FXML
   private void handleAddIngredient() {
     try {
-      String ingredientName = newIngredientNameField.getText();
+      String ingredientName = newIngredientNameField.getText().toLowerCase();
       Integer ingredientAmnt = Integer.parseInt(newIngredientAmntField.getText());
 
       recipe.addItem(ingredientName, ingredientAmnt);

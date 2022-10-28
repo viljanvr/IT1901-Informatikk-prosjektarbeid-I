@@ -83,7 +83,7 @@ public class IngredientEditController {
   @FXML
   protected void handleSave() {
     appController.closeIngredientEditOverlay();
-    appController.updateIngredient(ingredientName, ingredientNameField.getText(),
+    appController.updateIngredient(ingredientName, ingredientNameField.getText().toLowerCase(),
         Integer.parseInt(quantityField.getText()));
   }
 

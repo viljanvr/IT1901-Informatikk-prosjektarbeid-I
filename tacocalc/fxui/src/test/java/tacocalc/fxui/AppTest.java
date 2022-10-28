@@ -118,6 +118,22 @@ public class AppTest extends ApplicationTest {
     // TODO: Maybe test checkbox
   }
 
+  @Test
+  @DisplayName("Test that it is not possible to create a duplicate of an ingredient ")
+  public void testDuplicate() {
+    addIngredient("1", "ost");
+    addIngredient("4", "ost");
+    Assertions.assertEquals(3, controller.getIngredientViewStream().count());
+    // Test case sensitivity
+    addIngredient("3", "OsT");
+    Assertions.assertEquals(3, controller.getIngredientViewStream().count());
+  }
+
+  // TODO: Make edge-case tests
+  // What happens if view fills up?
+  // Really long name on ingredient?
+
+
   private void addIngredient(String amount, String name) {
     clickOn("#newIngredientAmntField").write(amount);
     clickOn("#newIngredientNameField").write(name);
