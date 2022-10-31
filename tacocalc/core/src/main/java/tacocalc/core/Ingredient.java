@@ -72,7 +72,8 @@ public class Ingredient {
   }
 
   public String toString() {
-    return ("[" + (getBought() ? "x" : " ") + "]: " + getAmount() + "x " + getName());
+    return ("[" + (getBought() ? "x" : " ") + "]: " + getAmount() + "x " + getName() + " "
+        + getMeasuringUnit());
   }
 
   public static void main(String[] args) {
