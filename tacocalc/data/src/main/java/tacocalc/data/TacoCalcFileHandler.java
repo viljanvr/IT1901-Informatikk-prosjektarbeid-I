@@ -21,8 +21,6 @@ import tacocalc.core.Recipe;
 public class TacoCalcFileHandler {
   public static final String FILEPATH = "../data/src/main/resources/";
 
-  // TODO: Save the measuring Unit as well
-
   /**
    * Takes a filename and stores the object in that given Json file. If it does not exist then it
    * simply creates it.
@@ -57,12 +55,9 @@ public class TacoCalcFileHandler {
     try (FileReader fr = new FileReader(fp, StandardCharsets.UTF_8)) {
       Gson gson = new Gson();
 
-      // TODO: Load measuringUnit and perPerson
-
       // Make Ingredient list from Gson
       Type listType = new TypeToken<List<Ingredient>>() {}.getType();
       ArrayList<Ingredient> ingredients = gson.fromJson(fr, listType);
-
       // Return shopping list from ArrayList
       return new Recipe(ingredients.toArray(new Ingredient[0]));
     } catch (Exception e) {

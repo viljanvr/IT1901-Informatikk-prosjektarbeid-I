@@ -12,7 +12,7 @@ public class Ingredient {
   private Boolean bought = false;
 
   /**
-   * Hello LOL.
+   * The constructor of the Ingredient.
    *
    * @param name          another thing
    * @param amount        the other thing
