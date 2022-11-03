@@ -119,8 +119,8 @@ public class AppTest extends ApplicationTest {
     clickOn("#nameField").write("testFile");
     clickOn("#loadButton");
 
-    Assertions.assertEquals("5x tomat stk", getIngredientTextField(0));
-    Assertions.assertEquals("2x avocado stk", getIngredientTextField(1));
+    Assertions.assertEquals("5x tomat default", getIngredientTextField(0));
+    Assertions.assertEquals("2x avocado default", getIngredientTextField(1));
   }
 
   @Test
