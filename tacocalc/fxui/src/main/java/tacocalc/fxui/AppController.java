@@ -167,9 +167,9 @@ public class AppController {
 
   /**
    * Method takes in the name of an ingredient and checks if there is an item i view with the same
-   * name
-   * 
-   * @param ingredientName String of the name of ingredient to be added
+   * name.
+   *
+   * @param name String of the name of ingredient to be added
    * @return true if ingredient is already in view
    */
   public boolean isDuplicate(String name) {
@@ -203,8 +203,7 @@ public class AppController {
       if (isDuplicate(ingredientName)) {
         updateIngredient(ingredientName, ingredientName, ingredientAmnt, ingredientUnit);
         updateIngredientListView();
-      }
-      else {
+      } else {
         addItemToView(ingredientName, ingredientAmnt, false, ingredientUnit);
       }
 
@@ -221,7 +220,7 @@ public class AppController {
 
   /**
    * Method takes in the properties of an ingredient and adds it to the view.
-   * 
+   *
    * <p>
    * Method also initialises the eventhandlers for the new checkbox and the edit-button for the new
    * ingredient.
@@ -264,8 +263,7 @@ public class AppController {
       ingredientsListLeft.addRow(ingredientsListLeft.getRowCount(), checkBox, textField,
           editButton);
       columnCounter = 1;
-    }
-    else {
+    } else {
       ingredientsListRight.addRow(ingredientsListRight.getRowCount(), checkBox, textField,
           editButton);
       columnCounter = 0;
