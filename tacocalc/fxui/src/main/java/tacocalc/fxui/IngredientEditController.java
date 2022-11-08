@@ -6,8 +6,7 @@ import javafx.scene.control.TextField;
 import tacocalc.core.Recipe;
 
 /**
- * Controller for the overlay where you can edit the properties of a single
- * ingredient.
+ * Controller for the overlay where you can edit the properties of a single ingredient.
  */
 public class IngredientEditController {
 
@@ -41,11 +40,10 @@ public class IngredientEditController {
   }
 
   /**
-   * Updates the edit screen to show the name, amount and measuring unit of a
-   * single ingredient.
+   * Updates the edit screen to show the name, amount and measuring unit of a single ingredient.
    *
    * @param ingredientName name of the given ingredient
-   * @param recipe         internal object containing all ingredient objects
+   * @param recipe internal object containing all ingredient objects
    */
   protected void showNewIngredient(String ingredientName, Recipe recipe, String unit) {
     this.ingredientName = ingredientName;
@@ -79,20 +77,18 @@ public class IngredientEditController {
   }
 
   /**
-   * Saves the changes to a given ingredient when pressing the save-button and
-   * closes the editing.
+   * Saves the changes to a given ingredient when pressing the save-button and closes the editing.
    * overlay.
    */
   @FXML
   protected void handleSave() {
     appController.closeIngredientEditOverlay();
-    appController.updateIngredient(ingredientName, ingredientNameField.getText(),
+    appController.updateIngredient(ingredientName, ingredientNameField.getText().toLowerCase(),
         Integer.parseInt(quantityField.getText()), measuringUnitField.getText());
   }
 
   /**
-   * Deletes the ingredient when pressing the delete-button and closes the editing
-   * overlay.
+   * Deletes the ingredient when pressing the delete-button and closes the editing overlay.
    */
   @FXML
   private void handleDelete() {

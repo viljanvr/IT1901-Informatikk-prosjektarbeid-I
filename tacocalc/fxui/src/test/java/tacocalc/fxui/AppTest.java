@@ -30,10 +30,6 @@ public class AppTest extends ApplicationTest {
     stage.toFront();
   }
 
-  // TODO: Implement measuring unit into test (per now it only has "Default")
-
-  // method is used to add an ingredient in other tests
-
   @Test
 
   @DisplayName("Test adding new ingredients to view")
@@ -43,18 +39,14 @@ public class AppTest extends ApplicationTest {
     clickOn("#newMeasurementField").write("stk");
 
     // Checks if textfield contains expected text
-    Assertions.assertEquals("4",
-        controller.getNewIngredientAmntField().getText());
-    Assertions.assertEquals("agurk",
-        controller.getNewIngredientNameField().getText());
+    Assertions.assertEquals("4", controller.getNewIngredientAmntField().getText());
+    Assertions.assertEquals("agurk", controller.getNewIngredientNameField().getText());
     clickOn("#addIngredient");
     Assertions.assertEquals("4x agurk stk", getIngredientTextField(0));
 
     // Checks that the input fiels are cleared after adding an ingredient
-    Assertions.assertEquals("",
-        controller.getNewIngredientAmntField().getText());
-    Assertions.assertEquals("",
-        controller.getNewIngredientNameField().getText());
+    Assertions.assertEquals("", controller.getNewIngredientAmntField().getText());
+    Assertions.assertEquals("", controller.getNewIngredientNameField().getText());
 
     // Cheks that a second ingredient is added at the correct position
     clickOn("#newIngredientAmntField").write("5");
@@ -135,6 +127,16 @@ public class AppTest extends ApplicationTest {
     // TODO: Maybe test checkbox
   }
 
+  @Test
+
+  @DisplayName("Test adding duplicate ingredient to recipe")
+  public void testDuplicateIngredient() {
+    addIngredient("1", "ost", "stk");
+    addIngredient("2", "ost", "stk");
+    // addIngredient("2", "OsT", "stk");
+    assertEquals("3", controller.getIngredientViewStream().count());
+  }
+
   private void addIngredient(String amount, String name, String measuringUnit) {
     clickOn("#newIngredientAmntField").write(amount);
     clickOn("#newIngredientNameField").write(name);
@@ -143,19 +145,19 @@ public class AppTest extends ApplicationTest {
   }
 
   private String getIngredientTextField(int index) {
-    return ((TextField) controller.getIngredientViewStream().skip(3 * index +
-        1).findAny().get())
+    return ((TextField) controller.getIngredientViewStream().skip(3 * index + 1).findAny().get())
         .getText();
   }
 
   private Button getIngredientEditButton(int index) {
-    return ((Button) controller.getIngredientViewStream().skip(3 * index +
-        2).findAny().get());
+    return ((Button) controller.getIngredientViewStream().skip(3 * index + 2).findAny().get());
   }
 
   private void createTestFile() {
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
-    fh.write(new Recipe(new Ingredient("tomat", 5, "default"), new Ingredient("avocado", 2, "default")), "testFile");
+    fh.write(
+        new Recipe(new Ingredient("tomat", 5, "default"), new Ingredient("avocado", 2, "default")),
+        "testFile");
   }
 
 }

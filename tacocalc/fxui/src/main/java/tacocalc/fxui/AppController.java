@@ -82,10 +82,8 @@ public class AppController {
   }
 
   /**
-   * Enables/disables edit view when pressing the edit button. When entering edit
-   * mode a button to
-   * the right of each ingredient is shown. The button opens an overlay where you
-   * can edit the
+   * Enables/disables edit view when pressing the edit button. When entering edit mode a button to
+   * the right of each ingredient is shown. The button opens an overlay where you can edit the
    * properties of the given ingredient.
    */
   @FXML
@@ -96,12 +94,11 @@ public class AppController {
   }
 
   /**
-   * Update the bought-value of a given ingredient in the recipe object when a
-   * checkBox is clicked.
+   * Update the bought-value of a given ingredient in the recipe object when a checkBox is clicked.
    * The updated recipe is then saved to file.
    *
    * @param ingredientName String with the name of the ingredient
-   * @param c              Checkbox that has been clicked
+   * @param c Checkbox that has been clicked
    */
   private void handleToggleCheckbox(String ingredientName, CheckBox c) {
     recipe.setBought(ingredientName, c.isSelected());
@@ -109,8 +106,7 @@ public class AppController {
   }
 
   /**
-   * Finds and deletes the given ingredient in the recipe object. Saves updated
-   * recipe to files and
+   * Finds and deletes the given ingredient in the recipe object. Saves updated recipe to files and
    * updates the view.
    *
    * @param ingredient name of the ingredient to be removed
@@ -145,13 +141,12 @@ public class AppController {
   }
 
   /**
-   * Updates the internal value of a single ingredient in the recipe object.
-   * Updated recipe is then
+   * Updates the internal value of a single ingredient in the recipe object. Updated recipe is then
    * saved to file and the view is updated.
    *
-   * @param ingredient        ingredient to be changed
+   * @param ingredient ingredient to be changed
    * @param newIngredientName new ingredient name
-   * @param amount            new amount to be set
+   * @param amount new amount to be set
    */
   protected void updateIngredient(String ingredient, String newIngredientName, int amount,
       String measuringUnit) {
@@ -171,8 +166,25 @@ public class AppController {
   }
 
   /**
-   * Adds ingredient to the ShoppingList object. Saves the updated recipe object
-   * to file and updates
+   * Method takes in the name of an ingredient and checks if there is an item i view with the same
+   * name
+   * 
+   * @param ingredientName String of the name of ingredient to be added
+   * @return true if ingredient is already in view
+   */
+  public boolean isDuplicate(String name) {
+    try {
+      getIngredientViewStream()
+          .filter(i -> i instanceof TextField && ((TextField) i).getText().contains(name))
+          .findFirst().get();
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
+  /**
+   * Adds ingredient to the ShoppingList object. Saves the updated recipe object to file and updates
    * the view.
    *
    * <p>
@@ -188,7 +200,13 @@ public class AppController {
       recipe.addItem(ingredientName, ingredientAmnt, ingredientUnit);
       handleSaveToFile();
 
-      addItemToView(ingredientName, ingredientAmnt, false, ingredientUnit);
+      if (isDuplicate(ingredientName)) {
+        updateIngredient(ingredientName, ingredientName, ingredientAmnt, ingredientUnit);
+        updateIngredientListView();
+      }
+      else {
+        addItemToView(ingredientName, ingredientAmnt, false, ingredientUnit);
+      }
 
       newIngredientAmntField.clear();
       newIngredientNameField.clear();
@@ -205,14 +223,13 @@ public class AppController {
    * Method takes in the properties of an ingredient and adds it to the view.
    * 
    * <p>
-   * Method also initialises the eventhandlers for the new checkbox and the
-   * edit-button for the new
+   * Method also initialises the eventhandlers for the new checkbox and the edit-button for the new
    * ingredient.
    *
    * @param ingredientName the string of the name
    * @param ingredientAmnt the integer of the amount
-   * @param checked        the boolean state of the checkbox
-   * @param measuringUnit  the string of the measuring unit
+   * @param checked the boolean state of the checkbox
+   * @param measuringUnit the string of the measuring unit
    */
   private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked,
       String measuringUnit) {
@@ -222,8 +239,8 @@ public class AppController {
     Button editButton = new Button("->");
     editButton.setVisible(editMode);
 
-    TextField textField = new TextField(ingredientAmnt + "x " + ingredientName + " "
-        + measuringUnit);
+    TextField textField =
+        new TextField(ingredientAmnt + "x " + ingredientName + " " + measuringUnit);
     textField.setEditable(false);
     // Event handler for ingredient edit button
     editButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -247,7 +264,8 @@ public class AppController {
       ingredientsListLeft.addRow(ingredientsListLeft.getRowCount(), checkBox, textField,
           editButton);
       columnCounter = 1;
-    } else {
+    }
+    else {
       ingredientsListRight.addRow(ingredientsListRight.getRowCount(), checkBox, textField,
           editButton);
       columnCounter = 0;
@@ -273,8 +291,7 @@ public class AppController {
   }
 
   /**
-   * Opens the overlay where you can edit the properties of a given ingredient.
-   * Updates the overlay
+   * Opens the overlay where you can edit the properties of a given ingredient. Updates the overlay
    * with the values of the given ingredient.
    *
    * @param ingredientName the ingredient to be edited
@@ -303,8 +320,7 @@ public class AppController {
   }
 
   /**
-   * Saves the recipe object to a file with the name from the nameField text
-   * field.
+   * Saves the recipe object to a file with the name from the nameField text field.
    */
   protected void handleSaveToFile() {
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
@@ -312,8 +328,7 @@ public class AppController {
   }
 
   /**
-   * Clears the ingredient view. Reads a file with ingredients and adds all
-   * elements to the a recipe
+   * Clears the ingredient view. Reads a file with ingredients and adds all elements to the a recipe
    * object. All elements of recipe is then added to the view.
    */
   @FXML
@@ -321,9 +336,8 @@ public class AppController {
     clearIngredientListView();
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
     this.recipe = fh.read(getFileName());
-    recipe.getList().stream()
-        .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought(),
-            n.getMeasuringUnit()));
+    recipe.getList().stream().forEach(
+        n -> addItemToView(n.getName(), n.getAmount(), n.getBought(), n.getMeasuringUnit()));
   }
 
   /**
@@ -339,8 +353,7 @@ public class AppController {
   }
 
   /**
-   * A getter that maskes the newIngredientAmntField visible to other classes Is
-   * used in tests.
+   * A getter that maskes the newIngredientAmntField visible to other classes Is used in tests.
    *
    * @return returns the TextField object
    */
@@ -349,8 +362,7 @@ public class AppController {
   }
 
   /**
-   * A getter that makes the newingredientNameField visible to other classes Is
-   * used in test.
+   * A getter that makes the newingredientNameField visible to other classes Is used in test.
    *
    * @return returns the TextField object
    */
