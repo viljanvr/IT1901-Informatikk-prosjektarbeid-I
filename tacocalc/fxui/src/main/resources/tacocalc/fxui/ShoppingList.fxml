@@ -37,18 +37,26 @@
                <children>
                   <AnchorPane prefHeight="44.0" prefWidth="900.0">
                      <children>
-                        <HBox fx:id="scaleBox" prefHeight="44.0" prefWidth="430.0">
+                        <HBox fx:id="scaleBox" prefHeight="84.0" prefWidth="430.0">
                            <children>
-                              <Button fx:id="decreasePeopleButton" mnemonicParsing="false" onAction="#handleDecreasePeople" prefHeight="54.0" prefWidth="44.0" text="-">
+                              <Button fx:id="decreasePeopleButton" mnemonicParsing="false" onAction="#handleDecreasePeople" prefHeight="44.0" prefWidth="44.0" text="-">
                                  <HBox.margin>
                                     <Insets bottom="5.0" right="5.0" top="5.0" />
                                  </HBox.margin>
                               </Button>
-                              <TextField fx:id="numberOfPeopleField" alignment="CENTER" onKeyTyped="#handleNumberOfPeopleChange" prefHeight="44.0" prefWidth="68.0" promptText="People">
+                              <VBox>
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </HBox.margin>
-                              </TextField>
+                                 <children>
+                                    <TextField fx:id="numberOfPeopleField" alignment="CENTER" onKeyTyped="#handleNumberOfPeopleChange" prefHeight="44.0" prefWidth="68.0" promptText="People" />
+                                    <Text fx:id="numberOfPeopleErrorText" fill="#ffa012" strokeType="OUTSIDE" strokeWidth="0.0" text="Not a valid number" visible="false">
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                    </Text>
+                                 </children>
+                              </VBox>
                               <Button fx:id="addIngredient11" mnemonicParsing="false" onAction="#handleIncreasePeople" prefHeight="44.0" prefWidth="44.0" text="+">
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -143,6 +151,6 @@
             </VBox>
          </children>
       </VBox>
-      <BorderPane fx:id="popUpContain" prefHeight="600.0" prefWidth="900.0" visible="false" />
+      <BorderPane fx:id="popUpContain" onMouseClicked="#clickOutsideOverlayHandle" prefHeight="600.0" prefWidth="900.0" visible="false" />
    </children>
 </AnchorPane>

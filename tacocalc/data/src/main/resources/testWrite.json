@@ -1,12 +1,14 @@
 [
   {
     "name": "agurk",
-    "amount": 4,
+    "perPersonAmount": 4.0,
+    "roundUpTo": 1.0,
     "bought": false
   },
   {
     "name": "paprika",
-    "amount": 6,
+    "perPersonAmount": 6.0,
+    "roundUpTo": 1.0,
     "bought": false
   }
 ]

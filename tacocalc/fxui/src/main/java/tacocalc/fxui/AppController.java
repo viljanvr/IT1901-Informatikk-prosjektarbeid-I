@@ -1,6 +1,7 @@
 package tacocalc.fxui;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.stream.Stream;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -20,6 +21,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
 import tacocalc.data.TacoCalcFileHandler;
@@ -74,6 +76,9 @@ public class AppController {
   @FXML
   private HBox addIngredientBox;
 
+  @FXML
+  private Text numberOfPeopleErrorText;
+
   private Boolean editMode = false;
 
   private Recipe recipe = new Recipe();
@@ -112,27 +117,45 @@ public class AppController {
 
   @FXML
   private void handleDecreasePeople() {
-    numberOfPeopleField
-        .setText(String.valueOf(Integer.parseInt(numberOfPeopleField.getText()) - 1));
+    if (recipe.getNumberOfPeople() == 2) {
+      decreasePeopleButton.setDisable(true);
+    }
     recipe.setNumberOfPeople(recipe.getNumberOfPeople() - 1);
+    numberOfPeopleField.setText(String.valueOf(recipe.getNumberOfPeople()));
     updateIngredientListView();
+    numberOfPeopleErrorText.setVisible(false);
   }
 
   @FXML
   private void handleIncreasePeople() {
-    numberOfPeopleField
-        .setText(String.valueOf(Integer.parseInt(numberOfPeopleField.getText()) + 1));
+    decreasePeopleButton.setDisable(false);
     recipe.setNumberOfPeople(recipe.getNumberOfPeople() + 1);
+    numberOfPeopleField.setText(String.valueOf(recipe.getNumberOfPeople()));
     updateIngredientListView();
+    numberOfPeopleErrorText.setVisible(false);
   }
 
   @FXML
   private void handleNumberOfPeopleChange() {
     try {
-      recipe.setNumberOfPeople(Integer.parseInt(numberOfPeopleField.getText()));
+      int number = Integer.parseInt(numberOfPeopleField.getText());
+      if (number > 0) {
+        recipe.setNumberOfPeople(Integer.parseInt(numberOfPeopleField.getText()));
+        numberOfPeopleErrorText.setVisible(false);
+        if (number > 1) {
+          decreasePeopleButton.setDisable(false);
+        }
+      } else {
+        numberOfPeopleErrorText.setVisible(true);
+      }
+
       updateIngredientListView();
     } catch (NumberFormatException e) {
-      System.out.println("Not a valid number");
+      if (numberOfPeopleField.getText().isBlank()) {
+        numberOfPeopleErrorText.setVisible(false);
+      } else {
+        numberOfPeopleErrorText.setVisible(true);
+      }
     }
   }
 
@@ -192,16 +215,17 @@ public class AppController {
    * @param amount new amount to be set
    */
   protected void updateIngredient(String ingredient, String newIngredientName,
-      Double perPersonAmount) {
+      Double perPersonAmount, Double roundUpTo) {
     recipe.setIngredientPerPersonAmount(ingredient, perPersonAmount);
+    recipe.setRoundUpTo(ingredient, roundUpTo);
     recipe.changeIngredientName(ingredient, newIngredientName);
 
     TextField textField = (TextField) getIngredientViewStream()
         .filter(i -> i instanceof TextField && ((TextField) i).getText().contains(ingredient))
         .findFirst().get();
 
-    textField.setText(Ingredient.formatDouble(perPersonAmount * recipe.getNumberOfPeople()) + "x "
-        + newIngredientName);
+    textField.setText(Ingredient.formatDouble(recipe.getIngredientTotalAmount(newIngredientName))
+        + "x " + newIngredientName);
 
     handleSaveToFile();
   }
@@ -241,11 +265,10 @@ public class AppController {
       handleSaveToFile();
 
       if (isDuplicate(ingredientName)) {
-        updateIngredient(ingredientName, ingredientName,
-            ingredientPerPersonAmnt * recipe.getNumberOfPeople());
+        updateIngredient(ingredientName, ingredientName, ingredientPerPersonAmnt, 1.0);
         updateIngredientListView();
       } else {
-        addItemToView(ingredientName, ingredientPerPersonAmnt * recipe.getNumberOfPeople(), false);
+        addItemToView(ingredientName, recipe.getIngredientTotalAmount(ingredientName), false);
       }
 
       newIngredientAmntField.clear();
@@ -316,6 +339,13 @@ public class AppController {
   protected Stream<Node> getIngredientViewStream() {
     return Stream.concat(ingredientsListLeft.getChildren().stream(),
         ingredientsListRight.getChildren().stream());
+  }
+
+  @FXML
+  private void clickOutsideOverlayHandle(MouseEvent e) {
+    if (Objects.equals(e.getPickResult().getIntersectedNode().getId(), "popUpContain")) {
+      closeIngredientEditOverlay();
+    }
   }
 
   /**

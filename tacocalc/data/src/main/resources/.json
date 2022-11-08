@@ -1,7 +1,8 @@
 [
   {
-    "name": "paprika",
-    "amount": 4,
+    "name": "ost",
+    "perPersonAmount": 3.0,
+    "roundUpTo": 1.0,
     "bought": false
   }
 ]

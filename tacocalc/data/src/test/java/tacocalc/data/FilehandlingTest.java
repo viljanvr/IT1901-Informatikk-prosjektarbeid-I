@@ -14,15 +14,15 @@ public class FilehandlingTest {
   public void testWrite() {
     TacoCalcFileHandler th = new TacoCalcFileHandler();
     Recipe r1 = new Recipe();
-    r1.addItem("agurk", 4);
-    r1.addItem("paprika", 6);
+    r1.addItem("agurk", 4.0);
+    r1.addItem("paprika", 6.0);
     th.write(r1, "testWrite");
     File f = new File("../data/src/main/resources/testWrite.json");
     Assertions.assertTrue(f.isFile());
     // Check if you can write to existing file
     Assertions.assertTrue(f.canWrite());
     // Check if new items are written over
-    r1.addItem("banan", 18);
+    r1.addItem("banan", 18.0);
     th.write(r1, "testWrite2");
     Path p1 = Paths.get("testWrite");
     Path p2 = Paths.get("testWrite2");
@@ -38,10 +38,11 @@ public class FilehandlingTest {
   public void testRead() {
     TacoCalcFileHandler th = new TacoCalcFileHandler();
     Recipe r1 = new Recipe();
-    r1.addItem("genus", 3);
+    r1.addItem("genus", 3.0);
     th.write(r1, "testRead");
     Recipe r2 = th.read("testRead");
-    Assertions.assertEquals(r1.getIngredientAmount("genus"), r2.getIngredientAmount("genus"));
+    Assertions.assertEquals(r1.getIngredientPerPersonAmount("genus"),
+        r2.getIngredientPerPersonAmount("genus"));
     // If file doesn't exist it returns a new Recipe
     Assertions.assertEquals(0, th.read("NonFileNameOnlyForTesting").getList().size());
   }
