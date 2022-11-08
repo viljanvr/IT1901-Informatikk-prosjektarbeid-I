@@ -133,8 +133,8 @@ public class AppTest extends ApplicationTest {
   public void testDuplicateIngredient() {
     addIngredient("1", "ost", "stk");
     addIngredient("2", "ost", "stk");
-    // addIngredient("2", "OsT", "stk");
-    assertEquals("3", controller.getIngredientViewStream().count());
+    addIngredient("2", "OsT", "stk");
+    Assertions.assertEquals(3, controller.getIngredientViewStream().count());
   }
 
   private void addIngredient(String amount, String name, String measuringUnit) {

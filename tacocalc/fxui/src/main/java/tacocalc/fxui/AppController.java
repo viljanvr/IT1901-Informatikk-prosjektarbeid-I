@@ -193,7 +193,7 @@ public class AppController {
   @FXML
   private void handleAddIngredient() {
     try {
-      String ingredientName = newIngredientNameField.getText();
+      String ingredientName = newIngredientNameField.getText().toLowerCase();
       Integer ingredientAmnt = Integer.parseInt(newIngredientAmntField.getText());
       String ingredientUnit = newMeasurementField.getText();
 
