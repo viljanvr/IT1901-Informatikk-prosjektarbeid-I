@@ -2,7 +2,11 @@ package tacocalc.fxui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
 
 /**
@@ -20,6 +24,9 @@ public class IngredientEditController {
   private TextField quantityField;
 
   @FXML
+  private TextField roundAmountField;
+
+  @FXML
   private Button decreaseButton;
 
   @FXML
@@ -30,6 +37,12 @@ public class IngredientEditController {
 
   @FXML
   private Button deleteButton;
+
+  @FXML
+  private CheckBox roundCheckBox;
+
+  @FXML
+  private Text roundUpToText;
 
   String ingredientName;
   Recipe recipe;
@@ -50,10 +63,17 @@ public class IngredientEditController {
     this.recipe = recipe;
 
     ingredientNameField.setText(ingredientName);
-    quantityField.setText(Integer.toString(recipe.getIngredientAmount(ingredientName)));
+    quantityField.setText(Double.toString(recipe.getIngredientPerPersonAmount(ingredientName)));
 
     // TODO: add logic to set measuring unit
     measuringUnitField.setText("stk");
+
+    if (recipe.getRoundUpTo(ingredientName) == 0.0) {
+      handleRoundToggle();
+    } else {
+      roundAmountField.setText(Ingredient.formatDouble(recipe.getRoundUpTo(ingredientName)));
+      roundCheckBox.setSelected(true);
+    }
   }
 
   /**
@@ -61,9 +81,9 @@ public class IngredientEditController {
    */
   @FXML
   private void handleDecrease() {
-    int amount = recipe.getIngredientAmount(ingredientName);
-    recipe.setIngredientAmount(ingredientName, amount - 1);
-    quantityField.setText(Integer.toString(amount - 1));
+    Double amount = recipe.getIngredientPerPersonAmount(ingredientName);
+    recipe.setIngredientPerPersonAmount(ingredientName, amount - 1);
+    quantityField.setText(Double.toString(amount - 1));
   }
 
   /**
@@ -71,9 +91,18 @@ public class IngredientEditController {
    */
   @FXML
   private void handleIncrease() {
-    int amount = recipe.getIngredientAmount(ingredientName);
-    recipe.setIngredientAmount(ingredientName, amount + 1);
-    quantityField.setText(Integer.toString(amount + 1));
+    Double amount = recipe.getIngredientPerPersonAmount(ingredientName);
+    recipe.setIngredientPerPersonAmount(ingredientName, amount + 1);
+    quantityField.setText(Double.toString(amount + 1));
+  }
+
+  @FXML
+  private void handleRoundToggle() {
+    roundUpToText.setFill(roundCheckBox.isSelected() ? Color.WHITE : Color.web("#ababab"));
+    roundAmountField.setDisable(!roundCheckBox.isSelected());
+    roundAmountField.setText(
+        roundCheckBox.isSelected() ? Ingredient.formatDouble(recipe.getRoundUpTo(ingredientName))
+            : "");
   }
 
   /**
@@ -84,7 +113,7 @@ public class IngredientEditController {
   protected void handleSave() {
     appController.closeIngredientEditOverlay();
     appController.updateIngredient(ingredientName, ingredientNameField.getText().toLowerCase(),
-        Integer.parseInt(quantityField.getText()));
+        Double.parseDouble(quantityField.getText()));
   }
 
   /**
@@ -95,6 +124,5 @@ public class IngredientEditController {
     appController.closeIngredientEditOverlay();
     appController.handleDeleteIngredient(ingredientName);
   }
-
 
 }

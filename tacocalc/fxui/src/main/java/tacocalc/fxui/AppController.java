@@ -17,8 +17,10 @@ import javafx.scene.effect.BoxBlur;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
 import tacocalc.data.TacoCalcFileHandler;
 
@@ -46,10 +48,16 @@ public class AppController {
   private TextField nameField;
 
   @FXML
+  private TextField numberOfPeopleField;
+
+  @FXML
   private Button addIngredient;
 
   @FXML
-  private Button goBackButton;
+  private Button decreasePeopleButton;
+
+  @FXML
+  private Button increasePeopleButton;
 
   @FXML
   private Button editButton;
@@ -59,6 +67,12 @@ public class AppController {
 
   @FXML
   private VBox container;
+
+  @FXML
+  private HBox scaleBox;
+
+  @FXML
+  private HBox addIngredientBox;
 
   private Boolean editMode = false;
 
@@ -73,9 +87,13 @@ public class AppController {
 
   private BoxBlur blur = new BoxBlur(30, 30, 3);
 
+  /**
+   * Initializes the application.
+   */
   public void initialize() {
     initIngredientEditOverlay();
     loadRecipeFromRecipeBook(RecipeBookController.transferRecipe);
+    numberOfPeopleField.setText(String.valueOf(recipe.getNumberOfPeople()));
   }
 
   /**
@@ -88,6 +106,34 @@ public class AppController {
     editMode = !editMode;
     getIngredientViewStream().filter(a -> a instanceof Button).forEach(a -> a.setVisible(editMode));
     editButton.setText(editMode ? "Cancel" : "Edit");
+    addIngredientBox.setVisible(editMode);
+    scaleBox.setVisible(!editMode);
+  }
+
+  @FXML
+  private void handleDecreasePeople() {
+    numberOfPeopleField
+        .setText(String.valueOf(Integer.parseInt(numberOfPeopleField.getText()) - 1));
+    recipe.setNumberOfPeople(recipe.getNumberOfPeople() - 1);
+    updateIngredientListView();
+  }
+
+  @FXML
+  private void handleIncreasePeople() {
+    numberOfPeopleField
+        .setText(String.valueOf(Integer.parseInt(numberOfPeopleField.getText()) + 1));
+    recipe.setNumberOfPeople(recipe.getNumberOfPeople() + 1);
+    updateIngredientListView();
+  }
+
+  @FXML
+  private void handleNumberOfPeopleChange() {
+    try {
+      recipe.setNumberOfPeople(Integer.parseInt(numberOfPeopleField.getText()));
+      updateIngredientListView();
+    } catch (NumberFormatException e) {
+      System.out.println("Not a valid number");
+    }
   }
 
   /**
@@ -123,7 +169,7 @@ public class AppController {
     clearIngredientListView();
 
     recipe.getList().stream().forEach(i -> {
-      addItemToView(i.getName(), i.getAmount(), i.getBought());
+      addItemToView(i.getName(), i.getTotalAmount(recipe.getNumberOfPeople()), i.getBought());
     });
   }
 
@@ -145,15 +191,17 @@ public class AppController {
    * @param newIngredientName new ingredient name
    * @param amount new amount to be set
    */
-  protected void updateIngredient(String ingredient, String newIngredientName, int amount) {
-    recipe.setIngredientAmount(ingredient, amount);
+  protected void updateIngredient(String ingredient, String newIngredientName,
+      Double perPersonAmount) {
+    recipe.setIngredientPerPersonAmount(ingredient, perPersonAmount);
     recipe.changeIngredientName(ingredient, newIngredientName);
 
     TextField textField = (TextField) getIngredientViewStream()
         .filter(i -> i instanceof TextField && ((TextField) i).getText().contains(ingredient))
         .findFirst().get();
 
-    textField.setText(amount + "x " + newIngredientName);
+    textField.setText(Ingredient.formatDouble(perPersonAmount * recipe.getNumberOfPeople()) + "x "
+        + newIngredientName);
 
     handleSaveToFile();
   }
@@ -187,25 +235,25 @@ public class AppController {
   private void handleAddIngredient() {
     try {
       String ingredientName = newIngredientNameField.getText().toLowerCase();
-      Integer ingredientAmnt = Integer.parseInt(newIngredientAmntField.getText());
+      Double ingredientPerPersonAmnt = Double.parseDouble(newIngredientAmntField.getText());
 
-      recipe.addItem(ingredientName, ingredientAmnt);
+      recipe.addItem(ingredientName, ingredientPerPersonAmnt);
       handleSaveToFile();
 
       if (isDuplicate(ingredientName)) {
-        updateIngredient(ingredientName, ingredientName, ingredientAmnt);
+        updateIngredient(ingredientName, ingredientName,
+            ingredientPerPersonAmnt * recipe.getNumberOfPeople());
         updateIngredientListView();
       } else {
-        addItemToView(ingredientName, ingredientAmnt, false);
+        addItemToView(ingredientName, ingredientPerPersonAmnt * recipe.getNumberOfPeople(), false);
       }
 
       newIngredientAmntField.clear();
       newIngredientNameField.clear();
-    } catch (Exception e) {
+    } catch (NumberFormatException e) {
       Alert a = new Alert(AlertType.ERROR);
       a.setContentText("Amount needs to be a valid integer");
       a.show();
-      e.printStackTrace();
     }
   }
 
@@ -220,14 +268,15 @@ public class AppController {
    * @param ingredientAmnt the integer of the amount
    * @param checked the boolean state of the checkbox
    */
-  private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked) {
+  private void addItemToView(String ingredientName, Double ingredientAmnt, Boolean checked) {
     CheckBox checkBox = new CheckBox();
     checkBox.setSelected(checked);
 
     Button editButton = new Button("->");
     editButton.setVisible(editMode);
 
-    TextField textField = new TextField(ingredientAmnt + "x " + ingredientName);
+    TextField textField =
+        new TextField(Ingredient.formatDouble(ingredientAmnt) + "x " + ingredientName);
     textField.setEditable(false);
 
     // Event handler for ingredient edit button
@@ -284,6 +333,7 @@ public class AppController {
    * @param ingredientName the ingredient to be edited
    */
   private void openIngredientEditOverlay(String ingredientName) {
+    handleEditButton();
     popUpContain.setVisible(true);
     ingredientEditController.showNewIngredient(ingredientName, recipe);
     container.setEffect(blur);
@@ -322,8 +372,7 @@ public class AppController {
     clearIngredientListView();
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
     this.recipe = fh.read(getFileName());
-    recipe.getList().stream()
-        .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought()));
+    updateIngredientListView();
   }
 
   /**

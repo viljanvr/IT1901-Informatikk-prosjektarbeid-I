@@ -35,30 +35,32 @@ public class AppTest extends ApplicationTest {
   @Test
   @DisplayName("Test adding new ingredients to view")
   public void addNewIngredientTest() {
-    clickOn("#newIngredientAmntField").write("4");
+    clickOn("#editButton");
+    clickOn("#newIngredientAmntField").write("2");
     clickOn("#newIngredientNameField").write("agurk");
 
     // Checks if textfield contains expected text
-    Assertions.assertEquals("4", controller.getNewIngredientAmntField().getText());
+    Assertions.assertEquals("2", controller.getNewIngredientAmntField().getText());
     Assertions.assertEquals("agurk", controller.getNewIngredientNameField().getText());
     clickOn("#addIngredient");
-    Assertions.assertEquals("4x agurk", getIngredientTextField(0));
+    Assertions.assertEquals("8x agurk", getIngredientTextField(0));
 
     // Checks that the input fiels are cleared after adding an ingredient
     Assertions.assertEquals("", controller.getNewIngredientAmntField().getText());
     Assertions.assertEquals("", controller.getNewIngredientNameField().getText());
 
     // Cheks that a second ingredient is added at the correct position
-    clickOn("#newIngredientAmntField").write("5");
+    clickOn("#newIngredientAmntField").write("1");
     clickOn("#newIngredientNameField").write("tomat");
     clickOn("#addIngredient");
-    Assertions.assertEquals("5x tomat", getIngredientTextField(1));
+    Assertions.assertEquals("4x tomat", getIngredientTextField(1));
   }
 
   // Tests the error message for wrong input in integer field
   @Test
   @DisplayName("Test that adding an ingredient with an invalid amount doesn't do")
   public void testInvalidAmount() {
+    clickOn("#editButton");
     addIngredient("NotAnInteger", "Should give popup error");
     Assertions.assertEquals(0, controller.getIngredientViewStream().count());
   }
@@ -67,28 +69,29 @@ public class AppTest extends ApplicationTest {
   @Test
   @DisplayName("Test that you can increase and decrease the amount of an ingredient")
   public void testIncreaseAndDecrease() {
-    addIngredient("3", "paprika");
     clickOn("#editButton");
+    addIngredient("2", "paprika");
     clickOn(getIngredientEditButton(0));
     clickOn("#decreaseButton");
     clickOn("#saveButton");
-    Assertions.assertEquals("2x paprika", getIngredientTextField(0));
+    Assertions.assertEquals("4x paprika", getIngredientTextField(0));
+    clickOn("#editButton");
     clickOn(getIngredientEditButton(0));
     clickOn("#increaseButton");
     clickOn("#increaseButton");
     clickOn("#saveButton");
-    Assertions.assertEquals("4x paprika", getIngredientTextField(0));
+    Assertions.assertEquals("12x paprika", getIngredientTextField(0));
   }
 
   @Test
   @DisplayName("Test that you can change the name of an ingredient")
   public void testIngredientNameChange() {
-    addIngredient("3", "bacon");
     clickOn("#editButton");
+    addIngredient("1", "bacon");
     clickOn(getIngredientEditButton(0));
     clickOn("#ingredientNameField").eraseText(5).write("bacon terninger");
     clickOn("#ingredientNameField").clickOn("#saveButton");
-    Assertions.assertEquals("3x bacon terninger", getIngredientTextField(0));
+    Assertions.assertEquals("4x bacon terninger", getIngredientTextField(0));
   }
 
   // Tests other important button with a lot of logic
@@ -103,15 +106,15 @@ public class AppTest extends ApplicationTest {
     clickOn("#nameField").write("testFile");
     clickOn("#loadButton");
 
-    Assertions.assertEquals("5x tomat", getIngredientTextField(0));
-    Assertions.assertEquals("2x avocado", getIngredientTextField(1));
+    Assertions.assertEquals("8x tomat", getIngredientTextField(0));
+    Assertions.assertEquals("4x avocado", getIngredientTextField(1));
   }
 
   @Test
   @DisplayName("Test deleting an element from the view")
   public void deleteIngredientTest() {
-    addIngredient("1", "rømme");
     clickOn("#editButton");
+    addIngredient("1", "rømme");
     clickOn(getIngredientEditButton(0));
     clickOn("#deleteButton");
     Assertions.assertEquals(0, controller.getIngredientViewStream().count());
@@ -121,6 +124,7 @@ public class AppTest extends ApplicationTest {
   @Test
   @DisplayName("Test that it is not possible to create a duplicate of an ingredient ")
   public void testDuplicate() {
+    clickOn("#editButton");
     addIngredient("1", "ost");
     addIngredient("4", "ost");
     Assertions.assertEquals(3, controller.getIngredientViewStream().count());
@@ -151,6 +155,6 @@ public class AppTest extends ApplicationTest {
 
   private void createTestFile() {
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
-    fh.write(new Recipe(new Ingredient("tomat", 5), new Ingredient("avocado", 2)), "testFile");
+    fh.write(new Recipe(new Ingredient("tomat", 2.0), new Ingredient("avocado", 1.0)), "testFile");
   }
 }
