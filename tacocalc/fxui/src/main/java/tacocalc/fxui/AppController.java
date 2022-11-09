@@ -3,6 +3,9 @@ package tacocalc.fxui;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.stream.Stream;
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXCheckbox;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -15,12 +18,14 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
@@ -41,31 +46,31 @@ public class AppController {
   private BorderPane popUpContain;
 
   @FXML
-  private TextField newIngredientNameField;
+  private MFXTextField newIngredientNameField;
 
   @FXML
-  private TextField newIngredientAmntField;
+  private MFXTextField newIngredientAmntField;
 
   @FXML
-  private TextField newMeasurementField;
+  private MFXTextField newMeasurementField;
 
   @FXML
   private TextField nameField;
 
   @FXML
-  private TextField numberOfPeopleField;
+  private MFXTextField numberOfPeopleField;
 
   @FXML
-  private Button addIngredient;
+  private MFXButton addIngredient;
 
   @FXML
-  private Button decreasePeopleButton;
+  private MFXButton decreasePeopleButton;
 
   @FXML
-  private Button increasePeopleButton;
+  private MFXButton increasePeopleButton;
 
   @FXML
-  private Button editButton;
+  private MFXButton editButton;
 
   @FXML
   private Button loadButton;
@@ -102,6 +107,13 @@ public class AppController {
     initIngredientEditOverlay();
     loadRecipeFromRecipeBook(RecipeBookController.transferRecipe);
     numberOfPeopleField.setText(String.valueOf(recipe.getNumberOfPeople()));
+
+    numberOfPeopleField.addEventFilter(KeyEvent.KEY_TYPED, new EventHandler<KeyEvent>() {
+      @Override
+      public void handle(KeyEvent event) {
+        handleNumberOfPeopleChange();
+      }
+    });
   }
 
   /**
@@ -138,7 +150,6 @@ public class AppController {
     numberOfPeopleErrorText.setVisible(false);
   }
 
-  @FXML
   private void handleNumberOfPeopleChange() {
     try {
       int number = Integer.parseInt(numberOfPeopleField.getText());
@@ -169,7 +180,7 @@ public class AppController {
    * @param ingredientName String with the name of the ingredient
    * @param c Checkbox that has been clicked
    */
-  private void handleToggleCheckbox(String ingredientName, CheckBox c) {
+  private void handleToggleCheckbox(String ingredientName, MFXCheckbox c) {
     recipe.setBought(ingredientName, c.isSelected());
     handleSaveToFile();
   }
@@ -227,12 +238,12 @@ public class AppController {
 
     // TODO: Update the textfields for measuringUnit
 
-    TextField textField = (TextField) getIngredientViewStream()
-        .filter(i -> i instanceof TextField && ((TextField) i).getText().contains(ingredient))
-        .findFirst().get();
+    Text text = (Text) getIngredientViewStream()
+        .filter(i -> i instanceof Text && ((Text) i).getText().contains(ingredient)).findFirst()
+        .get();
 
-    textField.setText(Ingredient.formatDouble(recipe.getIngredientTotalAmount(newIngredientName))
-        + " " + measuringUnit + " " + newIngredientName);
+    text.setText(Ingredient.formatDouble(recipe.getIngredientTotalAmount(newIngredientName)) + " "
+        + measuringUnit + " " + newIngredientName);
 
     handleSaveToFile();
   }
@@ -281,18 +292,20 @@ public class AppController {
    */
   private void addItemToView(String ingredientName, Double ingredientAmnt, String measuringUnit,
       Boolean checked) {
-    CheckBox checkBox = new CheckBox();
+    MFXCheckbox checkBox = new MFXCheckbox();
     checkBox.setSelected(checked);
 
-    Button editButton = new Button("->");
+    MFXButton editButton = new MFXButton("→");
     editButton.setVisible(editMode);
+    editButton.setStyle("-fx-font-size: 20;");
 
-    TextField textField = new TextField(
+    Text text = new Text(
         Ingredient.formatDouble(ingredientAmnt) + " " + measuringUnit + " " + ingredientName);
-    textField.setEditable(false);
+    text.setFill(Color.WHITE);
+    text.setStyle("-fx-font-size: 20;");
+
     // Event handler for ingredient edit button
     editButton.setOnAction(new EventHandler<ActionEvent>() {
-
       @Override
       public void handle(ActionEvent e) {
         openIngredientEditOverlay(ingredientName);
@@ -304,17 +317,15 @@ public class AppController {
 
       @Override
       public void handle(MouseEvent e) {
-        handleToggleCheckbox(ingredientName, (CheckBox) e.getSource());
+        handleToggleCheckbox(ingredientName, (MFXCheckbox) e.getSource());
       }
     });
 
     if (columnCounter == 0) {
-      ingredientsListLeft.addRow(ingredientsListLeft.getRowCount(), checkBox, textField,
-          editButton);
+      ingredientsListLeft.addRow(ingredientsListLeft.getRowCount(), checkBox, text, editButton);
       columnCounter = 1;
     } else {
-      ingredientsListRight.addRow(ingredientsListRight.getRowCount(), checkBox, textField,
-          editButton);
+      ingredientsListRight.addRow(ingredientsListRight.getRowCount(), checkBox, text, editButton);
       columnCounter = 0;
     }
   }

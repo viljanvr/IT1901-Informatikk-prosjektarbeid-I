@@ -1,9 +1,17 @@
 package tacocalc.fxui;
 
+import javafx.event.EventHandler;
+import javax.xml.stream.EventFilter;
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXCheckbox;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import tacocalc.core.Ingredient;
@@ -15,31 +23,31 @@ import tacocalc.core.Recipe;
 public class IngredientEditController {
 
   @FXML
-  private TextField ingredientNameField;
+  private MFXTextField ingredientNameField;
 
   @FXML
-  private TextField measuringUnitField;
+  private MFXTextField measuringUnitField;
 
   @FXML
-  private TextField quantityField;
+  private MFXTextField quantityField;
 
   @FXML
-  private TextField roundAmountField;
+  private MFXTextField roundAmountField;
 
   @FXML
-  private Button decreaseButton;
+  private MFXButton decreaseButton;
 
   @FXML
-  private Button increaseButton;
+  private MFXButton increaseButton;
 
   @FXML
-  private Button saveButton;
+  private MFXButton saveButton;
 
   @FXML
-  private Button deleteButton;
+  private MFXButton deleteButton;
 
   @FXML
-  private CheckBox roundCheckBox;
+  private MFXCheckbox roundCheckBox;
 
   @FXML
   private Text roundUpToText;
@@ -54,6 +62,10 @@ public class IngredientEditController {
 
   protected IngredientEditController(AppController appController) {
     this.appController = appController;
+  }
+
+  public void initialize() {
+    initEventHandlers();
   }
 
   /**
@@ -110,13 +122,8 @@ public class IngredientEditController {
   }
 
   @FXML
-  private void handleAmountFieldChange() {
-    inputValidation();
-  }
-
-  @FXML
-  private void handleRoundUpFieldChange() {
-    inputValidation();
+  private void test123() {
+    System.out.println(ingredientNameField.getPseudoClassStates().toString());
   }
 
   private void inputValidation() {
@@ -194,5 +201,21 @@ public class IngredientEditController {
   private void handleDelete() {
     appController.closeIngredientEditOverlay();
     appController.handleDeleteIngredient(ingredientName);
+  }
+
+  private void initEventHandlers() {
+    quantityField.addEventFilter(KeyEvent.KEY_TYPED, new EventHandler<KeyEvent>() {
+      @Override
+      public void handle(KeyEvent event) {
+        inputValidation();
+      }
+    });
+
+    roundAmountField.addEventFilter(KeyEvent.KEY_TYPED, new EventHandler<KeyEvent>() {
+      @Override
+      public void handle(KeyEvent event) {
+        inputValidation();
+      }
+    });
   }
 }
