@@ -4,6 +4,7 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.BoxBlur?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -75,6 +76,11 @@
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </HBox.margin>
+                              </TextField>
+                              <TextField fx:id="newMeasurementField" prefHeight="47.0" prefWidth="183.0" promptText="Unit of measurement">
+                                <HBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                  </HBox.margin>
                               </TextField>
                               <TextField fx:id="newIngredientNameField" prefHeight="47.0" prefWidth="183.0" promptText="Ingredient name">
                                  <HBox.margin>

@@ -2,6 +2,7 @@
   {
     "name": "genus",
     "perPersonAmount": 3.0,
+    "measuringUnit": "mange",
     "roundUpTo": 1.0,
     "bought": false
   }

@@ -62,7 +62,7 @@ public class IngredientEditController {
    * @param ingredientName name of the given ingredient
    * @param recipe internal object containing all ingredient objects
    */
-  protected void showNewIngredient(String ingredientName, Recipe recipe) {
+  protected void showNewIngredient(String ingredientName, Recipe recipe, String unit) {
     this.ingredientName = ingredientName;
     this.recipe = recipe;
     this.newPerPersonAmount = recipe.getIngredientPerPersonAmount(ingredientName);
@@ -77,7 +77,7 @@ public class IngredientEditController {
     }
 
     // TODO: add logic to set measuring unit
-    measuringUnitField.setText("stk");
+    measuringUnitField.setText(unit);
 
     if (recipe.getRoundUpTo(ingredientName) == 0.0) {
       handleRoundToggle();
@@ -180,9 +180,10 @@ public class IngredientEditController {
    */
   @FXML
   protected void handleSave() {
-    appController.updateIngredient(ingredientName, ingredientNameField.getText().toLowerCase(),
+    appController.updateIngredient(ingredientName, ingredientNameField.getText(),
         Double.parseDouble(quantityField.getText()),
-        roundCheckBox.isSelected() ? Double.parseDouble(roundAmountField.getText()) : 0);
+        roundCheckBox.isSelected() ? Double.parseDouble(roundAmountField.getText()) : 0,
+        measuringUnitField.getText());
     appController.closeIngredientEditOverlay();
   }
 
@@ -194,5 +195,4 @@ public class IngredientEditController {
     appController.closeIngredientEditOverlay();
     appController.handleDeleteIngredient(ingredientName);
   }
-
 }

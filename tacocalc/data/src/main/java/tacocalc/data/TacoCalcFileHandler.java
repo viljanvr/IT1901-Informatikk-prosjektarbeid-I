@@ -58,7 +58,6 @@ public class TacoCalcFileHandler {
       // Make Ingredient list from Gson
       Type listType = new TypeToken<List<Ingredient>>() {}.getType();
       ArrayList<Ingredient> ingredients = gson.fromJson(fr, listType);
-
       // Return shopping list from ArrayList
       return new Recipe(ingredients.toArray(new Ingredient[0]));
     } catch (Exception e) {

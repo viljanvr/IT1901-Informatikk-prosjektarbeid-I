@@ -56,16 +56,17 @@ public class Recipe {
    *
    * @param name the string to be added
    * @param perPersonAmount the integer to be added
+   * @param measuringUnit the other string to be added
    * @param roundUpTo the value to round the total amount up to
    */
-  public void addItem(String name, Double perPersonAmount, Double roundUpTo) {
+  public void addItem(String name, Double perPersonAmount, Double roundUpTo, String measuringUnit) {
     Ingredient duplicate = getIngredient(name);
     if (duplicate != null) {
       duplicate.setPerPersonAmount(perPersonAmount);
       duplicate.setBought(false);
       duplicate.setRoundUpTo(roundUpTo);
     } else {
-      list.add(new Ingredient(name, perPersonAmount, roundUpTo));
+      list.add(new Ingredient(name, perPersonAmount, roundUpTo, measuringUnit));
     }
   }
 
@@ -77,8 +78,8 @@ public class Recipe {
    * @param name the string to be added
    * @param perPersonAmount the integer to be added
    */
-  public void addItem(String name, Double perPersonAmount) {
-    addItem(name, perPersonAmount, 1.0);
+  public void addItem(String name, Double perPersonAmount, String measuringUnit) {
+    addItem(name, perPersonAmount, 1.0, measuringUnit);
   }
 
   /**
@@ -138,6 +139,38 @@ public class Recipe {
       }
     }
     return null;
+  }
+
+  /**
+   * Set the measuring unit of a given ingredient.
+   * 
+   *
+   * @param name the name
+   *
+   * @param measuringUnit the other thing
+   * 
+   */
+  public void setIngredientMeasurement(String name, String measuringUnit) {
+    Ingredient ingredient = getIngredient(name);
+    if (ingredient == null) {
+      throw new IllegalStateException(
+          "The item doesn't exist in the list, and can therefore not give a new measuring unit");
+    }
+    getIngredient(name).setMeasuringUnit(measuringUnit);
+  }
+
+  /**
+   * Get the measuring unit of a given ingredient.
+   *
+   * @param name the ingredient to get the value from
+   * @return the measuring unit
+   */
+  public String getMeasuringUnit(String name) {
+    Ingredient ingredient = getIngredient(name);
+    if (ingredient == null) {
+      throw new IllegalStateException("This ingredient is not in the shoppinglist");
+    }
+    return getIngredient(name).getMeasuringUnit();
   }
 
   /**

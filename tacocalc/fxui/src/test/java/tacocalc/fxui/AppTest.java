@@ -30,20 +30,24 @@ public class AppTest extends ApplicationTest {
     stage.toFront();
   }
 
+  // TODO: Implement measuring unit into test (per now it only has "Default")
+
   // method is used to add an ingredient in other tests
 
   @Test
+
   @DisplayName("Test adding new ingredients to view")
   public void addNewIngredientTest() {
     clickOn("#editButton");
     clickOn("#newIngredientAmntField").write("2");
     clickOn("#newIngredientNameField").write("agurk");
+    clickOn("#newMeasurementField").write("stk");
 
     // Checks if textfield contains expected text
     Assertions.assertEquals("2", controller.getNewIngredientAmntField().getText());
     Assertions.assertEquals("agurk", controller.getNewIngredientNameField().getText());
     clickOn("#addIngredient");
-    Assertions.assertEquals("8x agurk", getIngredientTextField(0));
+    Assertions.assertEquals("8 stk agurk", getIngredientTextField(0));
 
     // Checks that the input fiels are cleared after adding an ingredient
     Assertions.assertEquals("", controller.getNewIngredientAmntField().getText());
@@ -52,50 +56,58 @@ public class AppTest extends ApplicationTest {
     // Cheks that a second ingredient is added at the correct position
     clickOn("#newIngredientAmntField").write("1");
     clickOn("#newIngredientNameField").write("tomat");
+    clickOn("#newMeasurementField").write("stk");
     clickOn("#addIngredient");
-    Assertions.assertEquals("4x tomat", getIngredientTextField(1));
+    Assertions.assertEquals("4 stk tomat", getIngredientTextField(1));
   }
 
   // Tests the error message for wrong input in integer field
+
   @Test
+
   @DisplayName("Test that adding an ingredient with an invalid amount doesn't do")
   public void testInvalidAmount() {
     clickOn("#editButton");
-    addIngredient("NotAnInteger", "Should give popup error");
+    addIngredient("NotAnInteger", "Should give popup error", "Something stupid");
     Assertions.assertEquals(0, controller.getIngredientViewStream().count());
   }
 
   // Tests Functions in the ingredient edit controller
+
   @Test
+
   @DisplayName("Test that you can increase and decrease the amount of an ingredient")
   public void testIncreaseAndDecrease() {
     clickOn("#editButton");
-    addIngredient("2", "paprika");
+    addIngredient("2", "paprika", "stk");
     clickOn(getIngredientEditButton(0));
     clickOn("#decreaseButton");
     clickOn("#saveButton");
-    Assertions.assertEquals("4x paprika", getIngredientTextField(0));
+    Assertions.assertEquals("4 stk paprika", getIngredientTextField(0));
     clickOn("#editButton");
     clickOn(getIngredientEditButton(0));
     clickOn("#increaseButton");
     clickOn("#increaseButton");
     clickOn("#saveButton");
-    Assertions.assertEquals("12x paprika", getIngredientTextField(0));
+    Assertions.assertEquals("12 stk paprika", getIngredientTextField(0));
   }
 
   @Test
+
   @DisplayName("Test that you can change the name of an ingredient")
   public void testIngredientNameChange() {
     clickOn("#editButton");
-    addIngredient("1", "bacon");
+    addIngredient("1", "bacon", "stk");
     clickOn(getIngredientEditButton(0));
     clickOn("#ingredientNameField").eraseText(5).write("bacon terninger");
     clickOn("#ingredientNameField").clickOn("#saveButton");
-    Assertions.assertEquals("4x bacon terninger", getIngredientTextField(0));
+    Assertions.assertEquals("4 stk bacon terninger", getIngredientTextField(0));
   }
 
   // Tests other important button with a lot of logic
+
   @Test
+
   @DisplayName("Test that all items is added to view when loading a file")
   public void testLoadFile() {
     createTestFile();
@@ -106,41 +118,44 @@ public class AppTest extends ApplicationTest {
     clickOn("#nameField").write("testFile");
     clickOn("#loadButton");
 
-    Assertions.assertEquals("8x tomat", getIngredientTextField(0));
-    Assertions.assertEquals("4x avocado", getIngredientTextField(1));
+    Assertions.assertEquals("8 default tomat", getIngredientTextField(0));
+    Assertions.assertEquals("4 default avocado", getIngredientTextField(1));
   }
 
   @Test
+
   @DisplayName("Test deleting an element from the view")
   public void deleteIngredientTest() {
     clickOn("#editButton");
-    addIngredient("1", "rømme");
+    addIngredient("1", "rømme", "dl");
     clickOn(getIngredientEditButton(0));
     clickOn("#deleteButton");
     Assertions.assertEquals(0, controller.getIngredientViewStream().count());
     // TODO: Maybe test checkbox
   }
 
-  @Test
-  @DisplayName("Test that it is not possible to create a duplicate of an ingredient ")
-  public void testDuplicate() {
-    clickOn("#editButton");
-    addIngredient("1", "ost");
-    addIngredient("4", "ost");
-    Assertions.assertEquals(3, controller.getIngredientViewStream().count());
-    // Test case sensitivity
-    addIngredient("3", "OsT");
-    Assertions.assertEquals(3, controller.getIngredientViewStream().count());
-  }
+  // TODO: Skulle vi ha
+  // @Test
+  // @DisplayName("Test that it is not possible to create a duplicate of an ingredient ")
+  // public void testDuplicate() {
+  // clickOn("#editButton");
+  // addIngredient("1", "ost", "default");
+  // addIngredient("4", "ost", "default");
+  // Assertions.assertEquals(3, controller.getIngredientViewStream().count());
+  // // Test case sensitivity
+  // addIngredient("3", "OsT", "default");
+  // Assertions.assertEquals(3, controller.getIngredientViewStream().count());
+  // }
 
   // TODO: Make edge-case tests
   // What happens if view fills up?
   // Really long name on ingredient?
 
 
-  private void addIngredient(String amount, String name) {
+  private void addIngredient(String amount, String name, String measuringUnit) {
     clickOn("#newIngredientAmntField").write(amount);
     clickOn("#newIngredientNameField").write(name);
+    clickOn("#newMeasurementField").write(measuringUnit);
     clickOn("#addIngredient");
   }
 
@@ -155,6 +170,8 @@ public class AppTest extends ApplicationTest {
 
   private void createTestFile() {
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
-    fh.write(new Recipe(new Ingredient("tomat", 2.0), new Ingredient("avocado", 1.0)), "testFile");
+    fh.write(new Recipe(new Ingredient("tomat", 2.0, "default"),
+        new Ingredient("avocado", 1.0, "default")), "testFile");
   }
+
 }

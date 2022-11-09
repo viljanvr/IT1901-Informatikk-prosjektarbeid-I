@@ -6,6 +6,7 @@ tacocalc/.vscode
 tacocalc/data/src/main/resources
 tacocalc/core/src/main/resources
 tacocalc/data/target
+tacocalc/restapi/target
 
 #Ignore macOS DS_store files
 .DS_store

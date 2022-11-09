@@ -47,6 +47,9 @@ public class AppController {
   private TextField newIngredientAmntField;
 
   @FXML
+  private TextField newMeasurementField;
+
+  @FXML
   private TextField nameField;
 
   @FXML
@@ -192,7 +195,8 @@ public class AppController {
     clearIngredientListView();
 
     recipe.getList().stream().forEach(i -> {
-      addItemToView(i.getName(), i.getTotalAmount(recipe.getNumberOfPeople()), i.getBought());
+      addItemToView(i.getName(), i.getTotalAmount(recipe.getNumberOfPeople()), i.getMeasuringUnit(),
+          i.getBought());
     });
   }
 
@@ -215,37 +219,22 @@ public class AppController {
    * @param amount new amount to be set
    */
   protected void updateIngredient(String ingredient, String newIngredientName,
-      Double perPersonAmount, Double roundUpTo) {
+      Double perPersonAmount, Double roundUpTo, String measuringUnit) {
     recipe.setIngredientPerPersonAmount(ingredient, perPersonAmount);
     recipe.setRoundUpTo(ingredient, roundUpTo);
+    recipe.setIngredientMeasurement(ingredient, measuringUnit);
     recipe.changeIngredientName(ingredient, newIngredientName);
+
+    // TODO: Update the textfields for measuringUnit
 
     TextField textField = (TextField) getIngredientViewStream()
         .filter(i -> i instanceof TextField && ((TextField) i).getText().contains(ingredient))
         .findFirst().get();
 
     textField.setText(Ingredient.formatDouble(recipe.getIngredientTotalAmount(newIngredientName))
-        + "x " + newIngredientName);
+        + " " + measuringUnit + " " + newIngredientName);
 
     handleSaveToFile();
-  }
-
-  /**
-   * Methods takes in the name of the ingredient we want to add to our recipe and checks if that
-   * ingredient is already in recipe.
-   *
-   * @param name the String of the ingredients name
-   * @return true if an ingredient with that name exists in view
-   */
-  private boolean isDuplicate(String name) {
-    try {
-      getIngredientViewStream()
-          .filter(i -> i instanceof TextField && ((TextField) i).getText().contains(name))
-          .findFirst().get();
-      return true;
-    } catch (Exception e) {
-      return false;
-    }
   }
 
   /**
@@ -258,21 +247,19 @@ public class AppController {
   @FXML
   private void handleAddIngredient() {
     try {
-      String ingredientName = newIngredientNameField.getText().toLowerCase();
+      String ingredientName = newIngredientNameField.getText();
       Double ingredientPerPersonAmnt = Double.parseDouble(newIngredientAmntField.getText());
+      String ingredientUnit = newMeasurementField.getText();
 
-      recipe.addItem(ingredientName, ingredientPerPersonAmnt);
+      recipe.addItem(ingredientName, ingredientPerPersonAmnt, ingredientUnit);
       handleSaveToFile();
 
-      if (isDuplicate(ingredientName)) {
-        updateIngredient(ingredientName, ingredientName, ingredientPerPersonAmnt, 1.0);
-        updateIngredientListView();
-      } else {
-        addItemToView(ingredientName, recipe.getIngredientTotalAmount(ingredientName), false);
-      }
+      addItemToView(ingredientName, recipe.getIngredientTotalAmount(ingredientName), ingredientUnit,
+          false);
 
       newIngredientAmntField.clear();
       newIngredientNameField.clear();
+      newMeasurementField.clear();
     } catch (NumberFormatException e) {
       Alert a = new Alert(AlertType.ERROR);
       a.setContentText("Amount needs to be a valid integer");
@@ -282,7 +269,7 @@ public class AppController {
 
   /**
    * Method takes in the properties of an ingredient and adds it to the view.
-   *
+   * 
    * <p>
    * Method also initialises the eventhandlers for the new checkbox and the edit-button for the new
    * ingredient.
@@ -290,18 +277,19 @@ public class AppController {
    * @param ingredientName the string of the name
    * @param ingredientAmnt the integer of the amount
    * @param checked the boolean state of the checkbox
+   * @param measuringUnit the string of the measuring unit
    */
-  private void addItemToView(String ingredientName, Double ingredientAmnt, Boolean checked) {
+  private void addItemToView(String ingredientName, Double ingredientAmnt, String measuringUnit,
+      Boolean checked) {
     CheckBox checkBox = new CheckBox();
     checkBox.setSelected(checked);
 
     Button editButton = new Button("->");
     editButton.setVisible(editMode);
 
-    TextField textField =
-        new TextField(Ingredient.formatDouble(ingredientAmnt) + "x " + ingredientName);
+    TextField textField = new TextField(
+        Ingredient.formatDouble(ingredientAmnt) + " " + measuringUnit + " " + ingredientName);
     textField.setEditable(false);
-
     // Event handler for ingredient edit button
     editButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -365,7 +353,8 @@ public class AppController {
   private void openIngredientEditOverlay(String ingredientName) {
     handleEditButton();
     popUpContain.setVisible(true);
-    ingredientEditController.showNewIngredient(ingredientName, recipe);
+    ingredientEditController.showNewIngredient(ingredientName, recipe,
+        recipe.getIngredient(ingredientName).getMeasuringUnit());
     container.setEffect(blur);
   }
 

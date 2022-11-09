@@ -6,12 +6,20 @@ package tacocalc.core;
 public class Ingredient {
   private String name;
   private Double perPersonAmount;
+  private String measuringUnit = "Default";
   private Double roundUpTo;
 
   private Boolean bought = false;
 
-  public Ingredient(String name, Double perPersonAmount) {
-    this(name, perPersonAmount, 0.0);
+  /**
+   * The constructor of the Ingredient.
+   *
+   * @param name another thing
+   * @param perPersonAmount the other thing
+   * @param measuringUnit the thing
+   */
+  public Ingredient(String name, Double perPersonAmount, String measuringUnit) {
+    this(name, perPersonAmount, 0.0, measuringUnit);
   }
 
   /**
@@ -21,9 +29,10 @@ public class Ingredient {
    * @param perPersonAmount the amount per person
    * @param roundUpTo the amount to round up to
    */
-  public Ingredient(String name, Double perPersonAmount, Double roundUpTo) {
+  public Ingredient(String name, Double perPersonAmount, Double roundUpTo, String measuringUnit) {
     setName(name);
     setPerPersonAmount(perPersonAmount);
+    setMeasuringUnit(measuringUnit);
     setRoundUpTo(roundUpTo);
   }
 
@@ -33,6 +42,14 @@ public class Ingredient {
 
   protected void setName(String name) {
     this.name = name;
+  }
+
+  protected void setMeasuringUnit(String measuringUnit) {
+    this.measuringUnit = measuringUnit;
+  }
+
+  public String getMeasuringUnit() {
+    return measuringUnit;
   }
 
   public Boolean getBought() {
@@ -87,12 +104,13 @@ public class Ingredient {
   }
 
   public String toString() {
-    return ("[" + (getBought() ? "x" : " ") + "]: " + formatDouble(getPerPersonAmount()) + "x "
-        + getName());
+    return "[" + (getBought() ? "x" : " ") + "]: " + formatDouble(getPerPersonAmount()) + " "
+        + getMeasuringUnit() + " " + getName();
   }
 
   public static String formatDouble(Double d) {
     return d % 1 == 0 ? String.valueOf((d.intValue())) : d.toString();
   }
+
 
 }

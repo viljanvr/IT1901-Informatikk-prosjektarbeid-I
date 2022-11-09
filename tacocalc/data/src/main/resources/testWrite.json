@@ -2,12 +2,14 @@
   {
     "name": "agurk",
     "perPersonAmount": 4.0,
+    "measuringUnit": "stk",
     "roundUpTo": 1.0,
     "bought": false
   },
   {
     "name": "paprika",
     "perPersonAmount": 6.0,
+    "measuringUnit": "stk",
     "roundUpTo": 1.0,
     "bought": false
   }
