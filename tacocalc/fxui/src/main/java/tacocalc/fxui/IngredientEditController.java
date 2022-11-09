@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import tacocalc.core.Ingredient;
@@ -70,6 +69,12 @@ public class IngredientEditController {
 
     ingredientNameField.setText(ingredientName);
     quantityField.setText(Double.toString(this.newPerPersonAmount));
+
+    if (newPerPersonAmount > 1) {
+      decreaseButton.setDisable(false);
+    } else {
+      decreaseButton.setDisable(true);
+    }
 
     // TODO: add logic to set measuring unit
     measuringUnitField.setText("stk");
