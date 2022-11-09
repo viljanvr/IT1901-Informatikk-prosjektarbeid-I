@@ -1,12 +1,16 @@
 [
   {
     "name": "tomat",
-    "amount": 5,
+    "perPersonAmount": 2.0,
+    "measuringUnit": "default",
+    "roundUpTo": 0.0,
     "bought": false
   },
   {
     "name": "avocado",
-    "amount": 2,
+    "perPersonAmount": 1.0,
+    "measuringUnit": "default",
+    "roundUpTo": 0.0,
     "bought": false
   }
 ]

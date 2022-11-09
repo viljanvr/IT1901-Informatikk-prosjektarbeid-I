@@ -1,6 +1,7 @@
 package tacocalc.fxui;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.stream.Stream;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,8 +18,11 @@ import javafx.scene.effect.BoxBlur;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
 import tacocalc.data.TacoCalcFileHandler;
 
@@ -49,10 +53,16 @@ public class AppController {
   private TextField nameField;
 
   @FXML
+  private TextField numberOfPeopleField;
+
+  @FXML
   private Button addIngredient;
 
   @FXML
-  private Button goBackButton;
+  private Button decreasePeopleButton;
+
+  @FXML
+  private Button increasePeopleButton;
 
   @FXML
   private Button editButton;
@@ -62,6 +72,15 @@ public class AppController {
 
   @FXML
   private VBox container;
+
+  @FXML
+  private HBox scaleBox;
+
+  @FXML
+  private HBox addIngredientBox;
+
+  @FXML
+  private Text numberOfPeopleErrorText;
 
   private Boolean editMode = false;
 
@@ -76,16 +95,18 @@ public class AppController {
 
   private BoxBlur blur = new BoxBlur(30, 30, 3);
 
+  /**
+   * Initializes the application.
+   */
   public void initialize() {
     initIngredientEditOverlay();
     loadRecipeFromRecipeBook(RecipeBookController.transferRecipe);
+    numberOfPeopleField.setText(String.valueOf(recipe.getNumberOfPeople()));
   }
 
   /**
-   * Enables/disables edit view when pressing the edit button. When entering edit
-   * mode a button to
-   * the right of each ingredient is shown. The button opens an overlay where you
-   * can edit the
+   * Enables/disables edit view when pressing the edit button. When entering edit mode a button to
+   * the right of each ingredient is shown. The button opens an overlay where you can edit the
    * properties of the given ingredient.
    */
   @FXML
@@ -93,15 +114,60 @@ public class AppController {
     editMode = !editMode;
     getIngredientViewStream().filter(a -> a instanceof Button).forEach(a -> a.setVisible(editMode));
     editButton.setText(editMode ? "Cancel" : "Edit");
+    addIngredientBox.setVisible(editMode);
+    scaleBox.setVisible(!editMode);
+  }
+
+  @FXML
+  private void handleDecreasePeople() {
+    if (recipe.getNumberOfPeople() == 2) {
+      decreasePeopleButton.setDisable(true);
+    }
+    recipe.setNumberOfPeople(recipe.getNumberOfPeople() - 1);
+    numberOfPeopleField.setText(String.valueOf(recipe.getNumberOfPeople()));
+    updateIngredientListView();
+    numberOfPeopleErrorText.setVisible(false);
+  }
+
+  @FXML
+  private void handleIncreasePeople() {
+    decreasePeopleButton.setDisable(false);
+    recipe.setNumberOfPeople(recipe.getNumberOfPeople() + 1);
+    numberOfPeopleField.setText(String.valueOf(recipe.getNumberOfPeople()));
+    updateIngredientListView();
+    numberOfPeopleErrorText.setVisible(false);
+  }
+
+  @FXML
+  private void handleNumberOfPeopleChange() {
+    try {
+      int number = Integer.parseInt(numberOfPeopleField.getText());
+      if (number > 0) {
+        recipe.setNumberOfPeople(Integer.parseInt(numberOfPeopleField.getText()));
+        numberOfPeopleErrorText.setVisible(false);
+        if (number > 1) {
+          decreasePeopleButton.setDisable(false);
+        }
+      } else {
+        numberOfPeopleErrorText.setVisible(true);
+      }
+
+      updateIngredientListView();
+    } catch (NumberFormatException e) {
+      if (numberOfPeopleField.getText().isBlank()) {
+        numberOfPeopleErrorText.setVisible(false);
+      } else {
+        numberOfPeopleErrorText.setVisible(true);
+      }
+    }
   }
 
   /**
-   * Update the bought-value of a given ingredient in the recipe object when a
-   * checkBox is clicked.
+   * Update the bought-value of a given ingredient in the recipe object when a checkBox is clicked.
    * The updated recipe is then saved to file.
    *
    * @param ingredientName String with the name of the ingredient
-   * @param c              Checkbox that has been clicked
+   * @param c Checkbox that has been clicked
    */
   private void handleToggleCheckbox(String ingredientName, CheckBox c) {
     recipe.setBought(ingredientName, c.isSelected());
@@ -109,8 +175,7 @@ public class AppController {
   }
 
   /**
-   * Finds and deletes the given ingredient in the recipe object. Saves updated
-   * recipe to files and
+   * Finds and deletes the given ingredient in the recipe object. Saves updated recipe to files and
    * updates the view.
    *
    * @param ingredient name of the ingredient to be removed
@@ -130,7 +195,8 @@ public class AppController {
     clearIngredientListView();
 
     recipe.getList().stream().forEach(i -> {
-      addItemToView(i.getName(), i.getAmount(), i.getBought(), i.getMeasuringUnit());
+      addItemToView(i.getName(), i.getTotalAmount(recipe.getNumberOfPeople()), i.getMeasuringUnit(),
+          i.getBought());
     });
   }
 
@@ -145,17 +211,17 @@ public class AppController {
   }
 
   /**
-   * Updates the internal value of a single ingredient in the recipe object.
-   * Updated recipe is then
+   * Updates the internal value of a single ingredient in the recipe object. Updated recipe is then
    * saved to file and the view is updated.
    *
-   * @param ingredient        ingredient to be changed
+   * @param ingredient ingredient to be changed
    * @param newIngredientName new ingredient name
-   * @param amount            new amount to be set
+   * @param amount new amount to be set
    */
-  protected void updateIngredient(String ingredient, String newIngredientName, int amount,
-      String measuringUnit) {
-    recipe.setIngredientAmount(ingredient, amount);
+  protected void updateIngredient(String ingredient, String newIngredientName,
+      Double perPersonAmount, Double roundUpTo, String measuringUnit) {
+    recipe.setIngredientPerPersonAmount(ingredient, perPersonAmount);
+    recipe.setRoundUpTo(ingredient, roundUpTo);
     recipe.setIngredientMeasurement(ingredient, measuringUnit);
     recipe.changeIngredientName(ingredient, newIngredientName);
 
@@ -165,14 +231,14 @@ public class AppController {
         .filter(i -> i instanceof TextField && ((TextField) i).getText().contains(ingredient))
         .findFirst().get();
 
-    textField.setText(amount + "x " + newIngredientName + " " + measuringUnit);
+    textField.setText(Ingredient.formatDouble(recipe.getIngredientTotalAmount(newIngredientName))
+        + " " + measuringUnit + " " + newIngredientName);
 
     handleSaveToFile();
   }
 
   /**
-   * Adds ingredient to the ShoppingList object. Saves the updated recipe object
-   * to file and updates
+   * Adds ingredient to the ShoppingList object. Saves the updated recipe object to file and updates
    * the view.
    *
    * <p>
@@ -182,22 +248,22 @@ public class AppController {
   private void handleAddIngredient() {
     try {
       String ingredientName = newIngredientNameField.getText();
-      Integer ingredientAmnt = Integer.parseInt(newIngredientAmntField.getText());
+      Double ingredientPerPersonAmnt = Double.parseDouble(newIngredientAmntField.getText());
       String ingredientUnit = newMeasurementField.getText();
 
-      recipe.addItem(ingredientName, ingredientAmnt, ingredientUnit);
+      recipe.addItem(ingredientName, ingredientPerPersonAmnt, ingredientUnit);
       handleSaveToFile();
 
-      addItemToView(ingredientName, ingredientAmnt, false, ingredientUnit);
+      addItemToView(ingredientName, recipe.getIngredientTotalAmount(ingredientName), ingredientUnit,
+          false);
 
       newIngredientAmntField.clear();
       newIngredientNameField.clear();
       newMeasurementField.clear();
-    } catch (Exception e) {
+    } catch (NumberFormatException e) {
       Alert a = new Alert(AlertType.ERROR);
       a.setContentText("Amount needs to be a valid integer");
       a.show();
-      e.printStackTrace();
     }
   }
 
@@ -205,25 +271,24 @@ public class AppController {
    * Method takes in the properties of an ingredient and adds it to the view.
    * 
    * <p>
-   * Method also initialises the eventhandlers for the new checkbox and the
-   * edit-button for the new
+   * Method also initialises the eventhandlers for the new checkbox and the edit-button for the new
    * ingredient.
    *
    * @param ingredientName the string of the name
    * @param ingredientAmnt the integer of the amount
-   * @param checked        the boolean state of the checkbox
-   * @param measuringUnit  the string of the measuring unit
+   * @param checked the boolean state of the checkbox
+   * @param measuringUnit the string of the measuring unit
    */
-  private void addItemToView(String ingredientName, Integer ingredientAmnt, Boolean checked,
-      String measuringUnit) {
+  private void addItemToView(String ingredientName, Double ingredientAmnt, String measuringUnit,
+      Boolean checked) {
     CheckBox checkBox = new CheckBox();
     checkBox.setSelected(checked);
 
     Button editButton = new Button("->");
     editButton.setVisible(editMode);
 
-    TextField textField = new TextField(ingredientAmnt + "x " + ingredientName + " "
-        + measuringUnit);
+    TextField textField = new TextField(
+        Ingredient.formatDouble(ingredientAmnt) + " " + measuringUnit + " " + ingredientName);
     textField.setEditable(false);
     // Event handler for ingredient edit button
     editButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -264,6 +329,13 @@ public class AppController {
         ingredientsListRight.getChildren().stream());
   }
 
+  @FXML
+  private void clickOutsideOverlayHandle(MouseEvent e) {
+    if (Objects.equals(e.getPickResult().getIntersectedNode().getId(), "popUpContain")) {
+      closeIngredientEditOverlay();
+    }
+  }
+
   /**
    * Closes the overlay where you can edit the properties of an ingredient.
    */
@@ -273,13 +345,13 @@ public class AppController {
   }
 
   /**
-   * Opens the overlay where you can edit the properties of a given ingredient.
-   * Updates the overlay
+   * Opens the overlay where you can edit the properties of a given ingredient. Updates the overlay
    * with the values of the given ingredient.
    *
    * @param ingredientName the ingredient to be edited
    */
   private void openIngredientEditOverlay(String ingredientName) {
+    handleEditButton();
     popUpContain.setVisible(true);
     ingredientEditController.showNewIngredient(ingredientName, recipe,
         recipe.getIngredient(ingredientName).getMeasuringUnit());
@@ -303,8 +375,7 @@ public class AppController {
   }
 
   /**
-   * Saves the recipe object to a file with the name from the nameField text
-   * field.
+   * Saves the recipe object to a file with the name from the nameField text field.
    */
   protected void handleSaveToFile() {
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
@@ -312,8 +383,7 @@ public class AppController {
   }
 
   /**
-   * Clears the ingredient view. Reads a file with ingredients and adds all
-   * elements to the a recipe
+   * Clears the ingredient view. Reads a file with ingredients and adds all elements to the a recipe
    * object. All elements of recipe is then added to the view.
    */
   @FXML
@@ -321,9 +391,7 @@ public class AppController {
     clearIngredientListView();
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
     this.recipe = fh.read(getFileName());
-    recipe.getList().stream()
-        .forEach(n -> addItemToView(n.getName(), n.getAmount(), n.getBought(),
-            n.getMeasuringUnit()));
+    updateIngredientListView();
   }
 
   /**
@@ -339,8 +407,7 @@ public class AppController {
   }
 
   /**
-   * A getter that maskes the newIngredientAmntField visible to other classes Is
-   * used in tests.
+   * A getter that maskes the newIngredientAmntField visible to other classes Is used in tests.
    *
    * @return returns the TextField object
    */
@@ -349,8 +416,7 @@ public class AppController {
   }
 
   /**
-   * A getter that makes the newingredientNameField visible to other classes Is
-   * used in test.
+   * A getter that makes the newingredientNameField visible to other classes Is used in test.
    *
    * @return returns the TextField object
    */

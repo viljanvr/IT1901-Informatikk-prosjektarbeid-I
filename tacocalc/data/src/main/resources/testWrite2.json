@@ -1,17 +1,23 @@
 [
   {
     "name": "agurk",
-    "amount": 4,
+    "perPersonAmount": 4.0,
+    "measuringUnit": "stk",
+    "roundUpTo": 1.0,
     "bought": false
   },
   {
     "name": "paprika",
-    "amount": 6,
+    "perPersonAmount": 6.0,
+    "measuringUnit": "stk",
+    "roundUpTo": 1.0,
     "bought": false
   },
   {
     "name": "banan",
-    "amount": 18,
+    "perPersonAmount": 18.0,
+    "measuringUnit": "stk",
+    "roundUpTo": 1.0,
     "bought": false
   }
 ]

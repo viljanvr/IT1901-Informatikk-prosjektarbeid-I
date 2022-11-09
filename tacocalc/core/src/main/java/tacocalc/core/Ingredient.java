@@ -5,23 +5,35 @@ package tacocalc.core;
  */
 public class Ingredient {
   private String name;
-  private Integer amount;
+  private Double perPersonAmount;
   private String measuringUnit = "Default";
-  private Double perPerson = 0.0d;
+  private Double roundUpTo;
 
   private Boolean bought = false;
 
   /**
    * The constructor of the Ingredient.
    *
-   * @param name          another thing
-   * @param amount        the other thing
+   * @param name another thing
+   * @param perPersonAmount the other thing
    * @param measuringUnit the thing
    */
-  public Ingredient(String name, Integer amount, String measuringUnit) {
+  public Ingredient(String name, Double perPersonAmount, String measuringUnit) {
+    this(name, perPersonAmount, 0.0, measuringUnit);
+  }
+
+  /**
+   * Constructor for ingredient class.
+   *
+   * @param name the name of the new ingredient
+   * @param perPersonAmount the amount per person
+   * @param roundUpTo the amount to round up to
+   */
+  public Ingredient(String name, Double perPersonAmount, Double roundUpTo, String measuringUnit) {
     setName(name);
-    setAmount(amount);
+    setPerPersonAmount(perPersonAmount);
     setMeasuringUnit(measuringUnit);
+    setRoundUpTo(roundUpTo);
   }
 
   public String getName() {
@@ -48,37 +60,57 @@ public class Ingredient {
     this.bought = bought;
   }
 
-  public Integer getAmount() {
-    return amount;
+  public Double getPerPersonAmount() {
+    return perPersonAmount;
   }
 
-  protected void setAmount(Integer amount) {
+  protected void setPerPersonAmount(Double amount) {
     if (amount <= 0) {
       throw new IllegalArgumentException("Amount must be a positive number, but was " + amount);
     }
-    this.amount = amount;
+    this.perPersonAmount = amount;
   }
 
-  public Double getPerPerson() {
-    return perPerson;
+  public Double getRoundUpTo() {
+    return roundUpTo;
   }
 
-  protected void setPerPerson(Double perPerson) {
-    if (perPerson <= 0) {
-      throw new IllegalArgumentException(
-          "perPerson must be a positive number, but was " + perPerson);
+  /**
+   * Set the value that the total amount is rounded up to.
+   *
+   * @param roundUpTo the value to be rounded up to. If the value is 0, the total value wount be
+   *        rounded.
+   */
+  public void setRoundUpTo(Double roundUpTo) {
+    if (roundUpTo < 0) {
+      throw new IllegalArgumentException("Number be a positive number, but was " + roundUpTo);
     }
-    this.perPerson = perPerson;
+    this.roundUpTo = roundUpTo;
+  }
+
+  /**
+   * Get the total value of an ingredient, scaled to the number of people given.
+   *
+   * @param numberOfPeople the number of people to eat
+   * @return a total amount as a double
+   */
+  public Double getTotalAmount(Integer numberOfPeople) {
+    if (roundUpTo == 0) {
+      return perPersonAmount * numberOfPeople;
+    } else {
+      Double totalAmount = perPersonAmount * numberOfPeople;
+      return Math.ceil(totalAmount / roundUpTo) * roundUpTo;
+    }
   }
 
   public String toString() {
-    return ("[" + (getBought() ? "x" : " ") + "]: " + getAmount() + "x " + getName() + " "
-        + getMeasuringUnit());
+    return "[" + (getBought() ? "x" : " ") + "]: " + formatDouble(getPerPersonAmount()) + " "
+        + getMeasuringUnit() + " " + getName();
   }
 
-  public static void main(String[] args) {
-    Ingredient i = new Ingredient("Hei", 10, "lol");
-    System.out.println(i.getMeasuringUnit());
+  public static String formatDouble(Double d) {
+    return d % 1 == 0 ? String.valueOf((d.intValue())) : d.toString();
   }
+
 
 }
