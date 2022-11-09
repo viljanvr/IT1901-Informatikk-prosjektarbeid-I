@@ -204,14 +204,14 @@ public class IngredientEditController {
   }
 
   private void initEventHandlers() {
-    quantityField.addEventFilter(KeyEvent.KEY_TYPED, new EventHandler<KeyEvent>() {
+    quantityField.addEventFilter(KeyEvent.ANY, new EventHandler<KeyEvent>() {
       @Override
       public void handle(KeyEvent event) {
         inputValidation();
       }
     });
 
-    roundAmountField.addEventFilter(KeyEvent.KEY_TYPED, new EventHandler<KeyEvent>() {
+    roundAmountField.addEventFilter(KeyEvent.ANY, new EventHandler<KeyEvent>() {
       @Override
       public void handle(KeyEvent event) {
         inputValidation();

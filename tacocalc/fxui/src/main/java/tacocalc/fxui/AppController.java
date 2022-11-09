@@ -108,7 +108,7 @@ public class AppController {
     loadRecipeFromRecipeBook(RecipeBookController.transferRecipe);
     numberOfPeopleField.setText(String.valueOf(recipe.getNumberOfPeople()));
 
-    numberOfPeopleField.addEventFilter(KeyEvent.KEY_TYPED, new EventHandler<KeyEvent>() {
+    numberOfPeopleField.addEventFilter(KeyEvent.ANY, new EventHandler<KeyEvent>() {
       @Override
       public void handle(KeyEvent event) {
         handleNumberOfPeopleChange();

@@ -1,10 +1,10 @@
 [
   {
     "name": "agurk",
-    "perPersonAmount": 0.33,
+    "perPersonAmount": 4.0,
     "measuringUnit": "stk",
     "roundUpTo": 1.0,
-    "bought": false
+    "bought": true
   },
   {
     "name": "paprika",
@@ -14,45 +14,10 @@
     "bought": false
   },
   {
-    "name": "mais",
-    "perPersonAmount": 50.0,
-    "measuringUnit": "g",
-    "roundUpTo": 100.0,
-    "bought": true
-  },
-  {
-    "name": "kjøttdeig",
-    "perPersonAmount": 100.0,
-    "measuringUnit": "g",
-    "roundUpTo": 400.0,
-    "bought": false
-  },
-  {
-    "name": "ost",
-    "perPersonAmount": 100.0,
-    "measuringUnit": "g",
-    "roundUpTo": 200.0,
-    "bought": true
-  },
-  {
-    "name": "rømme",
-    "perPersonAmount": 0.25,
-    "measuringUnit": "boks",
-    "roundUpTo": 1.0,
-    "bought": false
-  },
-  {
-    "name": "avocado",
-    "perPersonAmount": 0.5,
-    "measuringUnit": "stk",
-    "roundUpTo": 2.0,
-    "bought": false
-  },
-  {
-    "name": "lefser",
-    "perPersonAmount": 6.0,
+    "name": "banan",
+    "perPersonAmount": 18.0,
     "measuringUnit": "stk",
     "roundUpTo": 1.0,
-    "bought": true
+    "bought": false
   }
 ]

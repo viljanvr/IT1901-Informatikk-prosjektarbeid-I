@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -15,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 // import tacocalc.core.RecipeBook;
 
@@ -62,7 +64,7 @@ public class RecipeBookController {
    * @param recipeName the name of the recipe which will be added
    */
   private void addItemToView(String recipeName) {
-    Button recipeButton = new Button(recipeName);
+    MFXButton recipeButton = new MFXButton(recipeName);
     recipeButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
     recipeButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -79,11 +81,13 @@ public class RecipeBookController {
 
     });
     List<Node> children = recipeList.getChildren();
+    if (children.size() / 2 == recipeList.getRowCount()) {
+      recipeList.getRowConstraints().add(new RowConstraints(40));
+    }
     int columnPosition = (children.size() % 2 == 0) ? 0 : 1;
-    int rowPosition =
-
-        (children.size() % 2 == 0) ? recipeList.getRowCount() : recipeList.getRowCount() - 1;
+    int rowPosition = children.size() / 2;
     recipeList.add(recipeButton, columnPosition, rowPosition);
+
 
   }
 
