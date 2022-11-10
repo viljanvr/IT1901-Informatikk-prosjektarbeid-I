@@ -2,16 +2,19 @@
   {
     "name": "agurk",
     "amount": 4,
+    "perPerson": 0.0,
     "bought": false
   },
   {
     "name": "paprika",
     "amount": 6,
+    "perPerson": 0.0,
     "bought": false
   },
   {
     "name": "banan",
     "amount": 18,
+    "perPerson": 0.0,
     "bought": false
   }
 ]

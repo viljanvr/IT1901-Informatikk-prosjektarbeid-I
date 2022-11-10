@@ -2,11 +2,13 @@
   {
     "name": "tomat",
     "amount": 5,
+    "perPerson": 0.0,
     "bought": false
   },
   {
     "name": "avocado",
     "amount": 2,
+    "perPerson": 0.0,
     "bought": false
   }
 ]

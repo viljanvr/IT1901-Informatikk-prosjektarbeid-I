@@ -2,6 +2,7 @@
   {
     "name": "genus",
     "amount": 3,
+    "perPerson": 0.0,
     "bought": false
   }
 ]
