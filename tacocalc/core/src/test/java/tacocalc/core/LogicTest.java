@@ -15,32 +15,33 @@ public class LogicTest {
 
   @Test
   public void testIngredientConstructor() {
-    Ingredient I1 = new Ingredient("kjøtt", 200, "stk");
+    Ingredient I1 = new Ingredient("kjøtt", 200.0, 400.0, "stk");
     assertEquals("kjøtt", I1.getName());
-    assertEquals(200, I1.getAmount());
+    assertEquals(200, I1.getPerPersonAmount());
+    assertEquals(400, I1.getRoundUpTo());
     assertEquals("stk", I1.getMeasuringUnit());
   }
 
   @Test
-  public void testIngredientsAmount() {
-    Ingredient I1 = new Ingredient("agurk", 3, "stk");
-    assertEquals(3, I1.getAmount());
-    I1.setAmount(4);
-    assertEquals(4, I1.getAmount());
+  public void testPerPersonIngredientAmount() {
+    Ingredient I1 = new Ingredient("agurk", 3.0, "stk");
+    assertEquals(3, I1.getPerPersonAmount());
+    I1.setPerPersonAmount(4.0);
+    assertEquals(4, I1.getPerPersonAmount());
   }
 
   @Test
   public void testToStringmethods() {
-    Ingredient I1 = new Ingredient("tomat", 4, "stk");
-    assertEquals("[ ]: 4x tomat stk", I1.toString());
+    Ingredient I1 = new Ingredient("tomat", 4.0, "stk");
+    assertEquals("[ ]: 4 stk tomat", I1.toString());
     Recipe r = new Recipe(I1);
     r.setBought("tomat", true);
-    assertEquals("[x]: 4x tomat stk\n", r.toString());
+    assertEquals("[x]: 4 stk tomat\n", r.toString());
   }
 
   @Test
   public void testIngredientsBought() {
-    Ingredient I2 = new Ingredient("ost", 1, "stk");
+    Ingredient I2 = new Ingredient("ost", 1.0, "stk");
     assertFalse(I2.getBought());
     I2.setBought(true);
     assertTrue(I2.getBought());
@@ -49,22 +50,22 @@ public class LogicTest {
   // Tests for the Shoppinglist class
 
   @Test
-  public void testMultipleingredients() {
-    Ingredient I1 = new Ingredient("agurk", 3, "stk");
-    Ingredient I2 = new Ingredient("ost", 1, "stk");
+  public void testMultipleIngredients() {
+    Ingredient I1 = new Ingredient("agurk", 3.0, "stk");
+    Ingredient I2 = new Ingredient("ost", 1.0, "stk");
     Recipe r = new Recipe(I1, I2);
-    r.setPeople(1);
-    assertEquals(1, r.getIngredientAmount("ost"));
-    assertEquals(3, r.getIngredientAmount("agurk"));
-    r.setIngredientAmount("ost", 2);
-    r.setIngredientAmount("agurk", 2);
-    assertEquals(2, r.getIngredientAmount("ost"));
-    assertEquals(2, r.getIngredientAmount("agurk"));
+    r.setNumberOfPeople(1);
+    assertEquals(1, r.getIngredientPerPersonAmount("ost"));
+    assertEquals(3, r.getIngredientPerPersonAmount("agurk"));
+    r.setIngredientPerPersonAmount("ost", 2.0);
+    r.setIngredientPerPersonAmount("agurk", 2.0);
+    assertEquals(2, r.getIngredientPerPersonAmount("ost"));
+    assertEquals(2, r.getIngredientPerPersonAmount("agurk"));
   }
 
   @Test
   public void testShoppingListBought() {
-    Ingredient I1 = new Ingredient("agurk", 3, "stk");
+    Ingredient I1 = new Ingredient("agurk", 3.0, "stk");
     Recipe r = new Recipe(I1);
     r.setBought("agurk", true);
     assertTrue(r.getBought("agurk"));
@@ -73,15 +74,15 @@ public class LogicTest {
   @Test
   public void testAddAndDelete() {
     Recipe r = new Recipe();
-    r.setPeople(1);
-    r.addItem("ost", 1, "kg");
+    r.addItem("ost", 1.0, "kg");
     r.setBought("ost", true);
     assertTrue(r.getBought("ost"));
     // Adding the same ingredient again
-    r.addItem("ost", 3, "kg");
+    r.addItem("ost", 3.0, "kg");
     assertFalse(r.getBought("ost"));
-    assertEquals(3, r.getIngredientAmount("ost"));
+    assertEquals(3, r.getIngredientPerPersonAmount("ost"));
     r.deleteItem("ost");
+    assertNull(r.getIngredient("ost"));
     assertThrows(IllegalStateException.class, () -> {
       r.deleteItem("ost");
     });
@@ -92,12 +93,11 @@ public class LogicTest {
   @DisplayName("Test that changeName method changes name of ingredient")
   public void testChangeName() {
     Recipe r = new Recipe();
-    r.setPeople(1);
-    r.addItem("ost", 1, "stk");
-    assertEquals("[ ]: 1x ost stk", r.getIngredient("ost").toString());
+    r.addItem("ost", 0.5, "stk");
+    assertEquals("[ ]: 0.5 stk ost", r.getIngredient("ost").toString());
     r.changeIngredientName("ost", "avokado");
     // Avokado should now be in reipe, and ost not
-    assertEquals("[ ]: 1x avokado stk", r.getIngredient("avokado").toString());
+    assertEquals("[ ]: 0.5 stk avokado", r.getIngredient("avokado").toString());
     assertNull(r.getIngredient("ost"));
   }
 
@@ -105,11 +105,10 @@ public class LogicTest {
 
   @Test
   public void testThrows() {
-    Ingredient I1 = new Ingredient("tomat", 3, "stk");
+    Ingredient I1 = new Ingredient("tomat", 3.0, "stk");
     Recipe r = new Recipe(I1);
-    r.setPeople(1);
     assertThrows(IllegalArgumentException.class, () -> {
-      I1.setAmount(-1);
+      I1.setPerPersonAmount(-1.0);
     });
     assertThrows(IllegalStateException.class, () -> {
       r.getBought("ost");
@@ -121,10 +120,10 @@ public class LogicTest {
       r.setBought("ost", true);
     });
     assertThrows(IllegalStateException.class, () -> {
-      r.setIngredientAmount("ost", 2);
+      r.setIngredientPerPersonAmount("ost", 2.0);
     });
     assertThrows(IllegalStateException.class, () -> {
-      r.getIngredientAmount("ost");
+      r.getIngredientPerPersonAmount("ost");
     });
   }
 }

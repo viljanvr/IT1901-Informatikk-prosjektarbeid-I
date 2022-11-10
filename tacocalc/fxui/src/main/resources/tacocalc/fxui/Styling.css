@@ -1,27 +1,39 @@
-.btn {
-    -fx-font-family: Roboto, sans-serif;
-    -fx-font-weight: 0;
-    -fx-font-size: 14;
-    -fx-background-color: #ffa012;
-    -fx-padding: 10px 30px;
-    -fx-box-shadow: rgb(0, 0, 0) 0px 0px 0px 0px;
-    -fx-border-radius: 1;
-    -fx-background-radius: 1;
-    -fx-transition: 1000ms;
-    -fx-transform: translateY(0);
-    -fx-display: flex;
-    -fx-flex-direction: row;
-    -fx-align-items: center;
-    -fx-cursor: pointer;
+.mfx-text-field {
+	-fx-background-color:  #2C2C2C;
+    -fx-border-color:  #696969;
+    -fx-text-fill: #ffffff;
 }
 
-.btn:hover {
-    -fx-transition: 1000ms;
-    -fx-padding: 10px 30px;
-    -fx-transform: translateY(-0px);
-    -fx-background-color: #fff;
-    -fx-color: #ffa012;
-    -fx-border-style: solid;
-    -fx-border-color: #ffa012;
-    -fx-border-radius: 2;
+.mfx-text-field:focus-within{
+    -fx-border-color:  #FFA012;
+}
+
+.mfx-text-field .floating-text {
+    -fx-background-color:  #2C2C2C;
+    -fx-text-fill: #ffffff;
+}
+
+.mfx-checkbox {
+    -mfx-main:  #FFA012;
+}
+
+.mfx-button {
+    -fx-background-color: #FFA012;
+    -fx-background-radius: 5px;
+    -fx-border-radius:  5px;
+}
+
+.outline-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 5px;
+    -fx-border-color:  #FFA012;
+    -fx-text-fill: #FFA012;
+}
+
+.outline-button .mfx-ripple-generator {
+    -mfx-auto-clip: true;
+}
+
+.red-button {
+    -fx-background-color:  #d40000;
 }

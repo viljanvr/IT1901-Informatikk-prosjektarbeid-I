@@ -1,1 +1,58 @@
-[]
+[
+  {
+    "name": "agurk",
+    "perPersonAmount": 4.0,
+    "measuringUnit": "stk",
+    "roundUpTo": 1.0,
+    "bought": false
+  },
+  {
+    "name": "paprika",
+    "perPersonAmount": 6.0,
+    "measuringUnit": "stk",
+    "roundUpTo": 1.0,
+    "bought": false
+  },
+  {
+    "name": "mais",
+    "perPersonAmount": 4.0,
+    "measuringUnit": "stk",
+    "roundUpTo": 1.0,
+    "bought": false
+  },
+  {
+    "name": "kjøttdeig",
+    "perPersonAmount": 6.0,
+    "measuringUnit": "stk",
+    "roundUpTo": 1.0,
+    "bought": false
+  },
+  {
+    "name": "ost",
+    "perPersonAmount": 4.0,
+    "measuringUnit": "stk",
+    "roundUpTo": 1.0,
+    "bought": false
+  },
+  {
+    "name": "rømme",
+    "perPersonAmount": 6.0,
+    "measuringUnit": "stk",
+    "roundUpTo": 1.0,
+    "bought": false
+  },
+  {
+    "name": "avocado",
+    "perPersonAmount": 4.0,
+    "measuringUnit": "stk",
+    "roundUpTo": 1.0,
+    "bought": false
+  },
+  {
+    "name": "lefser",
+    "perPersonAmount": 6.0,
+    "measuringUnit": "stk",
+    "roundUpTo": 1.0,
+    "bought": false
+  }
+]

@@ -6,7 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -34,26 +34,27 @@ public class AppTest extends ApplicationTest {
 
   @DisplayName("Test adding new ingredients to view")
   public void addNewIngredientTest() {
-    clickOn("#newIngredientAmntField").write("4");
+    clickOn("#editButton");
+    clickOn("#newIngredientAmntField").write("2");
     clickOn("#newIngredientNameField").write("agurk");
     clickOn("#newMeasurementField").write("stk");
 
     // Checks if textfield contains expected text
-    Assertions.assertEquals("4", controller.getNewIngredientAmntField().getText());
+    Assertions.assertEquals("2", controller.getNewIngredientAmntField().getText());
     Assertions.assertEquals("agurk", controller.getNewIngredientNameField().getText());
     clickOn("#addIngredient");
-    Assertions.assertEquals("4x agurk stk", getIngredientTextField(0));
+    Assertions.assertEquals("8 stk agurk", getIngredientText(0));
 
     // Checks that the input fiels are cleared after adding an ingredient
     Assertions.assertEquals("", controller.getNewIngredientAmntField().getText());
     Assertions.assertEquals("", controller.getNewIngredientNameField().getText());
 
     // Cheks that a second ingredient is added at the correct position
-    clickOn("#newIngredientAmntField").write("5");
+    clickOn("#newIngredientAmntField").write("1");
     clickOn("#newIngredientNameField").write("tomat");
     clickOn("#newMeasurementField").write("stk");
     clickOn("#addIngredient");
-    Assertions.assertEquals("5x tomat stk", getIngredientTextField(1));
+    Assertions.assertEquals("4 stk tomat", getIngredientText(1));
   }
 
   // Tests the error message for wrong input in integer field
@@ -62,6 +63,7 @@ public class AppTest extends ApplicationTest {
 
   @DisplayName("Test that adding an ingredient with an invalid amount doesn't do")
   public void testInvalidAmount() {
+    clickOn("#editButton");
     addIngredient("NotAnInteger", "Should give popup error", "Something stupid");
     Assertions.assertEquals(0, controller.getIngredientViewStream().count());
   }
@@ -72,29 +74,30 @@ public class AppTest extends ApplicationTest {
 
   @DisplayName("Test that you can increase and decrease the amount of an ingredient")
   public void testIncreaseAndDecrease() {
-    addIngredient("3", "paprika", "stk");
     clickOn("#editButton");
+    addIngredient("2", "paprika", "stk");
     clickOn(getIngredientEditButton(0));
     clickOn("#decreaseButton");
     clickOn("#saveButton");
-    Assertions.assertEquals("2x paprika stk", getIngredientTextField(0));
+    Assertions.assertEquals("4 stk paprika", getIngredientText(0));
+    clickOn("#editButton");
     clickOn(getIngredientEditButton(0));
     clickOn("#increaseButton");
     clickOn("#increaseButton");
     clickOn("#saveButton");
-    Assertions.assertEquals("4x paprika stk", getIngredientTextField(0));
+    Assertions.assertEquals("12 stk paprika", getIngredientText(0));
   }
 
   @Test
 
   @DisplayName("Test that you can change the name of an ingredient")
   public void testIngredientNameChange() {
-    addIngredient("3", "bacon", "stk");
     clickOn("#editButton");
+    addIngredient("1", "bacon", "stk");
     clickOn(getIngredientEditButton(0));
     clickOn("#ingredientNameField").eraseText(5).write("bacon terninger");
     clickOn("#ingredientNameField").clickOn("#saveButton");
-    Assertions.assertEquals("3x bacon terninger stk", getIngredientTextField(0));
+    Assertions.assertEquals("4 stk bacon terninger", getIngredientText(0));
   }
 
   // Tests other important button with a lot of logic
@@ -111,16 +114,16 @@ public class AppTest extends ApplicationTest {
     clickOn("#nameField").write("testFile");
     clickOn("#loadButton");
 
-    Assertions.assertEquals("5x tomat default", getIngredientTextField(0));
-    Assertions.assertEquals("2x avocado default", getIngredientTextField(1));
+    Assertions.assertEquals("8 default tomat", getIngredientText(0));
+    Assertions.assertEquals("4 default avocado", getIngredientText(1));
   }
 
   @Test
 
   @DisplayName("Test deleting an element from the view")
   public void deleteIngredientTest() {
-    addIngredient("1", "rømme", "dl");
     clickOn("#editButton");
+    addIngredient("1", "rømme", "dl");
     clickOn(getIngredientEditButton(0));
     clickOn("#deleteButton");
     Assertions.assertEquals(0, controller.getIngredientViewStream().count());
@@ -131,6 +134,7 @@ public class AppTest extends ApplicationTest {
 
   @DisplayName("Test adding duplicate ingredient to recipe")
   public void testDuplicateIngredient() {
+    clickOn("#editButton");
     addIngredient("1", "ost", "stk");
     addIngredient("2", "ost", "stk");
     addIngredient("2", "OsT", "stk");
@@ -144,8 +148,8 @@ public class AppTest extends ApplicationTest {
     clickOn("#addIngredient");
   }
 
-  private String getIngredientTextField(int index) {
-    return ((TextField) controller.getIngredientViewStream().skip(3 * index + 1).findAny().get())
+  private String getIngredientText(int index) {
+    return ((Text) controller.getIngredientViewStream().skip(3 * index + 1).findAny().get())
         .getText();
   }
 
@@ -155,9 +159,8 @@ public class AppTest extends ApplicationTest {
 
   private void createTestFile() {
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
-    fh.write(
-        new Recipe(new Ingredient("tomat", 5, "default"), new Ingredient("avocado", 2, "default")),
-        "testFile");
+    fh.write(new Recipe(new Ingredient("tomat", 2.0, "default"),
+        new Ingredient("avocado", 1.0, "default")), "testFile");
   }
 
 }
