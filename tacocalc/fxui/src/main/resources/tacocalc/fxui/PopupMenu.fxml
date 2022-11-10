@@ -39,7 +39,7 @@
                   </MFXTextField>
                   <HBox prefHeight="26.0" prefWidth="200.0">
                      <children>
-                        <MFXButton id="outline-button" fx:id="decreaseButton" onAction="#handleDecrease" prefHeight="39.0" prefWidth="39.0" stylesheets="@Styling.css" text="-">
+                        <MFXButton fx:id="decreaseButton" onAction="#handleDecrease" prefHeight="39.0" prefWidth="39.0" styleClass="outline-button" stylesheets="@Styling.css" text="-">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
@@ -55,7 +55,7 @@
                               <Insets left="5.0" right="5.0" />
                            </HBox.margin>
                         </MFXTextField>
-                        <MFXButton id="outline-button" fx:id="increaseButton" onAction="#handleIncrease" prefHeight="39.0" prefWidth="39.0" stylesheets="@Styling.css" text="+">
+                        <MFXButton fx:id="increaseButton" onAction="#handleIncrease" prefHeight="39.0" prefWidth="39.0" styleClass="outline-button" stylesheets="@Styling.css" text="+">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
@@ -111,7 +111,7 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </MFXButton>
-                  <MFXButton id="red-button" fx:id="deleteButton" layoutX="195.0" layoutY="73.0" onAction="#handleDelete" prefHeight="27.0" prefWidth="61.0" stylesheets="@Styling.css" text="Delete">
+                  <MFXButton fx:id="deleteButton" layoutX="195.0" layoutY="73.0" onAction="#handleDelete" prefHeight="27.0" prefWidth="61.0" styleClass="red-button" stylesheets="@Styling.css" text="Delete">
                      <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </VBox.margin>

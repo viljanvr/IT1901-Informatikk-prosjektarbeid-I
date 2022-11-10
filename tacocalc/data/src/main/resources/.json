@@ -4,7 +4,7 @@
     "perPersonAmount": 4.0,
     "measuringUnit": "stk",
     "roundUpTo": 1.0,
-    "bought": true
+    "bought": false
   },
   {
     "name": "paprika",
@@ -18,6 +18,6 @@
     "perPersonAmount": 18.0,
     "measuringUnit": "stk",
     "roundUpTo": 1.0,
-    "bought": false
+    "bought": true
   }
 ]

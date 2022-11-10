@@ -41,7 +41,7 @@
                      <children>
                         <HBox fx:id="scaleBox" prefHeight="70.0" prefWidth="453.0">
                            <children>
-                              <MFXButton id="outline-button" fx:id="decreasePeopleButton" onAction="#handleDecreasePeople" prefHeight="39.0" prefWidth="39.0" text="-">
+                              <MFXButton fx:id="decreasePeopleButton" onAction="#handleDecreasePeople" prefHeight="39.0" prefWidth="39.0" styleClass="outline-button" text="-">
                                  <HBox.margin>
                                     <Insets right="5.0" />
                                  </HBox.margin>
@@ -62,7 +62,7 @@
                                     </Text>
                                  </children>
                               </VBox>
-                              <MFXButton id="outline-button" fx:id="increasePeopleButton" layoutX="10.0" layoutY="10.0" onAction="#handleIncreasePeople" prefHeight="39.0" prefWidth="39.0" text="+">
+                              <MFXButton fx:id="increasePeopleButton" layoutX="10.0" layoutY="10.0" onAction="#handleIncreasePeople" prefHeight="39.0" prefWidth="39.0" styleClass="outline-button" text="+">
                                  <HBox.margin>
                                     <Insets left="5.0" />
                                  </HBox.margin>
@@ -80,7 +80,7 @@
                               <MFXTextField fx:id="newIngredientNameField" floatMode="BORDER" floatingText="Ingredient name" prefHeight="39.0" prefWidth="123.0" />
                               <MFXTextField fx:id="newIngredientAmntField" floatMode="BORDER" floatingText="Amount" prefHeight="39.0" />
                               <MFXTextField fx:id="newMeasurementField" floatMode="BORDER" floatingText="Unit" prefHeight="39.0" />
-                              <MFXButton id="outline-button" fx:id="addIngredient" onAction="#handleAddIngredient" prefHeight="39.0" prefWidth="126.0" text="Add ingredient" />
+                              <MFXButton fx:id="addIngredient" onAction="#handleAddIngredient" prefHeight="39.0" prefWidth="126.0" styleClass="outline-button" text="Add ingredient" />
                            </children>
                            <padding>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -88,12 +88,12 @@
                         </HBox>
                         <HBox alignment="TOP_RIGHT" prefWidth="430.0" spacing="10.0" AnchorPane.rightAnchor="0.0">
                            <children>
-                              <Button fx:id="loadButton" mnemonicParsing="false" onAction="#handleLoadFile" prefHeight="39.0" prefWidth="61.0" text="Load" visible="false">
+                              <Button fx:id="loadButton" mnemonicParsing="false" onAction="#handleLoadFile" prefHeight="39.0" prefWidth="61.0" text="Load">
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
                               </Button>
-                              <TextField fx:id="nameField" prefHeight="39.0" promptText="Name" visible="false">
+                              <TextField fx:id="nameField" prefHeight="39.0" promptText="Name">
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>

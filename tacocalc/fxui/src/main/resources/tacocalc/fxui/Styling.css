@@ -23,17 +23,17 @@
     -fx-border-radius:  5px;
 }
 
-#outline-button {
+.outline-button {
     -fx-background-color: transparent;
     -fx-background-radius: 5px;
     -fx-border-color:  #FFA012;
     -fx-text-fill: #FFA012;
 }
 
-#outline-button .mfx-ripple-generator {
+.outline-button .mfx-ripple-generator {
     -mfx-auto-clip: true;
 }
 
-#red-button {
+.red-button {
     -fx-background-color:  #d40000;
 }
