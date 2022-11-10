@@ -6,7 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -47,7 +47,7 @@ public class AppTest extends ApplicationTest {
     Assertions.assertEquals("2", controller.getNewIngredientAmntField().getText());
     Assertions.assertEquals("agurk", controller.getNewIngredientNameField().getText());
     clickOn("#addIngredient");
-    Assertions.assertEquals("8 stk agurk", getIngredientTextField(0));
+    Assertions.assertEquals("8 stk agurk", getIngredientText(0));
 
     // Checks that the input fiels are cleared after adding an ingredient
     Assertions.assertEquals("", controller.getNewIngredientAmntField().getText());
@@ -58,7 +58,7 @@ public class AppTest extends ApplicationTest {
     clickOn("#newIngredientNameField").write("tomat");
     clickOn("#newMeasurementField").write("stk");
     clickOn("#addIngredient");
-    Assertions.assertEquals("4 stk tomat", getIngredientTextField(1));
+    Assertions.assertEquals("4 stk tomat", getIngredientText(1));
   }
 
   // Tests the error message for wrong input in integer field
@@ -83,13 +83,13 @@ public class AppTest extends ApplicationTest {
     clickOn(getIngredientEditButton(0));
     clickOn("#decreaseButton");
     clickOn("#saveButton");
-    Assertions.assertEquals("4 stk paprika", getIngredientTextField(0));
+    Assertions.assertEquals("4 stk paprika", getIngredientText(0));
     clickOn("#editButton");
     clickOn(getIngredientEditButton(0));
     clickOn("#increaseButton");
     clickOn("#increaseButton");
     clickOn("#saveButton");
-    Assertions.assertEquals("12 stk paprika", getIngredientTextField(0));
+    Assertions.assertEquals("12 stk paprika", getIngredientText(0));
   }
 
   @Test
@@ -101,7 +101,7 @@ public class AppTest extends ApplicationTest {
     clickOn(getIngredientEditButton(0));
     clickOn("#ingredientNameField").eraseText(5).write("bacon terninger");
     clickOn("#ingredientNameField").clickOn("#saveButton");
-    Assertions.assertEquals("4 stk bacon terninger", getIngredientTextField(0));
+    Assertions.assertEquals("4 stk bacon terninger", getIngredientText(0));
   }
 
   // Tests other important button with a lot of logic
@@ -118,8 +118,8 @@ public class AppTest extends ApplicationTest {
     clickOn("#nameField").write("testFile");
     clickOn("#loadButton");
 
-    Assertions.assertEquals("8 default tomat", getIngredientTextField(0));
-    Assertions.assertEquals("4 default avocado", getIngredientTextField(1));
+    Assertions.assertEquals("8 default tomat", getIngredientText(0));
+    Assertions.assertEquals("4 default avocado", getIngredientText(1));
   }
 
   @Test
@@ -159,8 +159,8 @@ public class AppTest extends ApplicationTest {
     clickOn("#addIngredient");
   }
 
-  private String getIngredientTextField(int index) {
-    return ((TextField) controller.getIngredientViewStream().skip(3 * index + 1).findAny().get())
+  private String getIngredientText(int index) {
+    return ((Text) controller.getIngredientViewStream().skip(3 * index + 1).findAny().get())
         .getText();
   }
 

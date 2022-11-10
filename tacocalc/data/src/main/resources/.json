@@ -1,9 +1,9 @@
 [
   {
     "name": "agurk",
-    "perPersonAmount": 1.0,
+    "perPersonAmount": 4.0,
     "measuringUnit": "stk",
-    "roundUpTo": 4.0,
+    "roundUpTo": 1.0,
     "bought": false
   },
   {
@@ -18,6 +18,6 @@
     "perPersonAmount": 18.0,
     "measuringUnit": "stk",
     "roundUpTo": 1.0,
-    "bought": false
+    "bought": true
   }
 ]
