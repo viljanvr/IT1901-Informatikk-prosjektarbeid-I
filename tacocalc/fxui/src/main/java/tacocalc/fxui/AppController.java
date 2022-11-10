@@ -248,6 +248,21 @@ public class AppController {
   }
 
   /**
+   * Method takes in the name of an ingredient and checks if there is an item i view with the same
+   * name.
+   *
+   * @param name String of the name of ingredient to be added
+   * @return true if ingredient is already in view
+   */
+  public boolean isDuplicate(String name) {
+    Ingredient duplicate = recipe.getIngredient(name);
+    if (duplicate == null) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
    * Adds ingredient to the ShoppingList object. Saves the updated recipe object to file and updates
    * the view.
    *
@@ -257,15 +272,16 @@ public class AppController {
   @FXML
   private void handleAddIngredient() {
     try {
-      String ingredientName = newIngredientNameField.getText();
+      String ingredientName = newIngredientNameField.getText().toLowerCase();
       Double ingredientPerPersonAmnt = Double.parseDouble(newIngredientAmntField.getText());
       String ingredientUnit = newMeasurementField.getText();
 
-      recipe.addItem(ingredientName, ingredientPerPersonAmnt, ingredientUnit);
-      handleSaveToFile();
-
-      addItemToView(ingredientName, recipe.getIngredientTotalAmount(ingredientName), ingredientUnit,
-          false);
+      if (!isDuplicate(ingredientName)) {
+        recipe.addItem(ingredientName, ingredientPerPersonAmnt, ingredientUnit);
+        handleSaveToFile();
+        addItemToView(ingredientName, recipe.getIngredientTotalAmount(ingredientName),
+            ingredientUnit, false);
+      }
 
       newIngredientAmntField.clear();
       newIngredientNameField.clear();
@@ -279,7 +295,7 @@ public class AppController {
 
   /**
    * Method takes in the properties of an ingredient and adds it to the view.
-   * 
+   *
    * <p>
    * Method also initialises the eventhandlers for the new checkbox and the edit-button for the new
    * ingredient.
@@ -417,7 +433,7 @@ public class AppController {
   }
 
   /**
-   * A getter that maskes the newIngredientAmntField visible to other classes Is used in tests.
+   * A getter that maskes the newIngredientAmntField visible to other classes is used in tests.
    *
    * @return returns the TextField object
    */

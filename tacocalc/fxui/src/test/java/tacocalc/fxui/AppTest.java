@@ -30,10 +30,6 @@ public class AppTest extends ApplicationTest {
     stage.toFront();
   }
 
-  // TODO: Implement measuring unit into test (per now it only has "Default")
-
-  // method is used to add an ingredient in other tests
-
   @Test
 
   @DisplayName("Test adding new ingredients to view")
@@ -134,23 +130,16 @@ public class AppTest extends ApplicationTest {
     // TODO: Maybe test checkbox
   }
 
-  // TODO: Skulle vi ha
-  // @Test
-  // @DisplayName("Test that it is not possible to create a duplicate of an ingredient ")
-  // public void testDuplicate() {
-  // clickOn("#editButton");
-  // addIngredient("1", "ost", "default");
-  // addIngredient("4", "ost", "default");
-  // Assertions.assertEquals(3, controller.getIngredientViewStream().count());
-  // // Test case sensitivity
-  // addIngredient("3", "OsT", "default");
-  // Assertions.assertEquals(3, controller.getIngredientViewStream().count());
-  // }
+  @Test
 
-  // TODO: Make edge-case tests
-  // What happens if view fills up?
-  // Really long name on ingredient?
-
+  @DisplayName("Test adding duplicate ingredient to recipe")
+  public void testDuplicateIngredient() {
+    clickOn("#editButton");
+    addIngredient("1", "ost", "stk");
+    addIngredient("2", "ost", "stk");
+    addIngredient("2", "OsT", "stk");
+    Assertions.assertEquals(3, controller.getIngredientViewStream().count());
+  }
 
   private void addIngredient(String amount, String name, String measuringUnit) {
     clickOn("#newIngredientAmntField").write(amount);

@@ -181,7 +181,7 @@ public class IngredientEditController {
    */
   @FXML
   protected void handleSave() {
-    appController.updateIngredient(ingredientName, ingredientNameField.getText(),
+    appController.updateIngredient(ingredientName, ingredientNameField.getText().toLowerCase(),
         Double.parseDouble(quantityField.getText()),
         roundCheckBox.isSelected() ? Double.parseDouble(roundAmountField.getText()) : 0,
         measuringUnitField.getText());
