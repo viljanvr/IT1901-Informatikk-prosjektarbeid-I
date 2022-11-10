@@ -1,8 +1,9 @@
 [
   {
     "name": "ost",
-    "amount": 3,
-    "perPerson": 0.0,
+    "perPersonAmount": 1.0,
+    "measuringUnit": "stk",
+    "roundUpTo": 1.0,
     "bought": false
   }
 ]

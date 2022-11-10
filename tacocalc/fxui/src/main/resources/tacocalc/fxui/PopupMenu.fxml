@@ -1,60 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXCheckbox?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<Pane fx:id="popup" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="450.0" style="-fx-background-color: #2C2C2C; -fx-border-color: #FFA012; -fx-border-width: 2; -fx-background-radius: 10; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="popup" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="365.0" prefWidth="470.0" style="-fx-background-color: #2C2C2C; -fx-border-color: #FFA012; -fx-border-width: 2; -fx-background-radius: 10; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <BorderPane prefHeight="350.0" prefWidth="450.0">
+      <BorderPane prefHeight="365.0" prefWidth="470.0">
          <center>
-            <VBox prefHeight="269.0" prefWidth="450.0" BorderPane.alignment="CENTER">
+            <VBox fx:id="ingredientNameFieldingredientNameField" prefHeight="246.0" prefWidth="470.0" BorderPane.alignment="CENTER">
                <padding>
-                  <Insets left="150.0" right="150.0" top="100.0" />
+                  <Insets left="120.0" right="120.0" top="20.0" />
                </padding>
                <children>
-                  <TextField fx:id="ingredientNameField" promptText="Navn">
+                  <MFXTextField fx:id="ingredientNameField" floatMode="BORDER" floatingText="Name" prefHeight="39.0" prefWidth="220.0" stylesheets="@Styling.css">
                      <VBox.margin>
-                        <Insets top="-30.0" />
+                        <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
                      </VBox.margin>
-                  </TextField>
-                  <TextField fx:id="measuringUnitField" promptText="Måleenhet">
+                     <textFill>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </textFill>
+                  </MFXTextField>
+                  <MFXTextField fx:id="measuringUnitField" floatMode="BORDER" floatingText="Measuring unit" layoutX="150.0" layoutY="35.0" prefHeight="39.0" prefWidth="220.0" stylesheets="@Styling.css">
+                     <textFill>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </textFill>
                      <VBox.margin>
-                        <Insets top="20.0" />
+                        <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
                      </VBox.margin>
-                  </TextField>
-                  <Pane prefHeight="82.0" prefWidth="450.0">
+                  </MFXTextField>
+                  <HBox prefHeight="26.0" prefWidth="200.0">
                      <children>
-                        <TextField fx:id="quantityField" alignment="CENTER" layoutX="25.0" layoutY="29.0" prefHeight="25.0" prefWidth="100.0" />
-                        <Button fx:id="decreaseButton" layoutX="-1.0" layoutY="29.0" mnemonicParsing="false" onAction="#handleDecrease" prefHeight="25.0" prefWidth="26.0" text="-" />
-                        <Button fx:id="increaseButton" layoutX="124.0" layoutY="29.0" mnemonicParsing="false" onAction="#handleIncrease" prefHeight="25.0" prefWidth="26.0" text="+" />
+                        <MFXButton fx:id="decreaseButton" onAction="#handleDecrease" prefHeight="39.0" prefWidth="39.0" styleClass="outline-button" stylesheets="@Styling.css" text="-">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </MFXButton>
+                        <MFXTextField fx:id="quantityField" floatMode="BORDER" floatingText="Amount per person" prefHeight="39.0" stylesheets="@Styling.css">
+                           <textFill>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </textFill>
+                           <HBox.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </HBox.margin>
+                        </MFXTextField>
+                        <MFXButton fx:id="increaseButton" onAction="#handleIncrease" prefHeight="39.0" prefWidth="39.0" styleClass="outline-button" stylesheets="@Styling.css" text="+">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </MFXButton>
                      </children>
-                  </Pane>
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="26.0" prefWidth="200.0">
+                     <children>
+                        <MFXCheckbox fx:id="roundCheckBox" onAction="#handleRoundToggle" selected="true" stylesheets="@Styling.css">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </MFXCheckbox>
+                        <Text fx:id="roundUpToText" fill="#FFFFFF" strokeType="OUTSIDE" strokeWidth="0.0" text="Round up to nearest">
+                           <HBox.margin>
+                              <Insets left="3.0" right="5.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Text>
+                        <MFXTextField fx:id="roundAmountField" floatMode="DISABLED" stylesheets="@Styling.css" />
+                     </children>
+                     <VBox.margin>
+                        <Insets left="-10.0" right="-10.0" top="10.0" />
+                     </VBox.margin>
+                  </HBox>
                </children>
                <BorderPane.margin>
-                  <Insets bottom="10.0" />
+                  <Insets />
                </BorderPane.margin>
             </VBox>
          </center>
          <bottom>
-            <Pane prefHeight="110.0" prefWidth="450.0" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" prefHeight="120.0" prefWidth="470.0" BorderPane.alignment="BOTTOM_LEFT">
                <children>
-                  <Button fx:id="saveButton" layoutX="175.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleSave" prefHeight="40.0" prefWidth="100.0" text="SAVE">
+                  <Text fx:id="errorMessage" fill="#ffa012" strokeType="OUTSIDE" strokeWidth="0.0" text="A verry long error message" visible="false">
                      <font>
-                        <Font name="Calisto MT" size="18.0" />
+                        <Font size="11.0" />
                      </font>
-                  </Button>
-                  <Button fx:id="deleteButton" layoutX="195.0" layoutY="63.0" mnemonicParsing="false" onAction="#handleDelete" prefWidth="60.0" style="-fx-background-color: #fc3838;" text="Delete">
+                  </Text>
+                  <MFXButton fx:id="saveButton" onAction="#handleSave" prefHeight="40.0" prefWidth="100.0" stylesheets="@Styling.css" text="SAVE">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
                      <font>
-                        <Font name="Calisto MT" size="12.0" />
+                        <Font name="System Bold" size="18.0" />
                      </font>
-                  </Button>
+                  </MFXButton>
+                  <MFXButton fx:id="deleteButton" layoutX="195.0" layoutY="73.0" onAction="#handleDelete" prefHeight="27.0" prefWidth="61.0" styleClass="red-button" stylesheets="@Styling.css" text="Delete">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                  </MFXButton>
                </children>
-            </Pane>
+            </VBox>
          </bottom>
       </BorderPane>
    </children>

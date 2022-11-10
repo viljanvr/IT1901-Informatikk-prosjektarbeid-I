@@ -10,7 +10,7 @@ import java.util.List;
 public class Recipe {
   ArrayList<Ingredient> list = new ArrayList<>();
   private String name;
-  private int people;
+  private int numberOfPeople;
 
   /**
    * Adds all ingdredients to the objects list.
@@ -19,7 +19,16 @@ public class Recipe {
    */
   public Recipe(Ingredient... ingredients) {
     list.addAll(Arrays.asList(ingredients));
-    this.people = 1;
+    this.numberOfPeople = 4;
+  }
+
+  /**
+   * Get the name of this recipie.
+   *
+   * @return the name as a string
+   */
+  public String getName() {
+    return name;
   }
 
   /**
@@ -41,21 +50,36 @@ public class Recipe {
   }
 
   /**
-   * Adds a new Ingredient to the ShoppingList If it is already an Ingredient with the same name,
+   * Adds a new Ingredient to the ShoppingList. If it is already an Ingredient with the same name,
    * the old Ingredient will be updated with the amount of the new, and its bought status is set to
    * false.
    *
    * @param name the string to be added
-   * @param amount the integer to be added
+   * @param perPersonAmount the integer to be added
+   * @param measuringUnit the other string to be added
+   * @param roundUpTo the value to round the total amount up to
    */
-  public void addItem(String name, Integer amount) {
+  public void addItem(String name, Double perPersonAmount, Double roundUpTo, String measuringUnit) {
     Ingredient duplicate = getIngredient(name);
     if (duplicate != null) {
-      duplicate.setAmount(amount);
+      duplicate.setPerPersonAmount(perPersonAmount);
       duplicate.setBought(false);
+      duplicate.setRoundUpTo(roundUpTo);
     } else {
-      list.add(new Ingredient(name, amount));
+      list.add(new Ingredient(name, perPersonAmount, roundUpTo, measuringUnit));
     }
+  }
+
+  /**
+   * Adds a new Ingredient to the ShoppingList. If it is already an Ingredient with the same name,
+   * the old Ingredient will be updated with the amount of the new, and its bought status is set to
+   * false.
+   *
+   * @param name the string to be added
+   * @param perPersonAmount the integer to be added
+   */
+  public void addItem(String name, Double perPersonAmount, String measuringUnit) {
+    addItem(name, perPersonAmount, 1.0, measuringUnit);
   }
 
   /**
@@ -118,41 +142,78 @@ public class Recipe {
   }
 
   /**
+   * Set the measuring unit of a given ingredient.
+   * 
+   *
+   * @param name the name
+   *
+   * @param measuringUnit the other thing
+   * 
+   */
+  public void setIngredientMeasurement(String name, String measuringUnit) {
+    Ingredient ingredient = getIngredient(name);
+    if (ingredient == null) {
+      throw new IllegalStateException(
+          "The item doesn't exist in the list, and can therefore not give a new measuring unit");
+    }
+    getIngredient(name).setMeasuringUnit(measuringUnit);
+  }
+
+  /**
+   * Get the measuring unit of a given ingredient.
+   *
+   * @param name the ingredient to get the value from
+   * @return the measuring unit
+   */
+  public String getMeasuringUnit(String name) {
+    Ingredient ingredient = getIngredient(name);
+    if (ingredient == null) {
+      throw new IllegalStateException("This ingredient is not in the shoppinglist");
+    }
+    return getIngredient(name).getMeasuringUnit();
+  }
+
+  /**
    * Set the amount per person of a given ingredient.
    *
    * @param name The ingredient to be set
-   * @param amountPerPerson The updated amount per person
+   * @param perPersonAmount The updated amount per person
    */
-  public void setIngredientAmount(String name, Integer amountPerPerson) {
+  public void setIngredientPerPersonAmount(String name, Double perPersonAmount) {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
       throw new IllegalStateException(
           "The item doesn't exist in the list, and can therefore not set new amount");
     }
-    getIngredient(name).setAmount(amountPerPerson);
+    getIngredient(name).setPerPersonAmount(perPersonAmount);
   }
 
   /**
    * Get the amount per person of a given ingredient.
    *
    * @param name the ingredient to get the value from
-   * @return the amount per person as an interger
+   * @return the amount per person as a Double
    */
-  public int getIngredientAmount(String name) {
+  public Double getIngredientPerPersonAmount(String name) {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
       throw new IllegalStateException("This ingredient is not in the shoppinglist");
     }
-    return (int) getIngredient(name).getAmount() * people;
+    return getIngredient(name).getPerPersonAmount();
   }
 
   /**
-   * Get the name of this recipie.
+   * Get the total amount of a given ingredient.
    *
-   * @return the name as a string
+   * @param name the ingredient to get the value from
+   * @return the total amount as a Double
    */
-  public String getName() {
-    return name;
+  public Double getIngredientTotalAmount(String name) {
+    Ingredient ingredient = getIngredient(name);
+    if (ingredient == null) {
+      throw new IllegalStateException("This ingredient is not in the shoppinglist");
+    }
+    return getIngredient(name).getTotalAmount(numberOfPeople);
   }
 
   /**
@@ -170,6 +231,45 @@ public class Recipe {
   }
 
   /**
+   * Get the number of people used to scale the ingredient amount.
+   *
+   * @return the number of people as an integer
+   */
+  public int getNumberOfPeople() {
+    return numberOfPeople;
+  }
+
+  /**
+   * Set the number of people used to scale the ingredient amount.
+   *
+   * @param people the number of people to be set
+   */
+  public void setNumberOfPeople(int people) {
+    if (people < 1) {
+      throw new IllegalArgumentException("A recipe must be for 1 or more people");
+    }
+    this.numberOfPeople = people;
+  }
+
+  public void setRoundUpTo(String ingredient, Double roundUpTo) {
+    getIngredient(ingredient).setRoundUpTo(roundUpTo);
+  }
+
+  /**
+   * Returns the value that a given ingredients total amount should be rounded up to.
+   *
+   * @param name the name of the ingredient
+   * @return the roundUpTo value as a Double
+   */
+  public Double getRoundUpTo(String name) {
+    Ingredient ingredient = getIngredient(name);
+    if (ingredient == null) {
+      throw new IllegalStateException("This ingredient is not in the shoppinglist");
+    }
+    return ingredient.getRoundUpTo();
+  }
+
+  /**
    * toString-method.
    */
   public String toString() {
@@ -179,26 +279,5 @@ public class Recipe {
       s = sb.append(s).append(ingredient.toString()).append("\n").toString();
     }
     return s;
-  }
-
-  /**
-   * Get number of people owning this recipie.
-   *
-   * @return the number of people as an integer
-   */
-  public int getPeople() {
-    return people;
-  }
-
-  /**
-   * Set number of people owning this recipie.
-   *
-   * @param people the number of people to be set
-   */
-  public void setPeople(int people) {
-    if (people < 1) {
-      throw new IllegalArgumentException("A recipe must be for 1 or more people");
-    }
-    this.people = people;
   }
 }

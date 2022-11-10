@@ -18,9 +18,9 @@ public class TacocalcService {
 
   private TacoCalcFileHandler fh = new TacoCalcFileHandler();
 
-  private RecipeBook recipes = new RecipeBook(
-      new Recipe[] {new Recipe(new Ingredient("Pølser", 2), new Ingredient("Pølsebrød", 2)),
-          new Recipe(new Ingredient("Ringnes", 6))});
+  private RecipeBook recipes = new RecipeBook(new Recipe[] {
+      new Recipe(new Ingredient("Pølser", 2d, "stk"), new Ingredient("Pølsebrød", 2d, "stk")),
+      new Recipe(new Ingredient("Ringnes", 6d, "stk"))});
 
   public Collection<Recipe> getAllRecipes() {
     return recipes.getAllRecipes();
