@@ -3,6 +3,7 @@ package tacocalc.fxui;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.enums.FloatMode;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -11,6 +12,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -26,6 +29,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
 import tacocalc.data.TacoCalcFileHandler;
@@ -45,6 +49,9 @@ public class AppController {
   private BorderPane popUpContain;
 
   @FXML
+  private BorderPane header;
+
+  @FXML
   private MFXTextField newIngredientNameField;
 
   @FXML
@@ -54,10 +61,10 @@ public class AppController {
   private MFXTextField newMeasurementField;
 
   @FXML
-  private TextField nameField;
+  private MFXTextField numberOfPeopleField;
 
   @FXML
-  private MFXTextField numberOfPeopleField;
+  private MFXTextField recipeNameEditingField;
 
   @FXML
   private MFXButton addIngredient;
@@ -70,6 +77,9 @@ public class AppController {
 
   @FXML
   private MFXButton editButton;
+
+  @FXML
+  private MFXButton backButton;
 
   @FXML
   private Button loadButton;
@@ -86,9 +96,12 @@ public class AppController {
   @FXML
   private Text numberOfPeopleErrorText;
 
-  private Boolean editMode = false;
+  @FXML
+  private Text recipieNameText;
 
-  private Recipe recipe = new Recipe();
+  private Recipe recipe;
+
+  private Boolean editMode = false;
 
   // Keeps track of left or right.
   private int columnCounter = 0;
@@ -107,12 +120,16 @@ public class AppController {
     loadRecipeFromRecipeBook(RecipeBookController.transferRecipe);
     numberOfPeopleField.setText(String.valueOf(recipe.getNumberOfPeople()));
 
-    numberOfPeopleField.addEventFilter(KeyEvent.ANY, new EventHandler<KeyEvent>() {
-      @Override
-      public void handle(KeyEvent event) {
-        handleNumberOfPeopleChange();
-      }
+    numberOfPeopleField.addEventFilter(KeyEvent.ANY, e -> {
+      handleNumberOfPeopleChange();
     });
+
+    recipeNameEditingField.addEventFilter(KeyEvent.ANY, e -> {
+      handleRecipeNameChange();
+    });
+    // recipeNameEditingField.setOnAction(e -> {
+    // saveNewRecipieName(recipeNameEditingField.getText());
+    // });
   }
 
   /**
@@ -127,6 +144,12 @@ public class AppController {
     editButton.setText(editMode ? "Cancel" : "Edit");
     addIngredientBox.setVisible(editMode);
     scaleBox.setVisible(!editMode);
+
+    header.setCenter(editMode ? recipeNameEditingField : recipieNameText);
+
+    if (!editMode && !Objects.equals(recipe.getName(), recipeNameEditingField.getText())) {
+      saveNewRecipeName(recipeNameEditingField.getText());
+    }
   }
 
   @FXML
@@ -169,6 +192,18 @@ public class AppController {
       } else {
         numberOfPeopleErrorText.setVisible(true);
       }
+    }
+  }
+
+  private void handleRecipeNameChange() {
+    // TODO: feilhåndtering
+  }
+
+  private void saveNewRecipeName(String newName) {
+    TacoCalcFileHandler fh = new TacoCalcFileHandler();
+    if (fh.renameFile(recipe.getName(), newName)) {
+      recipe.setName(newName);
+      recipieNameText.setText(newName);
     }
   }
 
@@ -405,31 +440,7 @@ public class AppController {
    */
   protected void handleSaveToFile() {
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
-    fh.write(recipe, getFileName());
-  }
-
-  /**
-   * Clears the ingredient view. Reads a file with ingredients and adds all elements to the a recipe
-   * object. All elements of recipe is then added to the view.
-   */
-  @FXML
-  private void handleLoadFile() {
-    clearIngredientListView();
-    TacoCalcFileHandler fh = new TacoCalcFileHandler();
-    this.recipe = fh.read(getFileName());
-    updateIngredientListView();
-  }
-
-  /**
-   * Gets the name from a text field of a file to be read or written to.
-   *
-   * <p>
-   * TODO: Implement possibility to have different recipes and files
-   *
-   * @return returns filename as a String
-   */
-  private String getFileName() {
-    return nameField.getText();
+    fh.write(recipe, recipe.getName());
   }
 
   /**
@@ -458,6 +469,27 @@ public class AppController {
   public void loadRecipeFromRecipeBook(String recipeName) {
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
     this.recipe = fh.read(recipeName);
+    System.out.println(recipe.getName());
     updateIngredientListView();
+    recipieNameText.setText(recipeName);
+    recipeNameEditingField = new MFXTextField(recipeName, "", "Recipe Name");
+    recipeNameEditingField.setFloatMode(FloatMode.BORDER);
+    recipeNameEditingField.setId("recipe-name-text-field");
+
+
+  }
+
+  @FXML
+  private void handleGoBack() {
+    Stage thisStage = (Stage) backButton.getScene().getWindow();
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("RecipeBook.fxml"));
+    Parent root;
+    try {
+      root = loader.load();
+      thisStage.setScene(new Scene(root));
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 }

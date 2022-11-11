@@ -28,8 +28,7 @@ public class TacoCalcFileHandler {
    * @param fileName the String of the filename to be written to
    */
   public void write(Recipe r, String fileName) {
-    String fp = FILEPATH + fileName + ".json";
-    try (FileWriter fw = new FileWriter(fp, StandardCharsets.UTF_8)) {
+    try (FileWriter fw = new FileWriter(getFileName(fileName), StandardCharsets.UTF_8)) {
       Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
       gson.toJson(r.getList(), fw);
@@ -51,18 +50,42 @@ public class TacoCalcFileHandler {
    * @return a ShoppingList created from the contents of the Json file
    */
   public Recipe read(String fileName) {
-    String fp = FILEPATH + fileName + ".json";
-    try (FileReader fr = new FileReader(fp, StandardCharsets.UTF_8)) {
+    if (fileName == null) {
+      return new Recipe("noName");
+    }
+    try (FileReader fr = new FileReader(getFileName(fileName), StandardCharsets.UTF_8)) {
       Gson gson = new Gson();
 
       // Make Ingredient list from Gson
       Type listType = new TypeToken<List<Ingredient>>() {}.getType();
       ArrayList<Ingredient> ingredients = gson.fromJson(fr, listType);
       // Return shopping list from ArrayList
-      return new Recipe(ingredients.toArray(new Ingredient[0]));
+      return new Recipe(fileName, ingredients.toArray(new Ingredient[0]));
     } catch (Exception e) {
       e.printStackTrace();
     }
-    return new Recipe();
+    return new Recipe(fileName);
+  }
+
+  /**
+   * Allow you to rename a given file.
+   *
+   * @param oldName the file to be renamed
+   * @param newName the new file name
+   * @return returns true if renaming succeded
+   */
+  public boolean renameFile(String oldName, String newName) {
+    File oldFile = new File(getFileName(oldName));
+    File newFile = new File(getFileName(newName));
+
+    if (newFile.exists()) {
+      System.out.println("Cannot rename, since new file name is alredy in use");
+      return false;
+    }
+    return oldFile.renameTo(newFile);
+  }
+
+  private String getFileName(String fileName) {
+    return FILEPATH + fileName + ".json";
   }
 }
