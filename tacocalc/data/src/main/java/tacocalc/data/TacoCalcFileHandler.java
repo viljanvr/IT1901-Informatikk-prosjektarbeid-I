@@ -61,7 +61,7 @@ public class TacoCalcFileHandler {
       ArrayList<Ingredient> ingredients = gson.fromJson(fr, listType);
       // Return shopping list from ArrayList
       return new Recipe(fileName, ingredients.toArray(new Ingredient[0]));
-    } catch (Exception e) {
+    } catch (IOException e) {
       return new Recipe(fileName);
     }
   }
@@ -78,7 +78,6 @@ public class TacoCalcFileHandler {
     File newFile = new File(getFileName(newName));
 
     if (newFile.exists()) {
-      System.out.println("Cannot rename, since new file name is alredy in use");
       return false;
     }
     return oldFile.renameTo(newFile);

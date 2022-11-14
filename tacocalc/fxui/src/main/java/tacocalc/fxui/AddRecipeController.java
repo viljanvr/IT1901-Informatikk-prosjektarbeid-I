@@ -8,6 +8,10 @@ import javafx.fxml.FXML;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+/**
+ * Controller for overlay appearing when pressing the "Create new recipe"-button from the recipe
+ * overview screen.
+ */
 public class AddRecipeController {
 
   @FXML
@@ -31,15 +35,17 @@ public class AddRecipeController {
   @FXML
   private MFXComboBox<String> templateComboBox;
 
-  RecipeBookController recipeBookController;
+  private RecipeBookController recipeBookController;
 
-  public AddRecipeController(RecipeBookController recipeBookController) {
+  protected AddRecipeController(RecipeBookController recipeBookController) {
     this.recipeBookController = recipeBookController;
   }
 
   @FXML
   private void handleCreate() {
     recipeBookController.changeToScene(recipeNameField.getText());
+    // TODO: Create recipe from template
+    // TODO: Validate input
   }
 
   @FXML

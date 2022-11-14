@@ -467,7 +467,6 @@ public class AppController {
   public void loadRecipeFromRecipeBook(String recipeName) {
     TacoCalcFileHandler fh = new TacoCalcFileHandler();
     this.recipe = fh.read(recipeName);
-    System.out.println(recipe.getName());
     updateIngredientListView();
     recipieNameText.setText(recipeName);
     recipeNameEditingField = new MFXTextField(recipeName, "", "Recipe Name");

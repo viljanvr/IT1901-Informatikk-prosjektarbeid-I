@@ -127,8 +127,6 @@ public class RecipeBookController {
    *
    * @param recipeName the name of the recipie to open
    *
-   * @param thisStage the current window
-   *
    * @throws IOException throws exception if specified FXML is not found
    */
   public void changeToScene(String recipeName) {
