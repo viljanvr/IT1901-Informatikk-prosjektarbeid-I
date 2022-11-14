@@ -3,6 +3,7 @@
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXCheckbox?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import io.github.palexdev.materialfx.controls.MFXToggleButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -111,7 +112,7 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </MFXButton>
-                  <MFXButton fx:id="deleteButton" layoutX="195.0" layoutY="73.0" onAction="#handleDelete" prefHeight="27.0" prefWidth="61.0" styleClass="red-button" stylesheets="@Styling.css" text="Delete">
+                  <MFXButton fx:id="deleteIngredientButton" layoutX="195.0" layoutY="73.0" onAction="#handleDelete" prefHeight="27.0" prefWidth="61.0" styleClass="red-button" stylesheets="@Styling.css" text="Delete">
                      <VBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </VBox.margin>

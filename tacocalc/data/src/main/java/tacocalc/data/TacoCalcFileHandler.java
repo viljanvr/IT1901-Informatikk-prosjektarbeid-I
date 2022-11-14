@@ -62,9 +62,8 @@ public class TacoCalcFileHandler {
       // Return shopping list from ArrayList
       return new Recipe(fileName, ingredients.toArray(new Ingredient[0]));
     } catch (Exception e) {
-      e.printStackTrace();
+      return new Recipe(fileName);
     }
-    return new Recipe(fileName);
   }
 
   /**
@@ -83,6 +82,11 @@ public class TacoCalcFileHandler {
       return false;
     }
     return oldFile.renameTo(newFile);
+  }
+
+  public boolean deleteFile(String fileName) {
+    File file = new File(getFileName(fileName));
+    return file.delete();
   }
 
   private String getFileName(String fileName) {

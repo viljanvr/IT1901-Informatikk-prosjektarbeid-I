@@ -82,7 +82,7 @@ public class AppController {
   private MFXButton backButton;
 
   @FXML
-  private Button loadButton;
+  private MFXButton deleteRecipeButton;
 
   @FXML
   private VBox container;
@@ -127,9 +127,6 @@ public class AppController {
     recipeNameEditingField.addEventFilter(KeyEvent.ANY, e -> {
       handleRecipeNameChange();
     });
-    // recipeNameEditingField.setOnAction(e -> {
-    // saveNewRecipieName(recipeNameEditingField.getText());
-    // });
   }
 
   /**
@@ -141,12 +138,13 @@ public class AppController {
   private void handleEditButton() {
     editMode = !editMode;
     getIngredientViewStream().filter(a -> a instanceof Button).forEach(a -> a.setVisible(editMode));
-    editButton.setText(editMode ? "Cancel" : "Edit");
+    editButton.setText(editMode ? "Done" : "Edit");
     addIngredientBox.setVisible(editMode);
     scaleBox.setVisible(!editMode);
-
+    deleteRecipeButton.setVisible(editMode);
     header.setCenter(editMode ? recipeNameEditingField : recipieNameText);
 
+    // Save new recipe name if texifield is changed and you exit editing mode
     if (!editMode && !Objects.equals(recipe.getName(), recipeNameEditingField.getText())) {
       saveNewRecipeName(recipeNameEditingField.getText());
     }
@@ -491,5 +489,12 @@ public class AppController {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
+  }
+
+  @FXML
+  private void handleDeleteRecipe() {
+    TacoCalcFileHandler fh = new TacoCalcFileHandler();
+    fh.deleteFile(recipe.getName());
+    handleGoBack();
   }
 }

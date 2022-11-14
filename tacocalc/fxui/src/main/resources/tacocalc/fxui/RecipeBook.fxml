@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
@@ -9,47 +11,53 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #2C2C2C#2C2C2C;" stylesheets="@Styling.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tacocalc.fxui.RecipeBookController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #2C2C2C;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tacocalc.fxui.RecipeBookController">
    <children>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="900.0" style="-fx-background-color: #1F1F1F; -fx-background-radius: 0 0 10 10;">
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
+      <VBox fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@Styling.css">
          <children>
-            <Text fill="WHITE" layoutX="40.0" layoutY="80.443359375" strokeType="OUTSIDE" strokeWidth="0.0" text="Dine oppskrifter" textOrigin="CENTER" wrappingWidth="332.421875" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <font>
-                  <Font name="System Bold" size="50.0" />
-               </font>
-            </Text>
-         </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
-      </AnchorPane>
-      <AnchorPane prefHeight="500.0" prefWidth="900.0">
-         <children>
-            <GridPane fx:id="recipeList" hgap="50.0" layoutX="179.0" layoutY="156.0" vgap="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-              </rowConstraints>
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="900.0" style="-fx-background-color: #1F1F1F; -fx-background-radius: 0 0 10 10;">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <children>
+                  <Text fill="WHITE" layoutX="40.0" layoutY="80.443359375" strokeType="OUTSIDE" strokeWidth="0.0" text="Dine oppskrifter" textOrigin="CENTER" wrappingWidth="332.421875" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font name="System Bold" size="50.0" />
+                     </font>
+                  </Text>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
                <padding>
-                  <Insets bottom="20.0" left="40.0" right="40.0" top="20.0" />
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </padding>
-            </GridPane>
+            </AnchorPane>
+            <VBox alignment="TOP_CENTER" prefHeight="500.0" prefWidth="900.0">
+               <children>
+                  <MFXButton fx:id="createRecipeButton" onAction="#handleCreateRecipe" prefHeight="39.0" prefWidth="171.0" text="Create new recipe" />
+                  <GridPane fx:id="recipeList" hgap="50.0" vgap="20.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <padding>
+                        <Insets bottom="20.0" left="40.0" right="40.0" top="20.0" />
+                     </padding>
+                  </GridPane>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </VBox>
          </children>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
-      </AnchorPane>
+      </VBox>
+      <BorderPane fx:id="popUpContain" onMouseClicked="#clickOutsideOverlayHandle" prefHeight="600.0" prefWidth="900.0" visible="false" />
    </children>
-</VBox>
+</AnchorPane>

@@ -125,7 +125,7 @@ public class AppTest extends ApplicationTest {
     clickOn("#editButton");
     addIngredient("1", "rømme", "dl");
     clickOn(getIngredientEditButton(0));
-    clickOn("#deleteButton");
+    clickOn("#deleteIngredientButton");
     Assertions.assertEquals(0, controller.getIngredientViewStream().count());
     // TODO: Maybe test checkbox
   }
