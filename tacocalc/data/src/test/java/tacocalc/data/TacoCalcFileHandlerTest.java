@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import tacocalc.core.*;
 
-public class FilehandlingTest {
+public class TacoCalcFileHandlerTest {
   @Test
   public void testWrite() {
     TacoCalcFileHandler th = new TacoCalcFileHandler();
