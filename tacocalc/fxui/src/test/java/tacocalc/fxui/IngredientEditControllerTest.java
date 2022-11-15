@@ -64,7 +64,7 @@ public class IngredientEditControllerTest extends AppTest {
     clickOn("#editButton");
     addIngredient("1", "rømme", "dl");
     clickOn(getIngredientEditButton(0, this.controller));
-    clickOn("#deleteButton");
+    clickOn("#deleteIngredientButton");
     Assertions.assertEquals(0, controller.getIngredientViewStream().count());
     // TODO: Maybe test checkbox
   }

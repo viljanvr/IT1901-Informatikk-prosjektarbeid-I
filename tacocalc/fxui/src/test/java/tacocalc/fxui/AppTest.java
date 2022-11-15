@@ -1,7 +1,5 @@
 package tacocalc.fxui;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

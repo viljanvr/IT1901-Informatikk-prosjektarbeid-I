@@ -38,7 +38,7 @@ public class IngredientEditController {
   private MFXButton saveButton;
 
   @FXML
-  private MFXButton deleteButton;
+  private MFXButton deleteIngredientButton;
 
   @FXML
   private MFXCheckbox roundCheckBox;
