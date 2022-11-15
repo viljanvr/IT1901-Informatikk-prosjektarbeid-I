@@ -163,4 +163,8 @@ public class RecipeBookController {
     }
     popUpContain.setCenter(addRecipeOverlay);
   }
+
+  public GridPane getGridPane() {
+    return this.recipeList;
+  }
 }

@@ -1,7 +1,7 @@
 package tacocalc.fxui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,7 +18,7 @@ import tacocalc.data.TacoCalcFileHandler;
 
 public class RecipeBookControllerTest extends AppTest {
   Parent root;
-  AppController controller;
+  RecipeBookController controller;
 
   @Override
   public void start(final Stage stage) throws Exception {
@@ -31,4 +31,20 @@ public class RecipeBookControllerTest extends AppTest {
   }
 
   // TODO: Add tests for RecipeBook
+
+  @Test
+
+  @DisplayName("Test add item to view")
+  public void TestCreteRecipe() {
+    clickOn("#createRecipeButton");
+    clickOn("#recipeNameField").write("TestRecipe");
+    clickOn("#createButton");
+    clickOn("#editButton");
+    addIngredient("0.5", "agurk", "stk");
+    clickOn("#backButton");
+    Assertions.assertFalse(controller.getGridPane().getChildren().stream()
+        .anyMatch(n -> ((Button) n).getText() == "TestRecipe"));
+  }
+
+
 }
