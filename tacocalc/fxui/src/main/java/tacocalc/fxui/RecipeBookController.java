@@ -61,7 +61,8 @@ public class RecipeBookController {
    *
    */
   private void getRecipesFromFile() {
-    File dir = new File("../data/src/main/resources/");
+    File dir = new File(System.getProperty("user.home") + "/recipecalc");
+    System.out.println("Reading recipes from " + System.getProperty("user.home") + "/recipecalc");
 
     FilenameFilter filter = new FilenameFilter() {
       @Override

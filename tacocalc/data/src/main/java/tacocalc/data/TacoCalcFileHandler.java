@@ -19,7 +19,8 @@ import tacocalc.core.Recipe;
  * Class for reading and writing recipies to file.
  */
 public class TacoCalcFileHandler {
-  public static final String FILEPATH = "../data/src/main/resources/";
+  public static final String LOCALFILEPATH = "../data/src/main/resources/";
+  public static final String FILEPATH = "/recipecalc/";
 
   /**
    * Takes a filename and stores the object in that given Json file. If it does not exist then it
@@ -33,7 +34,7 @@ public class TacoCalcFileHandler {
 
       gson.toJson(r.getList(), fw);
     } catch (FileNotFoundException e) {
-      if (new File(FILEPATH).mkdir()) {
+      if (new File(System.getProperty("user.home") + FILEPATH).mkdir()) {
         write(r, fileName);
       }
     } catch (IOException e) {
@@ -89,6 +90,6 @@ public class TacoCalcFileHandler {
   }
 
   private String getFileName(String fileName) {
-    return FILEPATH + fileName + ".json";
+    return System.getProperty("user.home") + FILEPATH + fileName + ".json";
   }
 }
