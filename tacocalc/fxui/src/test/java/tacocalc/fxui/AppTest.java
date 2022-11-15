@@ -1,7 +1,5 @@
 package tacocalc.fxui;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -99,24 +97,6 @@ public class AppTest extends ApplicationTest {
     clickOn("#ingredientNameField").clickOn("#saveButton");
     Assertions.assertEquals("4 stk bacon terninger", getIngredientText(0));
   }
-
-  // Tests other important button with a lot of logic
-
-  // @Test
-
-  // @DisplayName("Test that all items is added to view when loading a file")
-  // public void testLoadFile() {
-  // createTestFile();
-
-  // // Check that the view is empty
-  // assertEquals(0, controller.getIngredientViewStream().count());
-
-  // clickOn("#nameField").write("testFile");
-  // clickOn("#loadButton");
-
-  // Assertions.assertEquals("8 default tomat", getIngredientText(0));
-  // Assertions.assertEquals("4 default avocado", getIngredientText(1));
-  // }
 
   @Test
 
