@@ -16,7 +16,7 @@
             <Insets />
          </opaqueInsets>
          <children>
-            <Text fill="WHITE" layoutX="40.0" layoutY="80.443359375" strokeType="OUTSIDE" strokeWidth="0.0" text="Dine oppskrifter" textOrigin="CENTER" wrappingWidth="332.421875" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Text fill="WHITE" layoutX="40.0" layoutY="73.251953125" strokeType="OUTSIDE" strokeWidth="0.0" text="Dine oppskrifter" textOrigin="CENTER" wrappingWidth="713.421875" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
                <font>
                   <Font name="System Bold" size="50.0" />
                </font>
