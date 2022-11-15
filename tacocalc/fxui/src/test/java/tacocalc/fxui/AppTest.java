@@ -14,16 +14,28 @@ import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
 import tacocalc.data.TacoCalcFileHandler;
 
-/**
- * AppTest
- */
-interface AppTest {
+public class AppTest extends ApplicationTest {
+  Parent root;
+  AppController controller;
 
-  public void addIngredient(String amount, String name, String measuringUnit);
+  @Override
+  public void start(final Stage stage) throws Exception {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("ShoppingList.fxml"));
+    Parent root = loader.load();
+    stage.setScene(new Scene(root));
+    controller = loader.getController();
+    stage.show();
+    stage.toFront();
+  }
 
-  public String getIngredientText(int index);
+  @Test
 
-  public Button getIngredientEditButton(int index);
+  @DisplayName("Test adding new ingredients to view")
+  public void addNewIngredientTest() {
+    clickOn("#editButton");
+    clickOn("#newIngredientAmntField").write("2");
+    clickOn("#newIngredientNameField").write("agurk");
+    clickOn("#newMeasurementField").write("stk");
 
     // Checks if textfield contains expected text
     Assertions.assertEquals("2", controller.getNewIngredientAmntField().getText());
