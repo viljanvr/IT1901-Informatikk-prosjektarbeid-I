@@ -24,6 +24,9 @@ Prosjektet består av to moduler:
 3. Bytt mappe til `fxui`
 4. Kjør `mvn javafx:run` i tacocalc
 
+Alternativt kan man bruke en "one liner" hvis du er på rotnivå i kildekoden:
+`cd tacocalc; mvn clean install; cd fxui; mvn javafx:run; cd ../..`
+
 ## Lage en .exe (executable) for Windows
 
 1. Installer .NET Framework 3.5 [link](https://www.microsoft.com/en-in/download/confirmation.aspx?id=22)
@@ -32,9 +35,6 @@ Prosjektet består av to moduler:
 4. Kjør `mvn jpackage:jpackage -f ./fxui/pom.xml` i /tacocalc
 5. Gå inn i fxui -> target -> dist. Her finner du en .exe fil.
 6. Kjør denne, og følg oppsettet. Du skal nå ha en app ved navn `RecipeCalc.exe`
-
-Alternativt kan man bruke en "one liner" hvis du er på rotnivå i kildekoden:
-`cd tacocalc; mvn clean install; cd fxui; mvn javafx:run; cd ../..`
 
 ## Tester
 
