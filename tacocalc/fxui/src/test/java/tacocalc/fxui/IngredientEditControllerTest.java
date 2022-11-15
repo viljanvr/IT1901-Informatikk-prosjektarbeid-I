@@ -11,7 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
-public class IngredientEditControllerTest extends ApplicationTest implements AppTest {
+public class IngredientEditControllerTest extends AppTest {
   Parent root;
   AppController controller;
 
@@ -33,16 +33,16 @@ public class IngredientEditControllerTest extends ApplicationTest implements App
   public void testIncreaseAndDecrease() {
     clickOn("#editButton");
     addIngredient("2", "paprika", "stk");
-    clickOn(getIngredientEditButton(0));
+    clickOn(getIngredientEditButton(0, this.controller));
     clickOn("#decreaseButton");
     clickOn("#saveButton");
-    Assertions.assertEquals("4 stk paprika", getIngredientText(0));
+    Assertions.assertEquals("4 stk paprika", getIngredientText(0, this.controller));
     clickOn("#editButton");
-    clickOn(getIngredientEditButton(0));
+    clickOn(getIngredientEditButton(0, this.controller));
     clickOn("#increaseButton");
     clickOn("#increaseButton");
     clickOn("#saveButton");
-    Assertions.assertEquals("12 stk paprika", getIngredientText(0));
+    Assertions.assertEquals("12 stk paprika", getIngredientText(0, this.controller));
   }
 
   @Test
@@ -51,10 +51,10 @@ public class IngredientEditControllerTest extends ApplicationTest implements App
   public void testIngredientNameChange() {
     clickOn("#editButton");
     addIngredient("1", "bacon", "stk");
-    clickOn(getIngredientEditButton(0));
+    clickOn(getIngredientEditButton(0, this.controller));
     clickOn("#ingredientNameField").eraseText(5).write("bacon terninger");
     clickOn("#ingredientNameField").clickOn("#saveButton");
-    Assertions.assertEquals("4 stk bacon terninger", getIngredientText(0));
+    Assertions.assertEquals("4 stk bacon terninger", getIngredientText(0, this.controller));
   }
 
   @Test
@@ -63,34 +63,9 @@ public class IngredientEditControllerTest extends ApplicationTest implements App
   public void deleteIngredientTest() {
     clickOn("#editButton");
     addIngredient("1", "rømme", "dl");
-    clickOn(getIngredientEditButton(0));
+    clickOn(getIngredientEditButton(0, this.controller));
     clickOn("#deleteButton");
     Assertions.assertEquals(0, controller.getIngredientViewStream().count());
     // TODO: Maybe test checkbox
   }
-
-  @Override
-  public void addIngredient(String amount, String name, String measuringUnit) {
-    clickOn("#newIngredientAmntField").write(amount);
-    clickOn("#newIngredientNameField").write(name);
-    clickOn("#newMeasurementField").write(measuringUnit);
-    clickOn("#addIngredient");
-  }
-
-  @Override
-  public String getIngredientText(int index) {
-    return ((Text) controller.getIngredientViewStream().skip(3 * index + 1).findAny().get())
-        .getText();
-  }
-
-  @Override
-  public Button getIngredientEditButton(int index) {
-    return ((Button) controller.getIngredientViewStream().skip(3 * index + 2).findAny().get());
-  }
-
-  @Override
-  public void createTestFile() {
-
-  }
-
 }

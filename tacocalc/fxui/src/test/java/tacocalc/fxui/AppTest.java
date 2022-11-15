@@ -19,14 +19,27 @@ import tacocalc.data.TacoCalcFileHandler;
 /**
  * AppTest
  */
-interface AppTest {
+public abstract class AppTest extends ApplicationTest {
 
-  public void addIngredient(String amount, String name, String measuringUnit);
+  public void addIngredient(String amount, String name, String measuringUnit) {
+    clickOn("#newIngredientAmntField").write(amount);
+    clickOn("#newIngredientNameField").write(name);
+    clickOn("#newMeasurementField").write(measuringUnit);
+    clickOn("#addIngredient");
+  }
 
-  public String getIngredientText(int index);
+  public String getIngredientText(int index, AppController controller) {
+    return ((Text) controller.getIngredientViewStream().skip(3 * index + 1).findAny().get())
+        .getText();
+  }
 
-  public Button getIngredientEditButton(int index);
+  public Button getIngredientEditButton(int index, AppController controller) {
+    return ((Button) controller.getIngredientViewStream().skip(3 * index + 2).findAny().get());
+  }
 
-  public void createTestFile();
-
+  public void createTestFile() {
+    TacoCalcFileHandler fh = new TacoCalcFileHandler();
+    fh.write(new Recipe(new Ingredient("tomat", 2.0, "default"),
+        new Ingredient("avocado", 1.0, "default")), "testFile");
+  }
 }
