@@ -1,5 +1,5 @@
 .mfx-text-field {
-	-fx-background-color:  #2C2C2C;
+	-fx-background-color:  transparent;
     -fx-border-color:  #696969;
     -fx-text-fill: #ffffff;
 }
@@ -36,4 +36,25 @@
 
 .red-button {
     -fx-background-color:  #d40000;
+}
+
+#recipe-name-text-field .floating-text {
+    -fx-background-color: #1F1F1F;
+}
+
+.mfx-scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.mfx-toggle-button {
+    -mfx-main: #FFA012;
+	-mfx-secondary: #ffc368;
+}
+
+.mfx-combo-box .caret .mfx-font-icon{
+    -mfx-color: #FFA012;
+}
+
+.mfx-combo-box:disabled .caret .mfx-font-icon{
+    -mfx-color: #ABABAB;
 }

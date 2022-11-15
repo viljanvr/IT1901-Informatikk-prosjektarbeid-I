@@ -6,6 +6,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,8 +15,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 // import tacocalc.core.RecipeBook;
 
@@ -30,8 +36,24 @@ public class RecipeBookController {
   @FXML
   private GridPane recipeList;
 
+  @FXML
+  private BorderPane popUpContain;
+
+  @FXML
+  private VBox container;
+
+  @FXML
+  private MFXButton createRecipeButton;
+
+  private AddRecipeController addRecipeController;
+
+  private Pane addRecipeOverlay;
+
+  BoxBlur blur = new BoxBlur(30, 30, 3);
+
   public void initialize() {
     getRecipesFromFile();
+    initAddRecipeOverlay();
   }
 
   /**
@@ -69,13 +91,7 @@ public class RecipeBookController {
 
       @Override
       public void handle(ActionEvent event) {
-        try {
-          Stage thisStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-          changeToScene(recipeButton.getText(), thisStage);
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-
+        changeToScene(recipeButton.getText());
       }
 
     });
@@ -86,8 +102,24 @@ public class RecipeBookController {
     int columnPosition = (children.size() % 2 == 0) ? 0 : 1;
     int rowPosition = children.size() / 2;
     recipeList.add(recipeButton, columnPosition, rowPosition);
+  }
 
+  @FXML
+  private void handleCreateRecipe() {
+    popUpContain.setVisible(true);
+    container.setEffect(blur);
+  }
 
+  protected void closeOverlay() {
+    popUpContain.setVisible(false);
+    container.setEffect(null);
+  }
+
+  @FXML
+  private void clickOutsideOverlayHandle(MouseEvent e) {
+    if (Objects.equals(e.getPickResult().getIntersectedNode().getId(), "popUpContain")) {
+      closeOverlay();
+    }
   }
 
   /**
@@ -95,17 +127,18 @@ public class RecipeBookController {
    *
    * @param recipeName the name of the recipie to open
    *
-   * @param thisStage the current window
-   *
    * @throws IOException throws exception if specified FXML is not found
    */
-  public void changeToScene(String recipeName, Stage thisStage) throws IOException {
+  public void changeToScene(String recipeName) {
+    Stage thisStage = (Stage) recipeList.getScene().getWindow();
     setTransfer(recipeName);
     FXMLLoader loader = new FXMLLoader(getClass().getResource("ShoppingList.fxml"));
-    Parent root = loader.load();
-
-    thisStage.setScene(new Scene(root));
-
+    try {
+      Parent root = loader.load();
+      thisStage.setScene(new Scene(root));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -115,5 +148,18 @@ public class RecipeBookController {
    */
   private static synchronized void setTransfer(String recipeName) {
     RecipeBookController.transferRecipe = recipeName;
+  }
+
+  private void initAddRecipeOverlay() {
+    addRecipeController = new AddRecipeController(this);
+
+    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddRecipePopup.fxml"));
+    fxmlLoader.setController(addRecipeController);
+    try {
+      addRecipeOverlay = fxmlLoader.load();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    popUpContain.setCenter(addRecipeOverlay);
   }
 }

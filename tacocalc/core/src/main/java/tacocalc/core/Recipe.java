@@ -17,9 +17,14 @@ public class Recipe {
    *
    * @param ingredients the Ingredients to be added
    */
-  public Recipe(Ingredient... ingredients) {
+  public Recipe(String name, Ingredient... ingredients) {
     list.addAll(Arrays.asList(ingredients));
     this.numberOfPeople = 4;
+    setName(name);
+  }
+
+  public Recipe(Ingredient... ingredients) {
+    this(null, ingredients);
   }
 
   /**

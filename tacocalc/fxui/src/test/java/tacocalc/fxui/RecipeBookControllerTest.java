@@ -16,7 +16,7 @@ import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
 import tacocalc.data.TacoCalcFileHandler;
 
-public class RecipeBookControllerTest extends ApplicationTest implements AppTest {
+public class RecipeBookControllerTest extends AppTest {
   Parent root;
   AppController controller;
 
@@ -31,23 +31,4 @@ public class RecipeBookControllerTest extends ApplicationTest implements AppTest
   }
 
   // TODO: Add tests for RecipeBook
-
-  @Override
-  public void addIngredient(String amount, String name, String measuringUnit) {
-
-  }
-
-  @Override
-  public String getIngredientText(int index) {
-    return null;
-  }
-
-  @Override
-  public Button getIngredientEditButton(int index) {
-    return null;
-  }
-
-  @Override
-  public void createTestFile() {
-  }
 }
