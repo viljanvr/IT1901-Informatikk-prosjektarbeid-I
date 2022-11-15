@@ -16,7 +16,7 @@ import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
 import tacocalc.data.TacoCalcFileHandler;
 
-public class AppControllerTest extends ApplicationTest implements AppTest {
+public class AppControllerTest extends AppTest {
   Parent root;
   AppController controller;
 
@@ -43,7 +43,7 @@ public class AppControllerTest extends ApplicationTest implements AppTest {
     Assertions.assertEquals("2", controller.getNewIngredientAmntField().getText());
     Assertions.assertEquals("agurk", controller.getNewIngredientNameField().getText());
     clickOn("#addIngredient");
-    Assertions.assertEquals("8 stk agurk", getIngredientText(0));
+    Assertions.assertEquals("8 stk agurk", getIngredientText(0, this.controller));
 
     // Checks that the input fiels are cleared after adding an ingredient
     Assertions.assertEquals("", controller.getNewIngredientAmntField().getText());
@@ -54,7 +54,7 @@ public class AppControllerTest extends ApplicationTest implements AppTest {
     clickOn("#newIngredientNameField").write("tomat");
     clickOn("#newMeasurementField").write("stk");
     clickOn("#addIngredient");
-    Assertions.assertEquals("4 stk tomat", getIngredientText(1));
+    Assertions.assertEquals("4 stk tomat", getIngredientText(1, this.controller));
   }
 
   // Tests the error message for wrong input in integer field
@@ -72,22 +72,6 @@ public class AppControllerTest extends ApplicationTest implements AppTest {
 
   @Test
 
-  @DisplayName("Test that all items is added to view when loading a file")
-  public void testLoadFile() {
-    createTestFile();
-
-    // Check that the view is empty
-    assertEquals(0, controller.getIngredientViewStream().count());
-
-    clickOn("#nameField").write("testFile");
-    clickOn("#loadButton");
-
-    Assertions.assertEquals("8 default tomat", getIngredientText(0));
-    Assertions.assertEquals("4 default avocado", getIngredientText(1));
-  }
-
-  @Test
-
   @DisplayName("Test adding duplicate ingredient to recipe")
   public void testDuplicateIngredient() {
     clickOn("#editButton");
@@ -95,31 +79,5 @@ public class AppControllerTest extends ApplicationTest implements AppTest {
     addIngredient("2", "ost", "stk");
     addIngredient("2", "OsT", "stk");
     Assertions.assertEquals(3, controller.getIngredientViewStream().count());
-  }
-
-  @Override
-  public void addIngredient(String amount, String name, String measuringUnit) {
-    clickOn("#newIngredientAmntField").write(amount);
-    clickOn("#newIngredientNameField").write(name);
-    clickOn("#newMeasurementField").write(measuringUnit);
-    clickOn("#addIngredient");
-  }
-
-  @Override
-  public String getIngredientText(int index) {
-    return ((Text) controller.getIngredientViewStream().skip(3 * index + 1).findAny().get())
-        .getText();
-  }
-
-  @Override
-  public Button getIngredientEditButton(int index) {
-    return ((Button) controller.getIngredientViewStream().skip(3 * index + 2).findAny().get());
-  }
-
-  @Override
-  public void createTestFile() {
-    TacoCalcFileHandler fh = new TacoCalcFileHandler();
-    fh.write(new Recipe(new Ingredient("tomat", 2.0, "default"),
-        new Ingredient("avocado", 1.0, "default")), "testFile");
   }
 }
