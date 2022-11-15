@@ -20,8 +20,6 @@ import tacocalc.data.TacoCalcFileHandler;
  * AppTest
  */
 public abstract class AppTest extends ApplicationTest {
-  Parent root;
-  AppController controller;
 
   public void addIngredient(String amount, String name, String measuringUnit) {
     clickOn("#newIngredientAmntField").write(amount);
