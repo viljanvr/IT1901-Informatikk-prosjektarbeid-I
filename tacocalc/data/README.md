@@ -1,6 +1,13 @@
+# Data
+
+Denne modulen behandler alt av lokal persistens til json.
+
 ## Struktur
 
-Denne `data` modulen inneholder lagring til json lokalt, med disse klassene:
+Main:
 
 - `TacocalcFileHandler`-klasse
+
+Test:
+
 - `FilehandlingTest`-testklasse for TacocalcFilehandler

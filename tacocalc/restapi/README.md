@@ -1,6 +1,10 @@
+# REST API
+
+Her har vi alt som kreves for REST API-et vårt, med unntak av klient delen som er i en egen modul.
+
 ## Struktur
 
-Denne `data` modulen inneholder lagring til json lokalt, med disse klassene:
+Main:
 
 - `TacocalcApplication`-klasse
 - `TacocalcController`-klasse

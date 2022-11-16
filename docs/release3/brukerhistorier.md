@@ -4,12 +4,12 @@
 
 Nå som jeg har blitt en stor influencer (se [release_2](docs\release_2\brukerhistorier.md)), har andre begynt å spørre om jeg kan dele måltidsplanen min med dem. Derfor ønsker jeg en måte å kunne laste opp oppskriftene til en nettside der de kan hente det ned og redigere disse utifra deres kalori-inntak.
 
-### MÅ SE
+### MÅ SE:
 
 - Egne og andres recipes
 - En oversikt over flere recipes, inkludert egne
 
-### MÅ GJØRE
+### MÅ GJØRE:
 
 - Hente recipes fra en database
 - Redigere og laste opp recipesene til denne databasen

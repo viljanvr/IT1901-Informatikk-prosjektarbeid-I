@@ -2,7 +2,7 @@
 
 <p>
     <figure align="center">
-        <img src="resources/ingredientMenu.png" alt="Mockup" width="600"/>
+        <img src="resources/ingredientMenu.png" alt="FORSIDE" width="600"/>
         <figcaption><i>Skjermbilde fra applikasjonen.</i></figcaption>
     </figure>
 </p>
@@ -33,6 +33,7 @@ DENNE ER IKKE GJORT ENDA:
 
 Vi har lagt beskrivelsen av strukturen inne i de forskjellige modulene i egne README.md filer i hver av modulene. Disse finner du her:
 
+- [client](../../tacocalc/client/README.md)
 - [core](../../tacocalc/core/README.md)
 - [data](../../tacocalc/data/README.md)
 - [fxui](../../tacocalc/fxui/README.md)
@@ -50,7 +51,7 @@ Følgende _features_ er implementert i denne versjonen av applikasjonen:
 
 <p>
     <figure align="center">
-        <img src="resources/OversiktRecipes" alt="OversiktRecipes" width="600"/>
+        <img src="resources/OversiktRecipes.png" alt="OversiktRecipes" width="600"/>
         <figcaption><i>Bilde 1: Start-meny hvor man har oversikt over alle oppskrifter.</i></figcaption>
     </figure>
 </p>
@@ -86,9 +87,11 @@ Følgende _features_ er implementert i denne versjonen av applikasjonen:
 
 ## Arbeidsflyt
 
-Vi har jobbet på individuelle branches, hovedsakelig delt opp i `feature/` eller `bug/` etterfulgt av en beskrivelse av hva branchen implementerer/fikser. Disse er laget basert på issues vi har på Gitlab. Istedenfor å jobbe i satte par har vi en løs arbeidsstruktur med fokus på å jobbe sammen på større ting, her ved flittig bruk av LiveShare funksjonen i VSCode. Master-branchen skal som tommelfingerregel alltid være en fungerende applikasjon, derav må en feature close et issue før den kan merges. `Bug` branches brukes for å fikse eventuelle feil som oppstår på master.
+I likhet med tidligere iterasjoner har vi lagd lokale som vi har delt opp i `feature/` og `bug/`. Nytt under denne iterasjonen er at vi i større grad har fokusert på mer omfattende commit-meldinger, mer beskrivende merge-requests og det å bruke kommentarer på disse. Dette førte for eksempel til at vi oppdaget feil i en merge request, da en annen reviewer fant en feil som den første revieweren ikke gjorde.
 
-I tillegg til å assigne issues til enkeltpersoner på Gitlab har vi hatt flere ukentlige møter, både fysiske og digitale, der vi jobber sammen.
+Vi har fortsatt med vår relativt løse arbeidsstruktur, med god bruk av LiveShare. `master`-branchen er som alltid _off limits_, og vi har hele tiden hatt som mål at `master` alltid skal kunne kjøre, noe implementasjonen av `pipelines` har sørget for at skjer. Vi begynte også å sette som regel at issues ikke skulle være noe mer generelle enn at en arbeider kunne åpne den og med en gang skjønne hvor i prosjektet problemet eksisterte. Slik ble samarbeidet forbedret, da hvem som helst kunne åpne en issue uten at en annen måtte spørre hva det var snakk om. Det ble også lettere for alle å følge med på hva som ble gjort av hvem når utenfor møtetider.
+
+Når det gjelder møter har vi i større grad hatt digitale møter, med stor suksess, da dette senket terskelen for å ha møter betraktelig. Vi kunne dermed møtes oftere på flere "upassende" tidspunkt, da alle på gruppa har hatt veldig travle hverdager. Eksempelvis klarte vi å presse inn et møte selvom et medlem hadde vært på noe før møtetidspunktet, grunnet at personen skulle hjemom. Med fysisk oppmøte hadde dette vært umulig, men møtet viste seg å være både viktig og produktivt.
 
 ## Tester
 
@@ -96,36 +99,4 @@ Vi har laget tester til appen som har som formål å oppdage eventuelle feil i a
 
 ## Brukerhistorier
 
-Vi har laget to nye brukerhistorier som du kan finne [her](/docs/release%202/brukerhistorier.md), i tillegg til de gamle fra release 1 som du finner [her](/docs/release%201/brukerhistorier.md).
-
-## Mockup
-
-I likhet med første iterasjon har vi benyttet oss av Figma for å lage nye _mockups_ av appen. Disse har fungert som en guide under utviklingen av appen. Prototypen i Figma er nå ganske lik den fungerende appen, med noen unntak. Det som er forskjellig er det vi ønsker å få på plass i neste iterasjon. I bilde 1 har vi en oversikt over alle oppskrifter i din _RecipeBook_. Her ligger både standard recipes hentet fra den universelle RecipeBook-en, samt dine egne recipes. Som en kan se i bilde 2 ønsker vi å få på plass skalering så fort som mulig i neste iterasjon.
-
-<p>
-    <figure align="center">
-        <img src="resources/prototypeRecipieMenu.png" alt="Mockup" width="600"/>
-        <figcaption><i>Bilde 1: Start-meny hvor man har oversikt over alle oppskrifter.</i></figcaption>
-    </figure>
-</p>
-<br/>
-<p>
-    <figure align="center">
-        <img src="resources/prototypeIngredientMenu.png" alt="Mockup" width="600"/>
-        <figcaption><i>Bilde 2: Liste over alle ingredienser til en bestemt oppskrift. Antall personer kan forrandres for å oppdatere mengden ingredienser.</i></figcaption>
-    </figure>
-</p>
-<br/>
-<p>
-    <figure align="center">
-        <img src="resources/prototypeEditMode.png" alt="Mockup" width="600"/>
-        <figcaption><i>Bilde 3: Ved å trykke på "Edit"-knappen (se bilde 2) så vil man gå inn i redigeringsmodus hvor man kan legge til nye ingredienser og gå inn på allerede eksisterende ingredienser for å redigere navn, mengde, etc.</i></figcaption>
-    </figure>
-</p>
-<br/>
-<p>
-    <figure align="center">
-        <img src="resources/prototypeIngredientEditMenu.png" alt="Mockup" width="600"/>
-        <figcaption><i>Bilde 4: Når man trykker på en ingrediens mens man er i redigeringsmodus så åpnes dette vinduet, hvor man kan endre navn, måleenhet og mengde til en ingrediens. Her finnes også "delete"-knappen hvis man ønsker å fjerne ingrediensen.</i></figcaption>
-    </figure>
-</p>
+Vi valgte å skrive to nye historier til to brukere vi allerede har møtt i release1 ([her](../release1/brukerhistorier.md)) og release2 ([her](../release2/brukerhistorier.md)). De nye historiene finner du [her](brukerhistorier.md)

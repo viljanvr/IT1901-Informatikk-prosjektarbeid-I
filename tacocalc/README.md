@@ -29,8 +29,8 @@ Alternativt kan man bruke en "one liner" hvis du er på rotnivå i kildekoden:
 
 ## Lage en .exe (executable) for Windows
 
-1. Installer .NET Framework 3.5 [link](https://www.microsoft.com/en-in/download/confirmation.aspx?id=22)
-2. Installer Wix 3.11 [link](https://github.com/wixtoolset/wix3/releases)
+1. Installer .NET Framework 3.5 ([link](https://www.microsoft.com/en-in/download/confirmation.aspx?id=22))
+2. Installer Wix 3.11 ([link](https://github.com/wixtoolset/wix3/releases))
 3. Kjør `mvn javafx:jlink -f ./fxui/pom.xml` i /tacocalc
 4. Kjør `mvn jpackage:jpackage -f ./fxui/pom.xml` i /tacocalc
 5. Gå inn i fxui -> target -> dist. Her finner du en .exe fil.
@@ -60,5 +60,5 @@ Her finner du dokumentasjon og brukerhistoriene til applikasjonen:
 
 **Release 3**
 
-- _Dokumentasjon (kommer senere)_
-- _Brukerhistorier (kommer senere)_
+- [Dokumentasjon](/docs/release3/dokumentasjon.md)
+- [Brukerhistorier](/docs/release3/brukerhistorier.md)
