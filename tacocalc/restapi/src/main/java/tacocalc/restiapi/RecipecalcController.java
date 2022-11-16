@@ -1,7 +1,5 @@
 package tacocalc.restiapi;
 
-import java.util.Collection;
-import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,37 +22,26 @@ public class RecipecalcController {
   private RecipecalcService recipecalcService;
 
   /**
-   * Gets all recipes from the API.
-   *
-   * @return A list of all recipes in the API
-   */
-  @GetMapping(value = "/recipes")
-  public Collection<Recipe> getAllRecipes() {
-    return recipecalcService.getAllRecipes();
-  }
-
-  /**
    * Adds a recipe to the API.
    *
    * @param recipe Recipe to be added
-   * @return The id of the given recipe
+   * @return The name of the given recipe
    */
-  @PostMapping(value = "/recipes/add", produces = "application/json")
+  @PostMapping(value = "/recipebook/{name}", produces = "application/json")
   public String addRecipe(Recipe recipe) {
-    String id = recipecalcService.addRecipe(recipe);
-    return "{\"id\":\"" + id + "\" }";
+    return "";
   }
 
 
   /**
    * Returns a given recipe based on an ID.
    *
-   * @param id ID to the recipe
+   * @param name Name of the recipe
    * @return Recipe with the given ID
    */
-  @GetMapping(value = "/recipes/{id}", produces = "application/json")
-  public Recipe getRecipe(final @PathVariable("id") String id) {
-    return recipecalcService.getRecipeById(id);
+  @GetMapping(value = "/recipebook/{name}", produces = "application/json")
+  public Recipe getRecipe(final @PathVariable("name") String name) {
+    return new Recipe("asdasd");
   }
 
 
@@ -62,14 +49,22 @@ public class RecipecalcController {
   /**
    * Removes a Recipe from the API if it exists.
    *
-   * @param id The id of the Recipe to remove
+   * @param name The name of the Recipe to remove
    */
-  @DeleteMapping(value = "recipes/{id}")
-  public void removeRecipe(final @PathVariable("id") String id) {
-    try {
-      recipecalcService.removeRecipe(id);
-    } catch (NoSuchElementException e) {
-      e.printStackTrace();
-    }
+  @DeleteMapping(value = "recipebook/{name}")
+  public void removeRecipe(final @PathVariable("name") String name) {
+
   }
+
+  // GET: recipies/
+  // POST: recipies/name=""
+  // DELETE: recipies/name=""
+  // PUT: recipies/name=""
+  // PUT: recipies/people=""
+
+  // PUT: recipies/ingredient/name=""
+  // PUT: recipies/ingredient/amount=""
+  // PUT: recipies/ingredient/round=""
+  // PUT: recipies/ingredient/bought=""
+  // PUT: recipes/ingredient/unit=""
 }

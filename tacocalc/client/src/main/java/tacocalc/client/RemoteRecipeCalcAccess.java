@@ -11,10 +11,13 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import org.springframework.http.HttpStatus;
+import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
 
 
@@ -22,13 +25,13 @@ import tacocalc.core.Recipe;
 /**
  * Client class that sends HTTP requests to the REST API.
  */
-public class TacocalcClient {
+public class RemoteRecipeCalcAccess {
 
   private final String url;
 
   private final int port;
 
-  public TacocalcClient(final String url, final int port) {
+  public RemoteRecipeCalcAccess(final String url, final int port) {
     this.url = url;
     this.port = port;
   }
@@ -95,6 +98,32 @@ public class TacocalcClient {
   public void deleteRecipe(String id)
       throws InterruptedException, ExecutionException, URISyntaxException {
     this.delete("/api/v1/recipes/" + id);
+  }
+
+  public void changeRecipeName(Recipe r, String name) {
+    // TODO: implement
+  }
+
+  public void setBought(Recipe recipe, String ingredientName, Boolean bought) {
+    // TODO: implement
+  }
+
+  public void deleteIngerdient(Recipe recipe, String ingredientName) {
+    // TODO: implement
+  }
+
+  public void updateIngredient(Recipe recipe, String ingredient, String newIngredientName,
+      Double perPersonAmount, Double roundUpTo, String measuringUnit) {
+    // TODO: implement
+  }
+
+  public void addIngredient(Recipe recipe, Ingredient ingredient) {
+    // TODO: implement
+  }
+
+  public List<Recipe> getAllRecipes() {
+    // TODO: implement
+    return new ArrayList<>();
   }
 
   /**
