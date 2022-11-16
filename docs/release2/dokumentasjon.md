@@ -30,12 +30,13 @@ Applikasjonen har en modulær struktur med følgende moduler og klasser:
 
 _I neste iterasjon tenker vi å ha egne README.md filer i hver av modulene, siden Rest API kommer til å øke kompleksiteten betraktelig._  
 <br/>
+
 <p>
     <figure align="center">
         <img src="resources/diagram.png" alt="Mockup" width="600"/>
         <figcaption><i>Pakke-diagrammet viser en oversikt over hvordan modulene og pakkene i applikasjonen henger sammen.</i></figcaption>
     </figure>
-</p>  
+</p>
 
 ## Implementert
 
@@ -69,14 +70,14 @@ Følgende _features_ er implementert i denne versjonen av applikasjonen:
 
 Ved neste iterasjon har vi planer om å utvide funksjonaliteten til appen ytterlige. Dette er de foreløpige ideene vi ser for oss å implementere:
 
-- Skalering av hele *recipes*
-- Skybasert deling av *repices* samt *recipebooks*
-- Sletting av *recipes*
+- Skalering av hele _recipes_
+- Skybasert deling av _repices_ samt _recipebooks_
+- Sletting av _recipes_
 - Mulighet til å forandre måleenhet til en ingrediens
 
 ## Arbeidsflyt
 
-Vi har jobbet på individuelle branches, hovedsakelig delt opp i `feature/` eller `bug/` etterfulgt av en beskrivelse av hva branchen implementerer/fikser. Disse er laget basert på issues vi har på Gitlab. Istedenfor å jobbe i satte par har vi en løs arbeidsstruktur med fokus på å jobbe sammen på større ting, her ved flittig bruk av LiveShare funksjonen i VSCode. Master-branchen skal som tommelfingerregel alltid være en fungerende applikasjon, derav må en feature close et issue før den kan merges. `Bug` branches brukes for å fikse eventuelle feil som oppstår på master. 
+Vi har jobbet på individuelle branches, hovedsakelig delt opp i `feature/` eller `bug/` etterfulgt av en beskrivelse av hva branchen implementerer/fikser. Disse er laget basert på issues vi har på Gitlab. Istedenfor å jobbe i satte par har vi en løs arbeidsstruktur med fokus på å jobbe sammen på større ting, her ved flittig bruk av LiveShare funksjonen i VSCode. Master-branchen skal som tommelfingerregel alltid være en fungerende applikasjon, derav må en feature close et issue før den kan merges. `Bug` branches brukes for å fikse eventuelle feil som oppstår på master.
 
 I tillegg til å assigne issues til enkeltpersoner på Gitlab har vi hatt flere ukentlige møter, både fysiske og digitale, der vi jobber sammen.
 
