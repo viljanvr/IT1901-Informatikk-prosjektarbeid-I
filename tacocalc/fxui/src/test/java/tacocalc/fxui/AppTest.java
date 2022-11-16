@@ -1,18 +1,14 @@
 package tacocalc.fxui;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import java.io.File;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
 import org.testfx.framework.junit5.ApplicationTest;
 import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
-import tacocalc.data.TacoCalcFileHandler;
+import tacocalc.data.RecipeFileHandler;
 
 /**
  * AppTest
@@ -36,8 +32,17 @@ public abstract class AppTest extends ApplicationTest {
   }
 
   public void createTestFile() {
-    TacoCalcFileHandler fh = new TacoCalcFileHandler();
-    fh.write(new Recipe(new Ingredient("tomat", 2.0, "default"),
-        new Ingredient("avocado", 1.0, "default")), "testFile");
+    RecipeFileHandler fh = new RecipeFileHandler();
+    fh.write(new Recipe("testFile", new Ingredient("tomat", 2.0, "default"),
+        new Ingredient("avocado", 1.0, "default")));
+  }
+
+  @BeforeEach
+  public void setUp(TestInfo testInfo) {
+    File testRecipe = new File(System.getProperty("user.home") + "/recipecalc/test/"
+        + testInfo.getDisplayName() + ".json");
+    testRecipe.delete();
+    RecipeFileHandler.setTestMode(true);
+    RecipeBookController.setTransfer(testInfo.getDisplayName());
   }
 }

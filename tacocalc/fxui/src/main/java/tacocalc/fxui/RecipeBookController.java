@@ -1,13 +1,9 @@
 package tacocalc.fxui;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
-import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -24,6 +20,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 // import tacocalc.core.RecipeBook;
+import tacocalc.data.RecipeFileHandler;
 
 /**
  * Class that controlls the scene where the user picks the recipe.
@@ -61,23 +58,9 @@ public class RecipeBookController {
    *
    */
   private void getRecipesFromFile() {
-    File dir = new File(System.getProperty("user.home") + "/recipecalc");
-    System.out.println("Reading recipes from " + System.getProperty("user.home") + "/recipecalc");
+    RecipeFileHandler fh = new RecipeFileHandler();
+    fh.getAllRecipies().stream().forEach(r -> addItemToView(r.getName()));
 
-    FilenameFilter filter = new FilenameFilter() {
-      @Override
-      public boolean accept(File f, String name) {
-        return name.endsWith(".json");
-      }
-    };
-
-    File[] listOfRecipes = dir.listFiles(filter);
-    List<String> recipeNames = Arrays.stream(listOfRecipes).map(f -> f.getName().split("\\.")[0])
-        .collect(Collectors.toList());
-    for (String recipeName : recipeNames) {
-      addItemToView(recipeName);
-
-    }
   }
 
   /**
@@ -109,6 +92,7 @@ public class RecipeBookController {
   private void handleCreateRecipe() {
     popUpContain.setVisible(true);
     container.setEffect(blur);
+    addRecipeController.handleRecipeNameChange();
   }
 
   protected void closeOverlay() {
@@ -147,7 +131,7 @@ public class RecipeBookController {
    *
    * @param recipeName the string that will be passed to the next scene
    */
-  private static synchronized void setTransfer(String recipeName) {
+  protected static synchronized void setTransfer(String recipeName) {
     RecipeBookController.transferRecipe = recipeName;
   }
 
@@ -162,5 +146,20 @@ public class RecipeBookController {
       e.printStackTrace();
     }
     popUpContain.setCenter(addRecipeOverlay);
+  }
+
+  // Getters used in tests
+  protected GridPane getGridPane() {
+    GridPane duplicate = recipeList;
+    return duplicate;
+  }
+
+  protected BorderPane getBorderPane() {
+    BorderPane duplicate = popUpContain;
+    return duplicate;
+  }
+
+  protected AddRecipeController getAddRecipeController() {
+    return this.addRecipeController;
   }
 }

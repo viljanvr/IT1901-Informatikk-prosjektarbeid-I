@@ -1,24 +1,17 @@
 package tacocalc.fxui;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.testfx.framework.junit5.ApplicationTest;
-import tacocalc.core.Ingredient;
-import tacocalc.core.Recipe;
-import tacocalc.data.TacoCalcFileHandler;
 
 public class RecipeBookControllerTest extends AppTest {
   Parent root;
-  AppController controller;
+  RecipeBookController controller;
 
   @Override
   public void start(final Stage stage) throws Exception {
@@ -30,5 +23,31 @@ public class RecipeBookControllerTest extends AppTest {
     stage.toFront();
   }
 
-  // TODO: Add tests for RecipeBook
+  @Test
+
+  @DisplayName("Test-add-item-to-view")
+  public void testCreteRecipe() {
+    clickOn("#createRecipeButton");
+    clickOn("#recipeNameField").write("TestRecipe");
+    clickOn("#createButton");
+    clickOn("#editButton");
+    addIngredient("0.5", "agurk", "stk");
+    clickOn("#backButton");
+    Assertions.assertFalse(controller.getGridPane().getChildren().stream()
+        .anyMatch(n -> ((Button) n).getText() == "TestRecipe"));
+  }
+
+  @Test
+
+  @DisplayName("Test-popup-elements")
+  public void testClosePopUp() {
+    clickOn("#createRecipeButton");
+    Assertions.assertTrue(controller.getBorderPane().isVisible());
+    clickOn("#templateCheckbox");
+    Assertions.assertFalse(controller.getAddRecipeController().getCheckbox().isDisable());
+    clickOn("#templateCheckbox");
+    Assertions.assertTrue(controller.getAddRecipeController().getCheckbox().isSelected());
+    clickOn("#cancelButton");
+    Assertions.assertFalse(controller.getBorderPane().isVisible());
+  }
 }

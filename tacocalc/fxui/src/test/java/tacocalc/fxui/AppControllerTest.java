@@ -1,20 +1,12 @@
 package tacocalc.fxui;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.testfx.framework.junit5.ApplicationTest;
-import tacocalc.core.Ingredient;
-import tacocalc.core.Recipe;
-import tacocalc.data.TacoCalcFileHandler;
 
 public class AppControllerTest extends AppTest {
   Parent root;
@@ -32,7 +24,7 @@ public class AppControllerTest extends AppTest {
 
   @Test
 
-  @DisplayName("Test adding new ingredients to view")
+  @DisplayName("Add-new-ingredient-to-view-test")
   public void addNewIngredientTest() {
     clickOn("#editButton");
     clickOn("#newIngredientAmntField").write("2");
@@ -61,7 +53,7 @@ public class AppControllerTest extends AppTest {
 
   @Test
 
-  @DisplayName("Test that adding an ingredient with an invalid amount doesn't do")
+  @DisplayName("Invalid-ingredient-amount-test")
   public void testInvalidAmount() {
     clickOn("#editButton");
     addIngredient("NotAnInteger", "Should give popup error", "Something stupid");
@@ -72,7 +64,7 @@ public class AppControllerTest extends AppTest {
 
   @Test
 
-  @DisplayName("Test adding duplicate ingredient to recipe")
+  @DisplayName("Add-duplicate-ingredient-test")
   public void testDuplicateIngredient() {
     clickOn("#editButton");
     addIngredient("1", "ost", "stk");
