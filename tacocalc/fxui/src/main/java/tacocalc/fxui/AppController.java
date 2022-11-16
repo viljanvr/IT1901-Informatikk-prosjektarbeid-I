@@ -496,4 +496,10 @@ public class AppController {
     fh.deleteFile(recipe.getName());
     handleGoBack();
   }
+
+  protected IngredientEditController getIngredientEditController() {
+    IngredientEditController duplicate = new IngredientEditController(this);
+    duplicate = this.ingredientEditController;
+    return duplicate;
+  }
 }

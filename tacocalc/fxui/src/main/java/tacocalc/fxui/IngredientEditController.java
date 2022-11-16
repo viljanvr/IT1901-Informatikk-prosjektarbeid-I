@@ -5,6 +5,7 @@ import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -211,5 +212,11 @@ public class IngredientEditController {
         inputValidation();
       }
     });
+  }
+
+  protected Button getSaveButton() {
+    Button duplicate = new Button();
+    duplicate = this.saveButton;
+    return duplicate;
   }
 }
