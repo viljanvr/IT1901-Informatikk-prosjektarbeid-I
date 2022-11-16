@@ -17,7 +17,7 @@ public class RecipeBook {
   /**
    * Varargs constructor for RecipeBook.
    *
-   * @param recipes Recipe[] containing recipes to be added to the RecipeBook
+   * @param recipes Recipe[] containing recipes to be added to the RecipeBookgit
    */
   public RecipeBook(Recipe... recipes) {
     for (Recipe recipe : recipes) {

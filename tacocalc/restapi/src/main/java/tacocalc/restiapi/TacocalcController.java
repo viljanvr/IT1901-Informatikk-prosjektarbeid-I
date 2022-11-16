@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +32,7 @@ public class TacocalcController {
    *
    * @return A list of all recipes in the API
    */
-  @GetMapping("/recipes")
+  @GetMapping(value = "/recipes")
   public Collection<Recipe> getAllRecipes() {
     return tacocalcService.getAllRecipes();
   }
@@ -42,7 +43,7 @@ public class TacocalcController {
    * @param recipe Recipe to be added
    * @return The id of the given recipe
    */
-  @PostMapping(value = "/add", produces = "application/json")
+  @PostMapping(value = "/recipes/add", produces = "application/json")
   public String addRecipe(Recipe recipe) {
     String id = tacocalcService.addRecipe(recipe, "tjommi");
     return "{\"id\":\"" + id + "\" }";
@@ -67,12 +68,12 @@ public class TacocalcController {
    *
    * @param id The id of the Recipe to remove
    */
-  @PostMapping(value = "/remove/{id}", produces = "application/json")
+  @DeleteMapping(value = "recipes/{id}")
   public void removeRecipe(final @PathVariable("id") String id) {
     try {
       tacocalcService.removeRecipe(id);
     } catch (NoSuchElementException e) {
-      // TODO: handle exception
+      e.printStackTrace();
     }
   }
 }
