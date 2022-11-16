@@ -2,14 +2,12 @@ package tacocalc.data;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -77,8 +75,10 @@ public class RecipeFileHandler {
       Gson gson = new Gson();
 
       // Make Ingredient list from Gson
-      Type listType = new TypeToken<List<Recipe>>() {}.getType();
+
+      // Type listType = new TypeToken<List<Recipe>>() {}.getType();
       // return gson.fromJson(fr, listType);
+
       return gson.fromJson(fr, Recipe.class);
       // Return shopping list from ArrayList
     } catch (IOException e) {

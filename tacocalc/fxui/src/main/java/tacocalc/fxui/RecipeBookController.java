@@ -1,13 +1,9 @@
 package tacocalc.fxui;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
-import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
