@@ -42,8 +42,11 @@ public class RecipeFileHandler {
 
       gson.toJson(r, fw);
     } catch (FileNotFoundException e) {
-      if (new File(System.getProperty("user.home") + FILEPATH + folder).mkdir()) {
-        write(r);
+      File parent = new File(System.getProperty("user.home") + FILEPATH + folder);
+      if (!parent.isFile()) {
+        if (parent.mkdirs()) {
+          write(r);
+        }
       }
     } catch (IOException e) {
       e.printStackTrace();

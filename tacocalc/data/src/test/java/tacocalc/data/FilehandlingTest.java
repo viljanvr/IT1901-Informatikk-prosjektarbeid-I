@@ -1,16 +1,27 @@
 package tacocalc.data;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Scanner;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import tacocalc.core.*;
 
 public class FilehandlingTest {
   @Test
-  public void testWrite() {
+  public void testWrite() throws FileNotFoundException {
     RecipeFileHandler.setTestMode(true);
 
     RecipeFileHandler th = new RecipeFileHandler();
@@ -18,23 +29,13 @@ public class FilehandlingTest {
     r1.addItem("agurk", 4.0, "stk");
     r1.addItem("paprika", 6.0, "stk");
     th.write(r1);
-    File f = new File(System.getProperty("user.home") + "/recipecalc/test/Write-test.json");
-    Assertions.assertTrue(f.isFile());
+    File f1 = new File(System.getProperty("user.home") + "/recipecalc/test/Write-test.json");
+    Assertions.assertTrue(f1.isFile());
     // Check if you can write to existing file
-    Assertions.assertTrue(f.canWrite());
+    Assertions.assertTrue(f1.canWrite());
 
-    // Check if new items are written over
-    r1.addItem("banan", 18.0, "stk");
-    r1.setName("testWrite2");
-    th.write(r1);
-    Path p1 = Paths.get("testWrite");
-    Path p2 = Paths.get("testWrite2");
-    try {
-      Assertions.assertTrue(Files.mismatch(p1, p2) == -1);
-    } catch (Exception e) {
-      System.out.println("Files failed to load");
-      e.printStackTrace();
-    }
+    Gson gson = new Gson();
+    assertEquals(gson.toJson(r1), gson.toJson(gson.fromJson(new FileReader(f1), Recipe.class)));
   }
 
   @Test
