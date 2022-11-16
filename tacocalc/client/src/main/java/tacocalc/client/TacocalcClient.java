@@ -1,9 +1,5 @@
 package tacocalc.client;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -15,7 +11,10 @@ import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.client.HttpServerErrorException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import tacocalc.core.Recipe;
 
 
@@ -39,13 +38,13 @@ public class TacocalcClient {
    * Gets all the recipes stored in the REST API.
    *
    * @return A map of all the recipes with id's as keys
-   * @throws HttpServerErrorException If the request isn't good
+   * @throws RuntimeException If the request isn't good
    * @throws InterruptedException If the thread is interrupted in the process
    * @throws ExecutionException If the process did not execute properly
    * @throws URISyntaxException If the URI syntax is incorrect
    */
-  public HashMap<String, Recipe> getRecipes() throws HttpServerErrorException, InterruptedException,
-      ExecutionException, URISyntaxException {
+  public HashMap<String, Recipe> getRecipes()
+      throws RuntimeException, InterruptedException, ExecutionException, URISyntaxException {
     HttpResponse<String> response = this.get(getUrl("/api/v1/recipes"));
     return getMapFromHttpResponse(response);
   }
@@ -55,14 +54,15 @@ public class TacocalcClient {
    *
    * @param id The ID of the recipe to get
    * @return Returns a recipe
-   * @throws HttpServerErrorException If the request isn't good
+   * @throws RuntimeException If the request isn't good
    * @throws InterruptedException If the thread is interrupted in the process
    * @throws ExecutionException If the process did not execute properly
    * @throws URISyntaxException If the URI syntax is incorrect
    */
-  public Recipe getRecipe(final String id) throws HttpServerErrorException, InterruptedException,
-      ExecutionException, URISyntaxException {
-    HttpResponse<String> response = this.get(getUrl("/api/v1/recipes" + id));
+  public Recipe getRecipe(final String id)
+      throws RuntimeException, InterruptedException, ExecutionException, URISyntaxException {
+
+    HttpResponse<String> response = this.get(getUrl("/api/v1/recipes/" + id));
     return (Recipe) getMapFromHttpResponse(response).get(id);
   }
 
@@ -71,13 +71,13 @@ public class TacocalcClient {
    *
    * @param recipe A map representing
    * @return The ID to the recipe
-   * @throws HttpServerErrorException If the request isn't good
+   * @throws RuntimeException If the request isn't good
    * @throws InterruptedException If the thread is interrupted in the process
    * @throws ExecutionException If the process did not execute properly
    * @throws URISyntaxException If the URI syntax is incorrect
    */
-  public String addRecipe(HashMap<String, Recipe> recipe) throws HttpServerErrorException,
-      InterruptedException, ExecutionException, URISyntaxException {
+  public String addRecipe(HashMap<String, Recipe> recipe)
+      throws RuntimeException, InterruptedException, ExecutionException, URISyntaxException {
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     String payload = gson.toJson(recipe);
     HttpResponse<String> response = this.post(getUrl("/api/v1/recipes/add"), payload);
@@ -115,18 +115,17 @@ public class TacocalcClient {
    *
    * @param endpoint The endpoint to fetch data from
    * @return A HTTP response
-   * @throws HttpServerErrorException If the request isn't good
+   * @throws RuntimeException If the request isn't good
    * @throws InterruptedException If the thread is interrupted in the process
    * @throws ExecutionException If the process did not execute properly
    * @throws URISyntaxException If the URI syntax is incorrect
    */
-  private HttpResponse<String> get(final String endpoint) throws InterruptedException,
-      ExecutionException, URISyntaxException, HttpServerErrorException {
+  private HttpResponse<String> get(final String endpoint)
+      throws InterruptedException, ExecutionException, URISyntaxException, RuntimeException {
     HttpResponse<String> response = this.getAsync(endpoint).get();
 
     if (response.statusCode() != HttpStatus.OK.value()) {
-      throw new HttpServerErrorException(HttpStatus.valueOf(response.statusCode()),
-          response.body());
+      throw new RuntimeException(response.statusCode() + response.body());
     }
     return response;
   }
@@ -152,18 +151,16 @@ public class TacocalcClient {
    * @param endpoint The endpoint to post data to
    * @param payload The data that will be posted
    * @return A HTTP Response
-   * @throws HttpServerErrorException If the request isn't good
+   * @throws RuntimeException If the request isn't good
    * @throws InterruptedException If the thread is interrupted in the process
    * @throws ExecutionException If the process did not execute properly
    * @throws URISyntaxException If the URI syntax is incorrect
    */
   private HttpResponse<String> post(final String endpoint, final String payload)
-      throws InterruptedException, ExecutionException, URISyntaxException,
-      HttpServerErrorException {
+      throws InterruptedException, ExecutionException, URISyntaxException, RuntimeException {
     HttpResponse<String> response = this.postAsync(endpoint, payload).get();
     if (response.statusCode() != HttpStatus.OK.value()) {
-      throw new HttpServerErrorException(HttpStatus.valueOf(response.statusCode()),
-          response.body());
+      throw new RuntimeException(response.statusCode() + response.body());
     }
     return response;
   }
@@ -197,8 +194,7 @@ public class TacocalcClient {
       throws InterruptedException, ExecutionException, URISyntaxException {
     HttpResponse<String> response = this.deleteAsync(endpoint).get();
     if (response.statusCode() != HttpStatus.OK.value()) {
-      throw new HttpServerErrorException(HttpStatus.valueOf(response.statusCode()),
-          response.body());
+      throw new RuntimeException(response.statusCode() + response.body());
     }
     return response;
   }
