@@ -7,10 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * REST API application using Spring.
  */
 @SpringBootApplication
-public class TacocalcApplication {
+public class RecipecalcApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(TacocalcApplication.class, args);
+    SpringApplication.run(RecipecalcApplication.class, args);
   }
 
 }
