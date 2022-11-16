@@ -11,6 +11,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -98,6 +100,9 @@ public class AppController {
 
   @FXML
   private Text recipieNameText;
+
+  @FXML
+  private Text recipeNameErrorText;
 
   private Recipe recipe;
 
@@ -194,7 +199,13 @@ public class AppController {
   }
 
   private void handleRecipeNameChange() {
-    // TODO: feilhåndtering
+    if (RecipeFileHandler.validFileName(recipeNameEditingField.getText())) {
+      recipeNameErrorText.setVisible(false);
+      editButton.setDisable(false);
+    } else {
+      recipeNameErrorText.setVisible(true);
+      editButton.setDisable(true);
+    }
   }
 
   private void saveNewRecipeName(String newName) {
@@ -472,6 +483,8 @@ public class AppController {
     recipeNameEditingField = new MFXTextField(recipeName, "", "Recipe Name");
     recipeNameEditingField.setFloatMode(FloatMode.BORDER);
     recipeNameEditingField.setId("recipe-name-text-field");
+    recipeNameEditingField.setPrefWidth(200);
+
 
 
   }
