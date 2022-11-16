@@ -36,18 +36,4 @@ public class RecipeBookControllerTest extends AppTest {
     Assertions.assertFalse(controller.getGridPane().getChildren().stream()
         .anyMatch(n -> ((Button) n).getText() == "TestRecipe"));
   }
-
-  @Test
-
-  @DisplayName("Test-popup-elements")
-  public void testClosePopUp() {
-    clickOn("#createRecipeButton");
-    Assertions.assertTrue(controller.getBorderPane().isVisible());
-    clickOn("#templateCheckbox");
-    Assertions.assertFalse(controller.getAddRecipeController().getCheckbox().isDisable());
-    clickOn("#templateCheckbox");
-    Assertions.assertTrue(controller.getAddRecipeController().getCheckbox().isSelected());
-    clickOn("#cancelButton");
-    Assertions.assertFalse(controller.getBorderPane().isVisible());
-  }
 }

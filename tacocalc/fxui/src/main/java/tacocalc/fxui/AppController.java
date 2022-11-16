@@ -509,8 +509,6 @@ public class AppController {
   }
 
   protected IngredientEditController getIngredientEditController() {
-    IngredientEditController duplicate = new IngredientEditController(this);
-    duplicate = this.ingredientEditController;
-    return duplicate;
+    return this.ingredientEditController;
   }
 }

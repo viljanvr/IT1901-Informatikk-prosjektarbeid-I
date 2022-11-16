@@ -215,8 +215,6 @@ public class IngredientEditController {
   }
 
   protected Button getSaveButton() {
-    Button duplicate = new Button();
-    duplicate = this.saveButton;
-    return duplicate;
+    return this.saveButton;
   }
 }
