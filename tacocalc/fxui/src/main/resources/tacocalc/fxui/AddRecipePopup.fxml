@@ -72,7 +72,7 @@
          <bottom>
             <VBox alignment="CENTER" prefHeight="149.0" prefWidth="470.0" BorderPane.alignment="BOTTOM_CENTER">
                <children>
-                  <Text fx:id="errorMessage" fill="#ffa012" strokeType="OUTSIDE" strokeWidth="0.0" text="A verry long error message" visible="false">
+                  <Text fx:id="errorMessage" fill="#ffa012" strokeType="OUTSIDE" strokeWidth="0.0" text="Invalid recipe name" visible="false">
                      <font>
                         <Font size="11.0" />
                      </font>

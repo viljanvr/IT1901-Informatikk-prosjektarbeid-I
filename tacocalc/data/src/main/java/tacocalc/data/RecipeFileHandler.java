@@ -11,6 +11,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -122,7 +123,7 @@ public class RecipeFileHandler {
    * @return Returns true if the string is a valid file name.
    */
   public static boolean validFileName(String s) {
-    return s == null || Pattern.matches("^[a-zA-Z0-9 _-]+$", s);
+    return s == null || Pattern.matches("^[a-zA-Z0-9_-][a-zA-Z0-9 _-]+[a-zA-Z0-9_-]$", s);
   }
 
   /**
@@ -131,9 +132,10 @@ public class RecipeFileHandler {
    * @return Returns a list of Recipe objects
    */
   public List<Recipe> getAllRecipies() {
-    File dir = new File(System.getProperty("user.home") + FILEPATH + RECIPE);
+    String folder = (testMode ? TEST : RECIPE);
+    File dir = new File(System.getProperty("user.home") + FILEPATH + folder);
     System.out
-        .println("Reading recipes from " + System.getProperty("user.home") + "/recipecalc/recipe");
+        .println("Reading recipes from " + System.getProperty("user.home") + FILEPATH + folder);
 
     FilenameFilter filter = new FilenameFilter() {
       @Override
@@ -143,8 +145,12 @@ public class RecipeFileHandler {
     };
 
     File[] filesList = dir.listFiles(filter);
-    return Arrays.stream(filesList).map(f -> readRecipe(f.getName().split("\\.")[0]))
-        .collect(Collectors.toList());
+    if (filesList == null) {
+      return new ArrayList<>();
+    } else {
+      return Arrays.stream(filesList).map(f -> readRecipe(f.getName().split("\\.")[0]))
+          .collect(Collectors.toList());
+    }
   }
 
   public static void setTestMode(Boolean b) {
