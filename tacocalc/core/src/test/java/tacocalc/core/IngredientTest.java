@@ -45,10 +45,21 @@ public class IngredientTest {
   }
 
   @Test
+  public void testGetTotalAmount() {
+    Ingredient I1 = new Ingredient("ost", 1.0, "stk");
+    assertEquals(4, I1.getTotalAmount(4));
+    Ingredient I2 = new Ingredient("agurk", 0.20, 0.5, "stk");
+    assertEquals(1.5, I2.getTotalAmount(7));
+  }
+
+  @Test
   public void testThrows() {
     Ingredient I1 = new Ingredient("agurk", 5.0, "stk");
     assertThrows(IllegalArgumentException.class, () -> {
       I1.setPerPersonAmount(-1.0);
+    });
+    assertThrows(IllegalArgumentException.class, () -> {
+      new Ingredient("agurk", 4.0, -1.0, "stk");
     });
   }
 }

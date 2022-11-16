@@ -83,5 +83,23 @@ public class RecipeTest {
     assertThrows(IllegalStateException.class, () -> {
       r.getIngredientPerPersonAmount("ost");
     });
+    assertThrows(IllegalStateException.class, () -> {
+      r.changeIngredientName("ost", "cheddar");
+    });
+    assertThrows(IllegalArgumentException.class, () -> {
+      r.setNumberOfPeople(0);
+    });
+    assertThrows(IllegalStateException.class, () -> {
+      r.getRoundUpTo("ost");
+    });
+    assertThrows(IllegalStateException.class, () -> {
+      r.getIngredientTotalAmount("ost");
+    });
+    assertThrows(IllegalStateException.class, () -> {
+      r.getMeasuringUnit("ost");
+    });
+    assertThrows(IllegalStateException.class, () -> {
+      r.setIngredientMeasurement("ost", "stk");
+    });
   }
 }
