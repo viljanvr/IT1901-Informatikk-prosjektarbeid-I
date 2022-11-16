@@ -165,15 +165,17 @@ public class RecipeBookController {
   }
 
   // Getters used in tests
-  public GridPane getGridPane() {
-    return this.recipeList;
+  protected GridPane getGridPane() {
+    GridPane duplicate = recipeList;
+    return duplicate;
   }
 
-  public BorderPane getBorderPane() {
-    return this.popUpContain;
+  protected BorderPane getBorderPane() {
+    BorderPane duplicate = popUpContain;
+    return duplicate;
   }
 
-  public AddRecipeController getAddRecipeController() {
+  protected AddRecipeController getAddRecipeController() {
     return this.addRecipeController;
   }
 }
