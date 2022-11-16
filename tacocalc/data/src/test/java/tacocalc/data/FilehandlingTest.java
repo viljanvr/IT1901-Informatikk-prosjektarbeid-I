@@ -28,7 +28,7 @@ public class FilehandlingTest {
     assertEquals(gson.toJson(r1), gson.toJson(gson.fromJson(new FileReader(f1), Recipe.class)));
   }
 
-  // @Test
+  @Test
   public void testRead() {
     RecipeFileHandler.setTestMode(true);
 

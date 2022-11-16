@@ -50,4 +50,5 @@ public abstract class AppTest extends ApplicationTest {
     RecipeFileHandler.setTestMode(true);
     RecipeBookController.setTransfer(testInfo.getDisplayName());
   }
+
 }
