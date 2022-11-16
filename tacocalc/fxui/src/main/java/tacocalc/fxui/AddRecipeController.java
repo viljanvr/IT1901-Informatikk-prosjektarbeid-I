@@ -75,7 +75,12 @@ public class AddRecipeController {
 
   }
 
-  private void handleRecipeNameChange() {
+  protected MFXCheckbox getCheckbox() {
+    MFXCheckbox duplicate = templateCheckbox;
+    return duplicate;
+  }
+
+  protected void handleRecipeNameChange() {
     if (RecipeFileHandler.validFileName(recipeNameField.getText())) {
       // If input is valid
       createButton.setDisable(false);

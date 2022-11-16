@@ -9,46 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class LogicTest {
-
-  // Tests for Ingredient class and its setters
-
-  @Test
-  public void testIngredientConstructor() {
-    Ingredient I1 = new Ingredient("kjøtt", 200.0, 400.0, "stk");
-    assertEquals("kjøtt", I1.getName());
-    assertEquals(200, I1.getPerPersonAmount());
-    assertEquals(400, I1.getRoundUpTo());
-    assertEquals("stk", I1.getMeasuringUnit());
-  }
-
-  @Test
-  public void testPerPersonIngredientAmount() {
-    Ingredient I1 = new Ingredient("agurk", 3.0, "stk");
-    assertEquals(3, I1.getPerPersonAmount());
-    I1.setPerPersonAmount(4.0);
-    assertEquals(4, I1.getPerPersonAmount());
-  }
-
-  @Test
-  public void testToStringmethods() {
-    Ingredient I1 = new Ingredient("tomat", 4.0, "stk");
-    assertEquals("[ ]: 4 stk tomat", I1.toString());
-    Recipe r = new Recipe(I1);
-    r.setBought("tomat", true);
-    assertEquals("[x]: 4 stk tomat\n", r.toString());
-  }
-
-  @Test
-  public void testIngredientsBought() {
-    Ingredient I2 = new Ingredient("ost", 1.0, "stk");
-    assertFalse(I2.getBought());
-    I2.setBought(true);
-    assertTrue(I2.getBought());
-  }
-
-  // Tests for the Shoppinglist class
-
+public class RecipeTest {
   @Test
   public void testMultipleIngredients() {
     Ingredient I1 = new Ingredient("agurk", 3.0, "stk");
@@ -101,15 +62,12 @@ public class LogicTest {
     assertNull(r.getIngredient("ost"));
   }
 
-  // Tests for the shopping class that checks if throws are done correctly
+  // Tests for the recipe class that checks if throws are done correctly
 
   @Test
   public void testThrows() {
     Ingredient I1 = new Ingredient("tomat", 3.0, "stk");
     Recipe r = new Recipe(I1);
-    assertThrows(IllegalArgumentException.class, () -> {
-      I1.setPerPersonAmount(-1.0);
-    });
     assertThrows(IllegalStateException.class, () -> {
       r.getBought("ost");
     });

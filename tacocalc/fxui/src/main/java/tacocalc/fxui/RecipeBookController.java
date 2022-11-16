@@ -96,6 +96,7 @@ public class RecipeBookController {
   private void handleCreateRecipe() {
     popUpContain.setVisible(true);
     container.setEffect(blur);
+    addRecipeController.handleRecipeNameChange();
   }
 
   protected void closeOverlay() {
@@ -149,5 +150,20 @@ public class RecipeBookController {
       e.printStackTrace();
     }
     popUpContain.setCenter(addRecipeOverlay);
+  }
+
+  // Getters used in tests
+  protected GridPane getGridPane() {
+    GridPane duplicate = recipeList;
+    return duplicate;
+  }
+
+  protected BorderPane getBorderPane() {
+    BorderPane duplicate = popUpContain;
+    return duplicate;
+  }
+
+  protected AddRecipeController getAddRecipeController() {
+    return this.addRecipeController;
   }
 }
