@@ -1,6 +1,7 @@
 package tacocalc.fxui;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.text.Text;
 import org.testfx.framework.junit5.ApplicationTest;
 import tacocalc.core.Ingredient;
@@ -26,6 +27,10 @@ public abstract class AppTest extends ApplicationTest {
 
   public Button getIngredientEditButton(int index, AppController controller) {
     return ((Button) controller.getIngredientViewStream().skip(3 * index + 2).findAny().get());
+  }
+
+  public CheckBox getIngredientCheckBox(int index, AppController controller) {
+    return ((CheckBox) controller.getIngredientViewStream().skip(3 * index + 0).findAny().get());
   }
 
   public void createTestFile() {

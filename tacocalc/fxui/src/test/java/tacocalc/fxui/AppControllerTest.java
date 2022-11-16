@@ -60,6 +60,16 @@ public class AppControllerTest extends AppTest {
     Assertions.assertEquals(0, controller.getIngredientViewStream().count());
   }
 
+  @Test
+
+  @DisplayName("Test-Ingredient-Bought")
+  public void testCheckbox() {
+    clickOn("#editButton");
+    addIngredient("2", "agurk", "stk");
+    clickOn(getIngredientCheckBox(0, this.controller));
+    Assertions.assertTrue(getIngredientCheckBox(0, this.controller).isSelected());
+  }
+
   // Tests other important button with a lot of logic
 
   @Test
