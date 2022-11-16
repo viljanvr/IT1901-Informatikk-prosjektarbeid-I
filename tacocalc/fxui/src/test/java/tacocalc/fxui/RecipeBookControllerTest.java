@@ -46,6 +46,7 @@ public class RecipeBookControllerTest extends AppTest {
     clickOn("#templateCheckbox");
     Assertions.assertFalse(controller.getAddRecipeController().getCheckbox().isDisable());
     clickOn("#templateCheckbox");
+    Assertions.assertTrue(controller.getAddRecipeController().getCheckbox().isSelected());
     clickOn("#cancelButton");
     Assertions.assertFalse(controller.getBorderPane().isVisible());
   }
