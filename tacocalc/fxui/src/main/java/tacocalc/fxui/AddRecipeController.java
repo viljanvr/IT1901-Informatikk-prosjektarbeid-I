@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import tacocalc.core.Recipe;
 import tacocalc.data.RecipeFileHandler;
 
 /**
@@ -54,7 +55,7 @@ public class AddRecipeController {
 
   @FXML
   private void handleCreate() {
-    recipeBookController.changeToScene(recipeNameField.getText());
+    recipeBookController.changeToScene(new Recipe(recipeNameField.getText()));
   }
 
   @FXML

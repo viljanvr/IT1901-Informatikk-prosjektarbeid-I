@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import tacocalc.core.Recipe;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ public class IngredientEditControllerTest extends AppTest {
 
   @Override
   public void start(final Stage stage) throws Exception {
+    RecipeBookController.setTransfer(new Recipe("Test-file"));
     FXMLLoader loader = new FXMLLoader(getClass().getResource("ShoppingList.fxml"));
     Parent root = loader.load();
     stage.setScene(new Scene(root));

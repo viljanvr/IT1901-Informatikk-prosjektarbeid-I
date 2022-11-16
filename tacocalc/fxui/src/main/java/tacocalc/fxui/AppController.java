@@ -5,6 +5,7 @@ import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.enums.FloatMode;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 import javafx.event.ActionEvent;
@@ -115,12 +116,26 @@ public class AppController {
 
   private BoxBlur blur = new BoxBlur(30, 30, 3);
 
+  // private RemoteRecipeCalcAccess rrca = new RemoteRecipeCalcAccess("http://localhost", 8080);
+
   /**
    * Initializes the application.
    */
   public void initialize() {
+    // Creates a copy, so that internal recipe object isn't mutable from the outside
+    List<Ingredient> ingredientList = RecipeBookController.transferRecipe.getList();
+    if (ingredientList.isEmpty()) {
+      this.recipe = new Recipe(RecipeBookController.transferRecipe.getName());
+    } else {
+      this.recipe =
+          new Recipe(RecipeBookController.transferRecipe.getName(), (Ingredient[]) ingredientList
+              .toArray(new Ingredient[RecipeBookController.transferRecipe.getList().size()]));
+    }
+
+    this.recipe.setNumberOfPeople(RecipeBookController.transferRecipe.getNumberOfPeople());
+
     initIngredientEditOverlay();
-    loadRecipeFromRecipeBook(RecipeBookController.transferRecipe);
+    loadRecipeFromRecipeBook(recipe);
     numberOfPeopleField.setText(String.valueOf(recipe.getNumberOfPeople()));
 
     numberOfPeopleField.addEventFilter(KeyEvent.ANY, e -> {
@@ -207,8 +222,9 @@ public class AppController {
   }
 
   private void saveNewRecipeName(String newName) {
-    RecipeFileHandler fh = new RecipeFileHandler();
-    if (fh.renameFile(recipe.getName(), newName)) {
+    // TODO:
+    // rrca.changeRecipeName(recipe, newName);
+    if (RecipeFileHandler.renameFile(recipe.getName(), newName)) {
       recipe.setName(newName);
       recipieNameText.setText(newName);
     }
@@ -223,6 +239,8 @@ public class AppController {
    */
   private void handleToggleCheckbox(String ingredientName, MFXCheckbox c) {
     recipe.setBought(ingredientName, c.isSelected());
+    // TODO
+    // rrca.setBought(recipe, ingredientName, c.isSelected());
     handleSaveToFile();
   }
 
@@ -237,6 +255,8 @@ public class AppController {
   protected void handleDeleteIngredient(String ingredient) {
     recipe.deleteItem(ingredient); // delete from database
     updateIngredientListView();
+    // TODO
+    // rrca.deleteIngerdient(recipe, ingredientName);
     handleSaveToFile();
   }
 
@@ -277,8 +297,6 @@ public class AppController {
     recipe.setIngredientMeasurement(ingredient, measuringUnit);
     recipe.changeIngredientName(ingredient, newIngredientName);
 
-    // TODO: Update the textfields for measuringUnit
-
     Text text = (Text) getIngredientViewStream()
         .filter(i -> i instanceof Text && ((Text) i).getText().contains(ingredient)).findFirst()
         .get();
@@ -286,6 +304,9 @@ public class AppController {
     text.setText(Ingredient.formatDouble(recipe.getIngredientTotalAmount(newIngredientName)) + " "
         + measuringUnit + " " + newIngredientName);
 
+    // TODO:
+    // rrca.updateIngredient(this.recipe, ingredient, newIngredientName, perPersonAmount, roundUpTo,
+    // measuringUnit);
     handleSaveToFile();
   }
 
@@ -298,10 +319,7 @@ public class AppController {
    */
   public boolean isDuplicate(String name) {
     Ingredient duplicate = recipe.getIngredient(name);
-    if (duplicate == null) {
-      return false;
-    }
-    return true;
+    return duplicate != null;
   }
 
   /**
@@ -320,7 +338,9 @@ public class AppController {
 
       if (!isDuplicate(ingredientName)) {
         recipe.addItem(ingredientName, ingredientPerPersonAmnt, ingredientUnit);
-        handleSaveToFile();
+        // TODO:
+        // rrca.addIngredient(this.recipe, new Ingredient(ingredientName, ingredientPerPersonAmnt,
+        // ingredientUnit));
         addItemToView(ingredientName, recipe.getIngredientTotalAmount(ingredientName),
             ingredientUnit, false);
       }
@@ -445,9 +465,9 @@ public class AppController {
   /**
    * Saves the recipe object to a file with the name from the nameField text field.
    */
+  // TODO: Delete method
   protected void handleSaveToFile() {
-    RecipeFileHandler fh = new RecipeFileHandler();
-    fh.write(recipe);
+    RecipeFileHandler.write(recipe);
   }
 
   /**
@@ -471,14 +491,12 @@ public class AppController {
   /**
    * TODO: write JavaDoc.
    *
-   * @param recipeName name of the recipie to load
+   * @param recipe name of the recipie to load
    */
-  public void loadRecipeFromRecipeBook(String recipeName) {
-    RecipeFileHandler fh = new RecipeFileHandler();
-    this.recipe = fh.readRecipe(recipeName);
+  public void loadRecipeFromRecipeBook(Recipe recipe) {
     updateIngredientListView();
-    recipieNameText.setText(recipeName);
-    recipeNameEditingField = new MFXTextField(recipeName, "", "Recipe Name");
+    recipieNameText.setText(recipe.getName());
+    recipeNameEditingField = new MFXTextField(recipe.getName(), "", "Recipe Name");
     recipeNameEditingField.setFloatMode(FloatMode.BORDER);
     recipeNameEditingField.setId("recipe-name-text-field");
     recipeNameEditingField.setPrefWidth(200);
@@ -503,8 +521,7 @@ public class AppController {
 
   @FXML
   private void handleDeleteRecipe() {
-    RecipeFileHandler fh = new RecipeFileHandler();
-    fh.deleteFile(recipe.getName());
+    RecipeFileHandler.deleteFile(recipe.getName());
     handleGoBack();
   }
 }

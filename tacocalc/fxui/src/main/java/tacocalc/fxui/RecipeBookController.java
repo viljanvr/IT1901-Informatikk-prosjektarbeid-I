@@ -19,6 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import tacocalc.core.Recipe;
 // import tacocalc.core.RecipeBook;
 import tacocalc.data.RecipeFileHandler;
 
@@ -28,10 +29,10 @@ import tacocalc.data.RecipeFileHandler;
 public class RecipeBookController {
 
   // private RecipeBook recipeBook;
-  static String transferRecipe;
+  static Recipe transferRecipe;
 
   @FXML
-  private GridPane recipeList;
+  private GridPane recipeListPane;
 
   @FXML
   private BorderPane popUpContain;
@@ -48,6 +49,10 @@ public class RecipeBookController {
 
   BoxBlur blur = new BoxBlur(30, 30, 3);
 
+  List<Recipe> recipeList;
+
+  // private RemoteRecipeCalcAccess rrca = new RemoteRecipeCalcAccess("http://localhost", 8080);
+
   public void initialize() {
     getRecipesFromFile();
     initAddRecipeOverlay();
@@ -58,8 +63,10 @@ public class RecipeBookController {
    *
    */
   private void getRecipesFromFile() {
-    RecipeFileHandler fh = new RecipeFileHandler();
-    fh.getAllRecipies().stream().forEach(r -> addItemToView(r.getName()));
+    // TODO:
+    // recipeList = rrca.getAllRecipes();
+    recipeList = RecipeFileHandler.getAllRecipies();
+    recipeList.stream().forEach(r -> addItemToView(r));
 
   }
 
@@ -68,24 +75,24 @@ public class RecipeBookController {
    *
    * @param recipeName the name of the recipe which will be added
    */
-  private void addItemToView(String recipeName) {
-    MFXButton recipeButton = new MFXButton(recipeName);
+  private void addItemToView(Recipe recipe) {
+    MFXButton recipeButton = new MFXButton(recipe.getName());
     recipeButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
     recipeButton.setOnAction(new EventHandler<ActionEvent>() {
 
       @Override
       public void handle(ActionEvent event) {
-        changeToScene(recipeButton.getText());
+        changeToScene(recipe);
       }
 
     });
-    List<Node> children = recipeList.getChildren();
-    if (children.size() / 2 == recipeList.getRowCount()) {
-      recipeList.getRowConstraints().add(new RowConstraints(40));
+    List<Node> children = recipeListPane.getChildren();
+    if (children.size() / 2 == recipeListPane.getRowCount()) {
+      recipeListPane.getRowConstraints().add(new RowConstraints(40));
     }
     int columnPosition = (children.size() % 2 == 0) ? 0 : 1;
     int rowPosition = children.size() / 2;
-    recipeList.add(recipeButton, columnPosition, rowPosition);
+    recipeListPane.add(recipeButton, columnPosition, rowPosition);
   }
 
   @FXML
@@ -110,13 +117,13 @@ public class RecipeBookController {
   /**
    * Changes scene to show a given recipe.
    *
-   * @param recipeName the name of the recipie to open
+   * @param recipe the name of the recipie to open
    *
    * @throws IOException throws exception if specified FXML is not found
    */
-  public void changeToScene(String recipeName) {
-    Stage thisStage = (Stage) recipeList.getScene().getWindow();
-    setTransfer(recipeName);
+  public void changeToScene(Recipe recipe) {
+    Stage thisStage = (Stage) recipeListPane.getScene().getWindow();
+    setTransfer(recipe);
     FXMLLoader loader = new FXMLLoader(getClass().getResource("ShoppingList.fxml"));
     try {
       Parent root = loader.load();
@@ -131,8 +138,8 @@ public class RecipeBookController {
    *
    * @param recipeName the string that will be passed to the next scene
    */
-  protected static synchronized void setTransfer(String recipeName) {
-    RecipeBookController.transferRecipe = recipeName;
+  protected static synchronized void setTransfer(Recipe recipe) {
+    RecipeBookController.transferRecipe = recipe;
   }
 
   private void initAddRecipeOverlay() {
@@ -150,7 +157,7 @@ public class RecipeBookController {
 
   // Getters used in tests
   protected GridPane getGridPane() {
-    GridPane duplicate = recipeList;
+    GridPane duplicate = recipeListPane;
     return duplicate;
   }
 

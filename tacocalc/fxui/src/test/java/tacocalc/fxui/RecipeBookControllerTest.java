@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import tacocalc.core.Recipe;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ public class RecipeBookControllerTest extends AppTest {
 
   @Override
   public void start(final Stage stage) throws Exception {
+    RecipeBookController.setTransfer(new Recipe("Test-file"));
     FXMLLoader loader = new FXMLLoader(getClass().getResource("RecipeBook.fxml"));
     Parent root = loader.load();
     stage.setScene(new Scene(root));
@@ -24,7 +26,6 @@ public class RecipeBookControllerTest extends AppTest {
   }
 
   @Test
-
   @DisplayName("Test-add-item-to-view")
   public void testCreteRecipe() {
     clickOn("#createRecipeButton");
@@ -38,7 +39,6 @@ public class RecipeBookControllerTest extends AppTest {
   }
 
   @Test
-
   @DisplayName("Test-popup-elements")
   public void testClosePopUp() {
     clickOn("#createRecipeButton");

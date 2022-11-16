@@ -32,17 +32,14 @@ public abstract class AppTest extends ApplicationTest {
   }
 
   public void createTestFile() {
-    RecipeFileHandler fh = new RecipeFileHandler();
-    fh.write(new Recipe("testFile", new Ingredient("tomat", 2.0, "default"),
+    RecipeFileHandler.write(new Recipe("testFile", new Ingredient("tomat", 2.0, "default"),
         new Ingredient("avocado", 1.0, "default")));
   }
 
   @BeforeEach
   public void setUp(TestInfo testInfo) {
-    File testRecipe = new File(System.getProperty("user.home") + "/recipecalc/test/"
-        + testInfo.getDisplayName() + ".json");
+    File testRecipe = new File(System.getProperty("user.home") + "/recipecalc/test/Test-file.json");
     testRecipe.delete();
     RecipeFileHandler.setTestMode(true);
-    RecipeBookController.setTransfer(testInfo.getDisplayName());
   }
 }
