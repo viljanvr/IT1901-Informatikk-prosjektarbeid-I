@@ -13,6 +13,8 @@
 
 Appen består av fem moduler, der hver samhandler med hverandre i henhold til pakkediagrammet under. Vi har også laget et klassediagram som beskriver hvordan noen av de viktigste klassene samhandler. Dette er eksemplifisert med et sekvensdiagram, som du også kan se under.
 
+DENNE ER IKKE GJORT ENDA:
+
 <br/>
 <p>
     <figure align="center">
@@ -25,16 +27,16 @@ Appen består av fem moduler, der hver samhandler med hverandre i henhold til pa
 <p>
     <figure align="center">
         <img src="resources/klassediagram.png" alt="Klassediagram" width="600"/>
-        <figcaption><i>Klassediagram som viser de to viktigste core klassene
+        <figcaption><i>Klassediagram som viser de to viktigste core klassene og deres dependencies.</i></figcaption>
     </figure>
 </p>
 
 Vi har lagt beskrivelsen av strukturen inne i de forskjellige modulene i egne README.md filer i hver av modulene. Disse finner du her:
 
-- [core](tacocalc\core\README.md)
-- [data](tacocalc\data\README.md)
-- [fxui](tacocalc\fxui\README.md)
-- [restapi](tacocalc\restapi\README.md)
+- [core](../../tacocalc/core/README.md)
+- [data](../../tacocalc/data/README.md)
+- [fxui](../../tacocalc/fxui/README.md)
+- [restapi](../../tacocalc/restapi/README.md)
 
 ## Implementert
 
@@ -45,35 +47,42 @@ Følgende _features_ er implementert i denne versjonen av applikasjonen:
 - Ny stil på UI
 - Skalering av hele oppskrifter
 - Mulighet til å både sette og endre avrunding av individuelle ingredienser
--
 
 <p>
     <figure align="center">
-        <img src="resources/recipieMenu.png" alt="Mockup" width="600"/>
+        <img src="resources/OversiktRecipes" alt="OversiktRecipes" width="600"/>
         <figcaption><i>Bilde 1: Start-meny hvor man har oversikt over alle oppskrifter.</i></figcaption>
     </figure>
 </p>
+<br/>
 <p>
     <figure align="center">
-        <img src="resources/ingredientMenu.png" alt="Mockup" width="600"/>
-        <figcaption><i>Bilde 2: Menyen hvor man kan huke av ingredienser etterhvert som man har kjøpt de. Her kan man også legge til nye ingredienser og gå inn på en bestemt ingrediens å redigere navn og antall.</i></figcaption>
-    </figure>
-</p>
-<p>
-    <figure align="center">
-        <img src="resources/ingredientEditMenu.png" alt="Mockup" width="600"/>
-        <figcaption><i>Bilde 3: Meyen hvor man kan redigere navn, måleenhet og antall av enkelte ingredienser. Her kan man også slette ingrediensen.</i></figcaption>
+        <img src="resources/CreateRecipe.png" alt="Mockup" width="600"/>
+        <figcaption><i>Bilde 2: Menyen som kommer opp når man trykker "Create Recipe". Her lager man en ny oppskrift som lagres, og man kan deretter gå inn og legge inn nye ingredienser.</i></figcaption>
     </figure>
 </p>
 
-## Ikke implementert
+<p>
+    <figure align="center">
+        <img src="resources/Forskalering.png" alt="Forskalering" width="600"/>
+        <img src="resources/Etterskalering.png" alt="Etterskalering" width="600">
+        <figcaption><i>Bilde 3: Eksempeloppskriften "Amogus" før og etter skalering.</i></figcaption>
+    </figure>
+</p>
 
-Ved neste iterasjon har vi planer om å utvide funksjonaliteten til appen ytterlige. Dette er de foreløpige ideene vi ser for oss å implementere:
+<p>
+    <figure align="center">
+        <img src="resources/EditIngredient.png" alt="EditIngredient" width="600"/>
+        <figcaption><i>Bilde 4: Dette er menyen man får opp når man trykker på "Edit" knappen. Her kan man skrive inn i feltene og trykke "Add Ingredient" for å legge til en ny ingrediens, eller redigere eksisterende (Se Bilde 5).</i></figcaption>
+    </figure>
+</p>
 
-- Skalering av hele _recipes_
-- Skybasert deling av _repices_ samt _recipebooks_
-- Sletting av _recipes_
-- Mulighet til å forandre måleenhet til en ingrediens
+<p>
+    <figure align="center">
+        <img src="resources/EditIngredient.png" alt="EditIngredient" width="600"/>
+        <figcaption><i>Bilde 5: Når man trykker pila til den valgte ingrediensen er dette menyen man får opp.</i></figcaption>
+    </figure>
+</p>
 
 ## Arbeidsflyt
 
