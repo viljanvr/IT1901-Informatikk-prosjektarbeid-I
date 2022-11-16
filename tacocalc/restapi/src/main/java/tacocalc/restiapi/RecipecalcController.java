@@ -1,7 +1,6 @@
 package tacocalc.restiapi;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,11 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
-import tacocalc.core.RecipeBook;
 
 /**
  * Controller for REST API.
@@ -21,11 +17,11 @@ import tacocalc.core.RecipeBook;
 
 @RestController
 @RequestMapping("/api/v1")
-public class TacocalcController {
+public class RecipecalcController {
 
 
   @Autowired
-  private TacocalcService tacocalcService;
+  private RecipecalcService recipecalcService;
 
   /**
    * Gets all recipes from the API.
@@ -34,7 +30,7 @@ public class TacocalcController {
    */
   @GetMapping(value = "/recipes")
   public Collection<Recipe> getAllRecipes() {
-    return tacocalcService.getAllRecipes();
+    return recipecalcService.getAllRecipes();
   }
 
   /**
@@ -45,7 +41,7 @@ public class TacocalcController {
    */
   @PostMapping(value = "/recipes/add", produces = "application/json")
   public String addRecipe(Recipe recipe) {
-    String id = tacocalcService.addRecipe(recipe, "tjommi");
+    String id = recipecalcService.addRecipe(recipe);
     return "{\"id\":\"" + id + "\" }";
   }
 
@@ -58,7 +54,7 @@ public class TacocalcController {
    */
   @GetMapping(value = "/recipes/{id}", produces = "application/json")
   public Recipe getRecipe(final @PathVariable("id") String id) {
-    return tacocalcService.getRecipeById(id);
+    return recipecalcService.getRecipeById(id);
   }
 
 
@@ -71,7 +67,7 @@ public class TacocalcController {
   @DeleteMapping(value = "recipes/{id}")
   public void removeRecipe(final @PathVariable("id") String id) {
     try {
-      tacocalcService.removeRecipe(id);
+      recipecalcService.removeRecipe(id);
     } catch (NoSuchElementException e) {
       e.printStackTrace();
     }

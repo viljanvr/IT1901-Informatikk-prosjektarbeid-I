@@ -7,20 +7,21 @@ import org.springframework.stereotype.Service;
 import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
 import tacocalc.core.RecipeBook;
-import tacocalc.data.TacoCalcFileHandler;
+import tacocalc.data.RecipeFileHandler;
 
 /**
  * Service handler for REST API.
  */
 
 @Service
-public class TacocalcService {
+public class RecipecalcService {
 
-  private TacoCalcFileHandler fh = new TacoCalcFileHandler();
+  private RecipeFileHandler fh = new RecipeFileHandler();
 
   private RecipeBook recipes = new RecipeBook(new Recipe[] {
-      new Recipe(new Ingredient("Pølser", 2d, "stk"), new Ingredient("Pølsebrød", 2d, "stk")),
-      new Recipe(new Ingredient("Ringnes", 6d, "stk"))});
+      new Recipe("Pølser", new Ingredient("Pølser", 2d, "stk"),
+          new Ingredient("Pølsebrød", 2d, "stk")),
+      new Recipe("Øl", new Ingredient("Ringnes", 6d, "stk"))});
 
   public Collection<Recipe> getAllRecipes() {
     return recipes.getAllRecipes();
@@ -32,9 +33,9 @@ public class TacocalcService {
    * @param recipe Recipe to be added
    * @return The id of the recipe in the RecipeBook
    */
-  public String addRecipe(Recipe recipe, String filename) {
+  public String addRecipe(Recipe recipe) {
     String id = recipes.addRecipe(recipe);
-    fh.write(recipe, filename);
+    fh.write(recipe);
     return id;
   }
 
@@ -58,20 +59,6 @@ public class TacocalcService {
       throw new NoSuchElementException(HttpStatus.NOT_FOUND + "Recipe not found");
     }
     recipes.removeRecipe(id);
-  }
-
-
-  /**
-   * Main method for testing.
-   *
-   * @param args Args to run main function
-   */
-  public static void main(String[] args) {
-    TacocalcService ts = new TacocalcService();
-
-    System.out.println(ts.recipes.toString());
-    System.out.println("\n");
-    System.out.println(ts.recipes.getRecipeById("1"));
   }
 
 }
