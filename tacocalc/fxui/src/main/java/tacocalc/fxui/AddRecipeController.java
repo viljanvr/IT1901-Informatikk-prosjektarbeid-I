@@ -66,4 +66,8 @@ public class AddRecipeController {
 
   }
 
+  public MFXCheckbox getCheckbox() {
+    return this.templateCheckbox;
+  }
+
 }
