@@ -33,7 +33,7 @@ public class FilehandlingTest {
   // }
   // }
 
-  @Test
+  // @Test
   public void testRead() {
     TacoCalcFileHandler th = new TacoCalcFileHandler();
     Recipe r1 = new Recipe();
