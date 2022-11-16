@@ -66,4 +66,9 @@ public class AddRecipeController {
 
   }
 
+  protected MFXCheckbox getCheckbox() {
+    MFXCheckbox duplicate = templateCheckbox;
+    return duplicate;
+  }
+
 }

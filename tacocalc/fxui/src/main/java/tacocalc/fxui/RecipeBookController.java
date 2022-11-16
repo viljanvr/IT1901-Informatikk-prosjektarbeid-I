@@ -163,4 +163,19 @@ public class RecipeBookController {
     }
     popUpContain.setCenter(addRecipeOverlay);
   }
+
+  // Getters used in tests
+  protected GridPane getGridPane() {
+    GridPane duplicate = recipeList;
+    return duplicate;
+  }
+
+  protected BorderPane getBorderPane() {
+    BorderPane duplicate = popUpContain;
+    return duplicate;
+  }
+
+  protected AddRecipeController getAddRecipeController() {
+    return this.addRecipeController;
+  }
 }
