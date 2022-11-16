@@ -22,11 +22,8 @@ public class IngredientEditControllerTest extends AppTest {
     stage.toFront();
   }
 
-  // Tests Functions in the ingredient edit controller
-
   @Test
-
-  @DisplayName("Test that you can increase and decrease the amount of an ingredient")
+  @DisplayName("Increase-and-decrease-amount-test")
   public void testIncreaseAndDecrease() {
     clickOn("#editButton");
     addIngredient("2", "paprika", "stk");
@@ -43,8 +40,7 @@ public class IngredientEditControllerTest extends AppTest {
   }
 
   @Test
-
-  @DisplayName("Test that you can change the name of an ingredient")
+  @DisplayName("Change-ingredient-name-test")
   public void testIngredientNameChange() {
     clickOn("#editButton");
     addIngredient("1", "bacon", "stk");
@@ -55,8 +51,7 @@ public class IngredientEditControllerTest extends AppTest {
   }
 
   @Test
-
-  @DisplayName("Test deleting an element from the view")
+  @DisplayName("Delete-ingredient-test")
   public void deleteIngredientTest() {
     clickOn("#editButton");
     addIngredient("1", "rømme", "dl");

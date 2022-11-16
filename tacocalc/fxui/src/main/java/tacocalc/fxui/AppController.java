@@ -32,7 +32,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
-import tacocalc.data.TacoCalcFileHandler;
+import tacocalc.data.RecipeFileHandler;
 
 /**
  * Main controller for screen where the user can see their shopping list.
@@ -98,6 +98,9 @@ public class AppController {
 
   @FXML
   private Text recipieNameText;
+
+  @FXML
+  private Text recipeNameErrorText;
 
   private Recipe recipe;
 
@@ -194,11 +197,17 @@ public class AppController {
   }
 
   private void handleRecipeNameChange() {
-    // TODO: feilhåndtering
+    if (RecipeFileHandler.validFileName(recipeNameEditingField.getText())) {
+      recipeNameErrorText.setVisible(false);
+      editButton.setDisable(false);
+    } else {
+      recipeNameErrorText.setVisible(true);
+      editButton.setDisable(true);
+    }
   }
 
   private void saveNewRecipeName(String newName) {
-    TacoCalcFileHandler fh = new TacoCalcFileHandler();
+    RecipeFileHandler fh = new RecipeFileHandler();
     if (fh.renameFile(recipe.getName(), newName)) {
       recipe.setName(newName);
       recipieNameText.setText(newName);
@@ -437,8 +446,8 @@ public class AppController {
    * Saves the recipe object to a file with the name from the nameField text field.
    */
   protected void handleSaveToFile() {
-    TacoCalcFileHandler fh = new TacoCalcFileHandler();
-    fh.write(recipe, recipe.getName());
+    RecipeFileHandler fh = new RecipeFileHandler();
+    fh.write(recipe);
   }
 
   /**
@@ -465,13 +474,15 @@ public class AppController {
    * @param recipeName name of the recipie to load
    */
   public void loadRecipeFromRecipeBook(String recipeName) {
-    TacoCalcFileHandler fh = new TacoCalcFileHandler();
-    this.recipe = fh.read(recipeName);
+    RecipeFileHandler fh = new RecipeFileHandler();
+    this.recipe = fh.readRecipe(recipeName);
     updateIngredientListView();
     recipieNameText.setText(recipeName);
     recipeNameEditingField = new MFXTextField(recipeName, "", "Recipe Name");
     recipeNameEditingField.setFloatMode(FloatMode.BORDER);
     recipeNameEditingField.setId("recipe-name-text-field");
+    recipeNameEditingField.setPrefWidth(200);
+
 
 
   }
@@ -492,7 +503,7 @@ public class AppController {
 
   @FXML
   private void handleDeleteRecipe() {
-    TacoCalcFileHandler fh = new TacoCalcFileHandler();
+    RecipeFileHandler fh = new RecipeFileHandler();
     fh.deleteFile(recipe.getName());
     handleGoBack();
   }
