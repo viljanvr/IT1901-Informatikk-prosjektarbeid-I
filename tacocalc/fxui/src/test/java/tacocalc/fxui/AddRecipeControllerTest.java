@@ -48,6 +48,17 @@ public class AddRecipeControllerTest extends AppTest {
   @DisplayName("Write-invalid-input-test")
   public void testInvalidInput() {
     clickOn("#createRecipeButton");
+    Assertions.assertTrue(controller.getAddRecipeController().getCreateButton().isDisable());
+    clickOn("#recipeNameField").write("Test");
+    Assertions.assertFalse(controller.getAddRecipeController().getCreateButton().isDisable());
+    clickOn("#recipeNameField").eraseText(4).write("Test-1");
+    Assertions.assertFalse(controller.getAddRecipeController().getCreateButton().isDisable());
+    clickOn("#recipeNameField").eraseText(6).write("!!!");
+    Assertions.assertTrue(controller.getAddRecipeController().getCreateButton().isDisable());
+    clickOn("#recipeNameField").eraseText(3).write(" Test");
+    Assertions.assertTrue(controller.getAddRecipeController().getCreateButton().isDisable());
+    clickOn("#recipeNameField").eraseText(5).write("Test ");
+    Assertions.assertTrue(controller.getAddRecipeController().getCreateButton().isDisable());
   }
 }
 
