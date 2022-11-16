@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
-import tacocalc.data.TacoCalcFileHandler;
+import tacocalc.data.RecipeFileHandler;
 
 public class RecipeBookControllerTest extends AppTest {
   Parent root;

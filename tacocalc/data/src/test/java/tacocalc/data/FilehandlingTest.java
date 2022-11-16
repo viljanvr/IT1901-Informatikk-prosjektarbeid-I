@@ -11,18 +11,22 @@ import tacocalc.core.*;
 public class FilehandlingTest {
   @Test
   public void testWrite() {
-    TacoCalcFileHandler th = new TacoCalcFileHandler();
-    Recipe r1 = new Recipe();
+    RecipeFileHandler.setTestMode(true);
+
+    RecipeFileHandler th = new RecipeFileHandler();
+    Recipe r1 = new Recipe("Write-test");
     r1.addItem("agurk", 4.0, "stk");
     r1.addItem("paprika", 6.0, "stk");
-    th.write(r1, "testWrite");
-    File f = new File("../data/src/main/resources/testWrite.json");
+    th.write(r1);
+    File f = new File(System.getProperty("user.home") + "/recipecalc/test/Write-test.json");
     Assertions.assertTrue(f.isFile());
     // Check if you can write to existing file
     Assertions.assertTrue(f.canWrite());
+
     // Check if new items are written over
     r1.addItem("banan", 18.0, "stk");
-    th.write(r1, "testWrite2");
+    r1.setName("testWrite2");
+    th.write(r1);
     Path p1 = Paths.get("testWrite");
     Path p2 = Paths.get("testWrite2");
     try {
@@ -35,15 +39,17 @@ public class FilehandlingTest {
 
   @Test
   public void testRead() {
-    TacoCalcFileHandler th = new TacoCalcFileHandler();
-    Recipe r1 = new Recipe();
+    RecipeFileHandler.setTestMode(true);
+
+    RecipeFileHandler th = new RecipeFileHandler();
+    Recipe r1 = new Recipe("Read-test");
     r1.addItem("genus", 3.0, "mange");
-    th.write(r1, "testRead");
+    th.write(r1);
     // If file doesn't exist it returns a new Recipe
-    Recipe r2 = th.read("testRead");
+    Recipe r2 = th.readRecipe("Read-test");
     Assertions.assertEquals(r1.getIngredientPerPersonAmount("genus"),
         r2.getIngredientPerPersonAmount("genus"));
     // If file doesn't exist it returns a new Recipe
-    Assertions.assertEquals(0, th.read("NonFileNameOnlyForTesting").getList().size());
+    Assertions.assertEquals(0, th.readRecipe("NonFileNameOnlyForTesting").getList().size());
   }
 }
