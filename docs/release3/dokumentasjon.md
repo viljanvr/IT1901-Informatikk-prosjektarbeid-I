@@ -11,9 +11,7 @@
 
 ## Struktur
 
-Appen består av fem moduler, der hver samhandler med hverandre i henhold til pakkediagrammet under. Vi har også laget et klassediagram som beskriver hvordan noen av de viktigste klassene samhandler. Dette er eksemplifisert med et sekvensdiagram, som du også kan se under.
-
-DENNE ER IKKE GJORT ENDA:
+Appen består av fem moduler, der hver samhandler med hverandre i henhold til pakkediagrammet under. Vi har også laget et klassediagram som beskriver hvordan noen av de viktigste klassene samhandler. Det er også et sekvensdiagram som eksemplifiserer en del av appen.
 
 <br/>
 <p>
@@ -31,7 +29,7 @@ DENNE ER IKKE GJORT ENDA:
     </figure>
 </p>
 
-Vi har lagt beskrivelsen av strukturen inne i de forskjellige modulene i egne README.md filer i hver av modulene. Disse finner du her:
+Vi har lagt beskrivelsen av strukturen inne i de forskjellige modulene i de egne README.md filene. Disse finner du her:
 
 - [client](../../tacocalc/client/README.md)
 - [core](../../tacocalc/core/README.md)
