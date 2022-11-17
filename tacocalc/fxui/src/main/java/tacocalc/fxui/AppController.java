@@ -5,7 +5,7 @@ import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.enums.FloatMode;
 import java.io.IOException;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.stream.Stream;
 import javafx.event.ActionEvent;
@@ -31,6 +31,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import tacocalc.client.RemoteRecipeCalcAccess;
 import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
 import tacocalc.data.RecipeFileHandler;
@@ -116,7 +117,7 @@ public class AppController {
 
   private BoxBlur blur = new BoxBlur(30, 30, 3);
 
-  // private RemoteRecipeCalcAccess rrca = new RemoteRecipeCalcAccess("http://localhost", 8080);
+  private RemoteRecipeCalcAccess rrca = new RemoteRecipeCalcAccess("http://localhost", 8080);
 
   /**
    * Initializes the application.
@@ -216,9 +217,7 @@ public class AppController {
   }
 
   private void saveNewRecipeName(String newName) {
-    // TODO:
-    // rrca.changeRecipeName(recipe, newName);
-    if (RecipeFileHandler.renameFile(recipe.getName(), newName)) {
+    if (rrca.changeRecipeName(recipe.getName(), newName)) {
       recipe.setName(newName);
       recipieNameText.setText(newName);
     }
@@ -232,10 +231,11 @@ public class AppController {
    * @param c Checkbox that has been clicked
    */
   private void handleToggleCheckbox(String ingredientName, MFXCheckbox c) {
-    recipe.setBought(ingredientName, c.isSelected());
-    // TODO
-    // rrca.setBought(recipe, ingredientName, c.isSelected());
-    handleSaveToFile();
+    if (rrca.setBought(recipe.getName(), ingredientName, c.isSelected())) {
+      recipe.setBought(ingredientName, c.isSelected());
+    } else {
+      c.setSelected(!c.isSelected());
+    }
   }
 
   /**
@@ -247,11 +247,10 @@ public class AppController {
    *
    */
   protected void handleDeleteIngredient(String ingredient) {
-    recipe.deleteItem(ingredient); // delete from database
-    updateIngredientListView();
-    // TODO
-    // rrca.deleteIngerdient(recipe, ingredientName);
-    handleSaveToFile();
+    if (rrca.deleteIngredient(recipe.getName(), ingredient)) {
+      recipe.deleteItem(ingredient); // delete from database
+      updateIngredientListView();
+    }
   }
 
   /**
@@ -286,10 +285,22 @@ public class AppController {
    */
   protected void updateIngredient(String ingredient, String newIngredientName,
       Double perPersonAmount, Double roundUpTo, String measuringUnit) {
-    recipe.setIngredientPerPersonAmount(ingredient, perPersonAmount);
-    recipe.setRoundUpTo(ingredient, roundUpTo);
-    recipe.setIngredientMeasurement(ingredient, measuringUnit);
-    recipe.changeIngredientName(ingredient, newIngredientName);
+
+    HashMap<String, Boolean> saveResults = rrca.updateIngredient(recipe.getName(), ingredient,
+        newIngredientName, perPersonAmount, roundUpTo, measuringUnit);
+
+    if (saveResults.get("setPerPersonAmount")) {
+      recipe.setIngredientPerPersonAmount(ingredient, perPersonAmount);
+    }
+    if (saveResults.get("setRoundUpTo")) {
+      recipe.setRoundUpTo(ingredient, roundUpTo);
+    }
+    if (saveResults.get("setMeasuringUnit")) {
+      recipe.setIngredientMeasurement(ingredient, measuringUnit);
+    }
+    if (saveResults.get("changeIngredientName")) {
+      recipe.changeIngredientName(ingredient, newIngredientName);
+    }
 
     Text text = (Text) getIngredientViewStream()
         .filter(i -> i instanceof Text && ((Text) i).getText().contains(ingredient)).findFirst()
@@ -297,11 +308,6 @@ public class AppController {
 
     text.setText(Ingredient.formatDouble(recipe.getIngredientTotalAmount(newIngredientName)) + " "
         + measuringUnit + " " + newIngredientName);
-
-    // TODO:
-    // rrca.updateIngredient(this.recipe, ingredient, newIngredientName, perPersonAmount, roundUpTo,
-    // measuringUnit);
-    handleSaveToFile();
   }
 
   /**
@@ -331,14 +337,14 @@ public class AppController {
       String ingredientUnit = newMeasurementField.getText();
 
       if (!isDuplicate(ingredientName)) {
-        recipe.addItem(ingredientName, ingredientPerPersonAmnt, ingredientUnit);
-        // TODO:
-        // rrca.addIngredient(this.recipe, new Ingredient(ingredientName, ingredientPerPersonAmnt,
-        // ingredientUnit));
-        addItemToView(ingredientName, recipe.getIngredientTotalAmount(ingredientName),
-            ingredientUnit, false);
-      }
+        if (rrca.addIngredient(recipe.getName(),
+            new Ingredient(ingredientName, ingredientPerPersonAmnt, ingredientUnit))) {
+          recipe.addItem(ingredientName, ingredientPerPersonAmnt, ingredientUnit);
 
+          addItemToView(ingredientName, recipe.getIngredientTotalAmount(ingredientName),
+              ingredientUnit, false);
+        }
+      }
       newIngredientAmntField.clear();
       newIngredientNameField.clear();
       newMeasurementField.clear();
@@ -457,14 +463,6 @@ public class AppController {
   }
 
   /**
-   * Saves the recipe object to a file with the name from the nameField text field.
-   */
-  // TODO: Delete method
-  protected void handleSaveToFile() {
-    RecipeFileHandler.write(recipe);
-  }
-
-  /**
    * A getter that maskes the newIngredientAmntField visible to other classes is used in tests.
    *
    * @return returns the TextField object
@@ -483,7 +481,7 @@ public class AppController {
   }
 
   /**
-   * TODO: write JavaDoc.
+   * Initialises the view with all the ingredients from the recipie, and sets the recipe title.
    *
    * @param recipe name of the recipie to load
    */
@@ -494,9 +492,6 @@ public class AppController {
     recipeNameEditingField.setFloatMode(FloatMode.BORDER);
     recipeNameEditingField.setId("recipe-name-text-field");
     recipeNameEditingField.setPrefWidth(200);
-
-
-
   }
 
   @FXML
@@ -508,7 +503,6 @@ public class AppController {
       root = loader.load();
       thisStage.setScene(new Scene(root));
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }

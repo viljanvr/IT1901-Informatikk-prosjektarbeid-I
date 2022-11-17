@@ -83,7 +83,6 @@ public class IngredientEditController {
       decreaseButton.setDisable(true);
     }
 
-    // TODO: add logic to set measuring unit
     measuringUnitField.setText(unit);
 
     if (recipe.getRoundUpTo(ingredientName) == 0.0) {

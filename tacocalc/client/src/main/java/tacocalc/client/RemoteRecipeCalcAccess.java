@@ -44,14 +44,16 @@ public class RemoteRecipeCalcAccess implements RecipeCalcAccess {
    */
   @Override
   public List<Recipe> getAllRecipes() {
-    HttpRequest request = HttpRequest.newBuilder(getUri("recipes/"))
-        .header(ACCEPT_HEADER, APPLICATION_JSON).GET().build();
+    URI uri = getUri("recipes/");
+    HttpRequest request =
+        HttpRequest.newBuilder(uri).header(ACCEPT_HEADER, APPLICATION_JSON).GET().build();
     try {
       final HttpResponse<String> response =
           HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
       String responseString = response.body();
-      Gson gson = new Gson();
-      return gson.fromJson(responseString, new TypeToken<List<Recipe>>() {}.getType());
+      sysOutHttpReq(request.method().toString(), uri.toString(),
+          Boolean.toString(response.statusCode() == 200));
+      return new Gson().fromJson(responseString, new TypeToken<List<Recipe>>() {}.getType());
     } catch (IOException | InterruptedException e) {
       throw new RuntimeException(e);
     }
@@ -65,13 +67,16 @@ public class RemoteRecipeCalcAccess implements RecipeCalcAccess {
    */
   @Override
   public boolean addRecipe(Recipe r) {
+    URI uri = getUri("recipes/recipe");
     try {
-      HttpRequest request = HttpRequest.newBuilder(getUri("recipes/recipe"))
-          .header(CONTENT_TYPE_HEADER, APPLICATION_JSON)
-          .POST(BodyPublishers.ofString(new Gson().toJson(r))).build();
+      HttpRequest request =
+          HttpRequest.newBuilder(uri).header(CONTENT_TYPE_HEADER, APPLICATION_JSON)
+              .POST(BodyPublishers.ofString(new Gson().toJson(r))).build();
       final HttpResponse<String> response =
           HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
-      return new Gson().fromJson(response.body(), Boolean.class);
+      Boolean result = new Gson().fromJson(addWhitespace(response.body()), Boolean.class);
+      sysOutHttpReq(request.method().toString(), uri.toString(), result.toString());
+      return result;
     } catch (IOException | InterruptedException e) {
       throw new RuntimeException(e);
     }
@@ -85,12 +90,15 @@ public class RemoteRecipeCalcAccess implements RecipeCalcAccess {
    */
   @Override
   public boolean deleteRecipe(String recipeName) {
+    URI uri = getUri("recipes/" + recipeName);
     try {
-      HttpRequest request = HttpRequest.newBuilder(getUri("recipes/" + recipeName))
+      HttpRequest request = HttpRequest.newBuilder(uri)
           .header(CONTENT_TYPE_HEADER, APPLICATION_JSON).DELETE().build();
       final HttpResponse<String> response =
           HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
-      return new Gson().fromJson(response.body(), Boolean.class);
+      Boolean result = new Gson().fromJson(response.body(), Boolean.class);
+      sysOutHttpReq(request.method().toString(), uri.toString(), result.toString());
+      return result;
     } catch (IOException | InterruptedException e) {
       throw new RuntimeException(e);
     }
@@ -105,13 +113,15 @@ public class RemoteRecipeCalcAccess implements RecipeCalcAccess {
    */
   @Override
   public boolean changeRecipeName(String oldName, String newName) {
+    URI uri = getUri("recipes/" + oldName + "/name?newName=" + newName);
     try {
-      HttpRequest request = HttpRequest
-          .newBuilder(getUri("recipes/" + oldName + "/name?newName=" + newName))
+      HttpRequest request = HttpRequest.newBuilder(uri)
           .header(CONTENT_TYPE_HEADER, APPLICATION_JSON).PUT(BodyPublishers.ofString("")).build();
       final HttpResponse<String> response =
           HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
-      return new Gson().fromJson(response.body(), Boolean.class);
+      Boolean result = new Gson().fromJson(response.body(), Boolean.class);
+      sysOutHttpReq(request.method().toString(), uri.toString(), result.toString());
+      return result;
     } catch (IOException | InterruptedException e) {
       throw new RuntimeException(e);
     }
@@ -126,13 +136,16 @@ public class RemoteRecipeCalcAccess implements RecipeCalcAccess {
    */
   @Override
   public boolean addIngredient(String recipeName, Ingredient ingredient) {
+    URI uri = getUri("recipes/" + recipeName + "/ingredient");
     try {
-      HttpRequest request = HttpRequest.newBuilder(getUri("recipes/" + recipeName + "/ingredient"))
-          .header(CONTENT_TYPE_HEADER, APPLICATION_JSON)
-          .POST(BodyPublishers.ofString(new Gson().toJson(ingredient))).build();
+      HttpRequest request =
+          HttpRequest.newBuilder(uri).header(CONTENT_TYPE_HEADER, APPLICATION_JSON)
+              .POST(BodyPublishers.ofString(new Gson().toJson(ingredient))).build();
       final HttpResponse<String> response =
           HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
-      return new Gson().fromJson(response.body(), Boolean.class);
+      Boolean result = new Gson().fromJson(response.body(), Boolean.class);
+      sysOutHttpReq(request.method().toString(), uri.toString(), result.toString());
+      return result;
     } catch (IOException | InterruptedException e) {
       throw new RuntimeException(e);
     }
@@ -148,13 +161,15 @@ public class RemoteRecipeCalcAccess implements RecipeCalcAccess {
    */
   @Override
   public boolean deleteIngredient(String recipeName, String ingredientName) {
+    URI uri = getUri("recipes/" + recipeName + "/" + ingredientName);
     try {
-      HttpRequest request =
-          HttpRequest.newBuilder(getUri("recipes/" + recipeName + "/" + ingredientName))
-              .header(CONTENT_TYPE_HEADER, APPLICATION_JSON).DELETE().build();
+      HttpRequest request = HttpRequest.newBuilder(uri)
+          .header(CONTENT_TYPE_HEADER, APPLICATION_JSON).DELETE().build();
       final HttpResponse<String> response =
           HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
-      return new Gson().fromJson(response.body(), Boolean.class);
+      Boolean result = new Gson().fromJson(response.body(), Boolean.class);
+      sysOutHttpReq(request.method().toString(), uri.toString(), result.toString());
+      return result;
     } catch (IOException | InterruptedException e) {
       throw new RuntimeException(e);
     }
@@ -270,10 +285,16 @@ public class RemoteRecipeCalcAccess implements RecipeCalcAccess {
           .header(CONTENT_TYPE_HEADER, APPLICATION_JSON).PUT(BodyPublishers.ofString("")).build();
       final HttpResponse<String> response =
           HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
-      return new Gson().fromJson(response.body(), Boolean.class);
+      Boolean result = new Gson().fromJson(response.body(), Boolean.class);
+      sysOutHttpReq(request.method().toString(), uri.toString(), result.toString());
+      return result;
     } catch (IOException | InterruptedException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  private void sysOutHttpReq(String reqType, String uri, String result) {
+    System.out.println(reqType + "-request " + uri + " result was \"" + result + "\"");
   }
 
 
@@ -285,9 +306,17 @@ public class RemoteRecipeCalcAccess implements RecipeCalcAccess {
    */
   private URI getUri(String endpoint) {
     try {
-      return new URI(this.url + ":" + this.port + API_URL + endpoint);
+      return new URI(removeWhitespace(this.url + ":" + this.port + API_URL + endpoint));
     } catch (URISyntaxException e) {
       return null;
     }
+  }
+
+  private static String removeWhitespace(String s) {
+    return s.replace("\s", "%20");
+  }
+
+  private static String addWhitespace(String s) {
+    return s.replace("%20", " ");
   }
 }
