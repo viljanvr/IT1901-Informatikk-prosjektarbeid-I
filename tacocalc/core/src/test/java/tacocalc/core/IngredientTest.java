@@ -24,15 +24,6 @@ public class IngredientTest {
   }
 
   @Test
-  public void testToStringmethods() {
-    Ingredient I1 = new Ingredient("tomat", 4.0, "stk");
-    Assertions.assertEquals("[ ]: 4 stk tomat", I1.toString());
-    Recipe r = new Recipe(I1);
-    r.setBought("tomat", true);
-    Assertions.assertEquals("[x]: 4 stk tomat\n", r.toString());
-  }
-
-  @Test
   public void testIngredientsBought() {
     Ingredient I2 = new Ingredient("ost", 1.0, "stk");
     Assertions.assertFalse(I2.getBought());

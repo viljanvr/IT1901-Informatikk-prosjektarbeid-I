@@ -107,9 +107,9 @@ public class RecipecalcService {
   /**
    * Change the ingredient name.
    *
-   * @param recipeName String
-   * @param oldIngredientName String
-   * @param newIngredientName String
+   * @param recipeName The name of the recipe to be changed
+   * @param oldIngredientName the old name of the ingredient
+   * @param newIngredientName the new name of the ingredient
    * @return True if successful, else False
    */
   protected boolean changeIngredientName(String recipeName, String oldIngredientName,
@@ -122,9 +122,9 @@ public class RecipecalcService {
   /**
    * Set the amount per person.
    *
-   * @param recipeName String
-   * @param ingredientName String
-   * @param perPersonAmount Double
+   * @param recipeName the name of the recipe containing the ingredient
+   * @param ingredientName the name of the ingredient to be changed
+   * @param perPersonAmount the Double of the amount per person
    * @return True if successful, else False
    */
   protected boolean setPerPersonAmount(String recipeName, String ingredientName,
@@ -138,9 +138,9 @@ public class RecipecalcService {
   /**
    * Set the round up amount.
    *
-   * @param recipeName String
-   * @param ingredientName String
-   * @param roundUpAmount Double
+   * @param recipeName the recipe that contains the ingredient
+   * @param ingredientName the name of the Ingredient to be changed
+   * @param roundUpAmount Double to be that is to be rounded to
    * @return True if successful, else False
    */
   protected boolean setRoundUpAmount(String recipeName, String ingredientName,
@@ -153,9 +153,9 @@ public class RecipecalcService {
   /**
    * Set the measuring unit.
    *
-   * @param measuringUnit String
-   * @param recipeName String
-   * @param ingredientName String
+   * @param measuringUnit String of the unit to be set
+   * @param recipeName name of the Recipe that contains the ingredient
+   * @param ingredientName name of the ingredient to be changed
    * @return True if successful, else False
    */
   protected boolean setUnit(String measuringUnit, String recipeName, String ingredientName) {
@@ -168,8 +168,8 @@ public class RecipecalcService {
    * Set if ingredient is bought or not.
    *
    * @param bought Boolean
-   * @param recipeName String
-   * @param ingredientName String
+   * @param recipeName name of the recipe containing the ingredient
+   * @param ingredientName the ingredient to be changed
    * @return True if successful, else False
    */
   protected boolean setBought(boolean bought, String recipeName, String ingredientName) {

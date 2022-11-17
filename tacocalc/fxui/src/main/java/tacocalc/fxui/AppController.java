@@ -123,15 +123,9 @@ public class AppController {
    */
   public void initialize() {
     // Creates a copy, so that internal recipe object isn't mutable from the outside
-    List<Ingredient> ingredientList = RecipeBookController.transferRecipe.getList();
-    if (ingredientList.isEmpty()) {
-      this.recipe = new Recipe(RecipeBookController.transferRecipe.getName());
-    } else {
-      this.recipe =
-          new Recipe(RecipeBookController.transferRecipe.getName(), (Ingredient[]) ingredientList
-              .toArray(new Ingredient[RecipeBookController.transferRecipe.getList().size()]));
-    }
-
+    this.recipe = new Recipe(RecipeBookController.transferRecipe.getName(),
+        (Ingredient[]) RecipeBookController.transferRecipe.getList()
+            .toArray(new Ingredient[RecipeBookController.transferRecipe.getList().size()]));
     this.recipe.setNumberOfPeople(RecipeBookController.transferRecipe.getNumberOfPeople());
 
     initIngredientEditOverlay();
