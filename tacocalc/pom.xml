@@ -135,5 +135,6 @@
         <module>fxui</module>
         <module>data</module>
         <module>restapi</module>
+        <module>client</module>
     </modules>
 </project>

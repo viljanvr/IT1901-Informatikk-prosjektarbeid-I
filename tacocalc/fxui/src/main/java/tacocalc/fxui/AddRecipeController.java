@@ -5,8 +5,10 @@ import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import tacocalc.data.RecipeFileHandler;
 
 /**
  * Controller for overlay appearing when pressing the "Create new recipe"-button from the recipe
@@ -41,11 +43,18 @@ public class AddRecipeController {
     this.recipeBookController = recipeBookController;
   }
 
+  /**
+   * Initializes the application.
+   */
+  public void initialize() {
+    recipeNameField.addEventFilter(KeyEvent.ANY, e -> {
+      handleRecipeNameChange();
+    });
+  }
+
   @FXML
   private void handleCreate() {
     recipeBookController.changeToScene(recipeNameField.getText());
-    // TODO: Create recipe from template
-    // TODO: Validate input
   }
 
   @FXML
@@ -69,6 +78,22 @@ public class AddRecipeController {
   protected MFXCheckbox getCheckbox() {
     MFXCheckbox duplicate = templateCheckbox;
     return duplicate;
+  }
+
+  protected void handleRecipeNameChange() {
+    if (RecipeFileHandler.validFileName(recipeNameField.getText())) {
+      // If input is valid
+      createButton.setDisable(false);
+      errorMessage.setVisible(false);
+    } else if (recipeNameField.getText().isEmpty()) {
+      // If input is empty
+      createButton.setDisable(true);
+      errorMessage.setVisible(false);
+    } else {
+      // If input contains invalid characters
+      createButton.setDisable(true);
+      errorMessage.setVisible(true);
+    }
   }
 
 }

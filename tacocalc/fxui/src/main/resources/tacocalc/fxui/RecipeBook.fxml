@@ -15,20 +15,20 @@
    <children>
       <VBox fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@Styling.css">
          <children>
-            <BorderPane prefHeight="100.0" style="-fx-background-color: #1F1F1F; -fx-background-radius: 0 0 10 10;">
-               <left>
-                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Dine oppskrifter" textOrigin="CENTER" wrappingWidth="713.421875" BorderPane.alignment="CENTER">
+            <BorderPane maxHeight="-Infinity" prefHeight="90.0" style="-fx-background-color: #1F1F1F; -fx-background-radius: 0 0 10 10;">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+               <center>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Your Recipes" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="539.421875" BorderPane.alignment="CENTER">
                      <font>
-                        <Font name="System Bold" size="50.0" />
+                        <Font name="System Bold" size="40.0" />
                      </font>
                      <BorderPane.margin>
                         <Insets />
                      </BorderPane.margin>
                   </Text>
-               </left>
-               <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </padding>
+               </center>
             </BorderPane>
             <VBox alignment="TOP_CENTER" prefHeight="500.0" prefWidth="900.0">
                <children>
