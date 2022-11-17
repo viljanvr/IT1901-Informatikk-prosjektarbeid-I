@@ -1,13 +1,13 @@
 #Ignore maven build folder
-tacocalc/fxui/target
-tacocalc/core/target
-tacocalc/target
-tacocalc/.vscode
-tacocalc/data/src/main/resources
-tacocalc/core/src/main/resources
-tacocalc/data/target
-tacocalc/restapi/target
-tacocalc/client/target
+recipecalc/fxui/target
+recipecalc/core/target
+recipecalc/target
+recipecalc/.vscode
+recipecalc/data/src/main/resources
+recipecalc/core/src/main/resources
+recipecalc/data/target
+recipecalc/restapi/target
+recipecalc/client/target
 
 #Ignore macOS DS_store files
 .DS_store

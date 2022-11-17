@@ -1,30 +1,30 @@
 stages:
-    - Java build
-    - Java test
+  - Java build
+  - Java test
 
 Build:
-    image: maven:3-openjdk-16
-    stage: Java build
-    script:
-        - cd tacocalc
-        - mvn compile
-    retry: 1
+  image: maven:3-openjdk-16
+  stage: Java build
+  script:
+    - cd recipecalc
+    - mvn compile
+  retry: 1
 
 Spotbugs:
-    image: maven:3-openjdk-16
-    stage: Java test
-    needs: []
-    script:
-        - cd tacocalc
-        - mvn install -DskipTests -DskipUiTests -DfailIfNoTests=false
-        - mvn spotbugs:check -DskipUiTests
-    retry: 2
+  image: maven:3-openjdk-16
+  stage: Java test
+  needs: []
+  script:
+    - cd recipecalc
+    - mvn install -DskipTests -DskipUiTests -DfailIfNoTests=false
+    - mvn spotbugs:check -DskipUiTests
+  retry: 2
 
 Checkstyle:
-    image: maven:3-openjdk-16
-    stage: Java test
-    needs: []
-    script:
-        - cd tacocalc
-        - mvn checkstyle:check
-    retry: 2
+  image: maven:3-openjdk-16
+  stage: Java test
+  needs: []
+  script:
+    - cd recipecalc
+    - mvn checkstyle:check
+  retry: 2

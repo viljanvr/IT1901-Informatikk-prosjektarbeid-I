@@ -1,9 +1,8 @@
 tasks:
   - init: sdk use java 16.0.1.hs-adpt
-    command: cd tacocalc
+    command: cd recipecalc
 
 image:
   file: .gitpod.Dockerfile
 ports:
-- port: 6080
-
+  - port: 6080
