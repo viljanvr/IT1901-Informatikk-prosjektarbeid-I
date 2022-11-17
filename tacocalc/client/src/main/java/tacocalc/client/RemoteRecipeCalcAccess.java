@@ -80,7 +80,7 @@ public class RemoteRecipeCalcAccess implements RecipeCalcAccess {
   /**
    * Delete recipe.
    *
-   * @param r Recipe to be deleted.
+   * @param recipeName Recipe to be deleted.
    * @return True if successful, else false.
    */
   @Override
@@ -99,7 +99,7 @@ public class RemoteRecipeCalcAccess implements RecipeCalcAccess {
   /**
    * Sends a HTTP Put request to rename a Recipe.
    *
-   * @param r Recipe to be renamed
+   * @param oldName Recipe to be renamed
    * @param newName New name of recipe
    * @return True if successful, else false.
    */
@@ -142,7 +142,7 @@ public class RemoteRecipeCalcAccess implements RecipeCalcAccess {
   /**
    * Delete Ingredient.
    *
-   * @param recipe Recipe which contains the ingredient
+   * @param recipeName Recipe which contains the ingredient
    * @param ingredientName String of the ingredient to be deleted
    * @return True if successful, else false.
    */
@@ -165,7 +165,7 @@ public class RemoteRecipeCalcAccess implements RecipeCalcAccess {
    * Update the properties of a given ingredient. Delegates to other methods, that each sends their
    * own HTTP request for separate properties.
    *
-   * @param recipe The recipe in which the ingredient is located
+   * @param recipeName The recipe in which the ingredient is located
    * @param ingredientName The ingredient to be updated
    * @param newIngredientName New name
    * @param perPersonAmount New amount per person
