@@ -79,13 +79,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- <dependency>
-			<groupId>org.testfx</groupId>
-			<artifactId>testfx-core</artifactId>
-			<version>4.0.16-alpha</version>
-			<scope>test</scope>
-		</dependency> -->
-
+        <!-- MaterialFX for Material style JavaFX components -->
         <dependency>
             <groupId>io.github.palexdev</groupId>
             <artifactId>materialfx</artifactId>
