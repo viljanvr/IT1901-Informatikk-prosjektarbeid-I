@@ -2,12 +2,12 @@
 
 <p>
     <figure align="center">
-        <img src="resources/ingredientMenu.png" alt="FORSIDE" width="600"/>
+        <img src="resources/OversiktRecipes.png" alt="FORSIDE" width="600"/>
         <figcaption><i>Skjermbilde fra applikasjonen.</i></figcaption>
     </figure>
 </p>
 
-**Hello I am aspiring technology professional.**
+**I den siste iterasjonen har vi valgt å fortsette med JavaFX, og dermed utvidet funksjonaliteten. Vi har fokusert på å ferdigstille målene vi satte fra starten av, med fokus på skalering og lagring. Denne iterasjonen har implementert en REST API, som en klient kan bruke til å sende forespørsler både lokalt og remote. Vi har brukt denne funksjonaliteten til å legge til standard oppskrifter en bruker kan hente, med mulighet for å utvide. I tillegg kan man nå installere en egen `executable`, som du finner en fremgangsmåte [her](../../tacocalc/README.md).**
 
 ## Struktur
 
@@ -29,7 +29,7 @@ Appen består av fem moduler, der hver samhandler med hverandre i henhold til pa
     </figure>
 </p>
 
-Vi har lagt beskrivelsen av strukturen inne i de forskjellige modulene i de egne README.md filene. Disse finner du her:
+Vi har lagt beskrivelsen av strukture en inne i de forskjellige modulene i de egne README.md filene. Disse finner du her:
 
 - [client](../../tacocalc/client/README.md)
 - [core](../../tacocalc/core/README.md)
@@ -85,7 +85,7 @@ Følgende _features_ er implementert i denne versjonen av applikasjonen:
 
 ## Arbeidsflyt
 
-I likhet med tidligere iterasjoner har vi lagd lokale som vi har delt opp i `feature/` og `bug/`. Nytt under denne iterasjonen er at vi i større grad har fokusert på mer omfattende commit-meldinger, mer beskrivende merge-requests og det å bruke kommentarer på disse. Dette førte for eksempel til at vi oppdaget feil i en merge request, da en annen reviewer fant en feil som den første revieweren ikke gjorde.
+I likhet med tidligere iterasjoner har vi lagd lokale som vi har delt opp i `feature/`, `bug/` og `fix`. Nytt under denne iterasjonen er at vi i større grad har fokusert på mer omfattende commit-meldinger, mer beskrivende merge-requests og det å bruke kommentarer på disse. Dette førte for eksempel til at vi oppdaget feil i en merge request, da en annen reviewer fant en feil som den første revieweren ikke gjorde.
 
 Vi har fortsatt med vår relativt løse arbeidsstruktur, med god bruk av LiveShare. `master`-branchen er som alltid _off limits_, og vi har hele tiden hatt som mål at `master` alltid skal kunne kjøre, noe implementasjonen av `pipelines` har sørget for at skjer. Vi begynte også å sette som regel at issues ikke skulle være noe mer generelle enn at en arbeider kunne åpne den og med en gang skjønne hvor i prosjektet problemet eksisterte. Slik ble samarbeidet forbedret, da hvem som helst kunne åpne en issue uten at en annen måtte spørre hva det var snakk om. Det ble også lettere for alle å følge med på hva som ble gjort av hvem når utenfor møtetider.
 
@@ -93,7 +93,7 @@ Når det gjelder møter har vi i større grad hatt digitale møter, med stor suk
 
 ## Tester
 
-Vi har laget tester til appen som har som formål å oppdage eventuelle feil i applikasjonen. Testene er laget for å kjøre med maven, og vi bruker jacoco for å generere en testrapport. Guide for hvordan man kan skrive ut en test-rapport finner du [her](/tacocalc/README.md#kjøring-av-tester). I tillegg har vi i denne iterasjonen begynt å benytte oss av en testrobot for brukergrensesnittet. Dette gjør at en lettere kan se hva og hvor testene eventuelt feiler, og enklere følge testene mens de utføres.
+Vi har laget tester til appen som har som formål å oppdage eventuelle feil i applikasjonen. Testene er laget for å kjøre med maven, og vi bruker jacoco for å generere en testrapport. Guide for hvordan man kan skrive ut en test-rapport finner du [her](/tacocalc/README.md#kjøring-av-tester). I tillegg har vi i denne iterasjonen begynt å benytte oss av en testrobot for brukergrensesnittet. Dette gjør at en lettere kan se hva og hvor testene eventuelt feiler, og enklere følge testene mens de utføres. Nytt i denne iterasjonen er at vi har hatt fokus på å splitte testene for å mer oversiktlig teste individuelle klasser, istedenfor hele moduler.
 
 ## Brukerhistorier
 

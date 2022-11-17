@@ -6,14 +6,14 @@ Nå som jeg har blitt en stor influencer (se [release_2](docs\release_2\brukerhi
 
 ### MÅ SE:
 
-- Egne og andres recipes
-- En oversikt over flere recipes, inkludert egne
+- Egne og andres oppskrifter
+- En oversikt over flere oppskrifter, inkludert egne
 
 ### MÅ GJØRE:
 
-- Hente recipes fra en database
-- Redigere og laste opp recipesene til denne databasen
-- Legge til / slette recipes slik at det kan oppdateres
+- Hente oppskrifter fra en database
+- Redigere og laste opp oppskrifterene til denne databasen
+- Legge til / slette oppskrifter slik at det kan oppdateres
 
 ## Familefar skal ha tacofredag (`bruker-1`) (han er blitt gammel)
 
