@@ -19,9 +19,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import tacocalc.client.RemoteRecipeCalcAccess;
 import tacocalc.core.Recipe;
-// import tacocalc.core.RecipeBook;
-import tacocalc.data.RecipeFileHandler;
 
 /**
  * Class that controlls the scene where the user picks the recipe.
@@ -51,7 +50,7 @@ public class RecipeBookController {
 
   List<Recipe> recipeList;
 
-  // private RemoteRecipeCalcAccess rrca = new RemoteRecipeCalcAccess("http://localhost", 8080);
+  private RemoteRecipeCalcAccess rrca = new RemoteRecipeCalcAccess("http://localhost", 8080);
 
   public void initialize() {
     getRecipesFromFile();
@@ -63,9 +62,7 @@ public class RecipeBookController {
    *
    */
   private void getRecipesFromFile() {
-    // TODO:
-    // recipeList = rrca.getAllRecipes();
-    recipeList = RecipeFileHandler.getAllRecipies();
+    recipeList = rrca.getAllRecipes();
     recipeList.stream().forEach(r -> addItemToView(r));
 
   }
