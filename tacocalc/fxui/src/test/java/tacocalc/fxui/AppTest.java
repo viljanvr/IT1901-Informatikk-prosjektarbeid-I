@@ -1,6 +1,7 @@
 package tacocalc.fxui;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.text.Text;
 import java.io.File;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,10 @@ public abstract class AppTest extends ApplicationTest {
     return ((Button) controller.getIngredientViewStream().skip(3 * index + 2).findAny().get());
   }
 
+  public CheckBox getIngredientCheckBox(int index, AppController controller) {
+    return ((CheckBox) controller.getIngredientViewStream().skip(3 * index + 0).findAny().get());
+  }
+
   public void createTestFile() {
     RecipeFileHandler.write(new Recipe("testFile", new Ingredient("tomat", 2.0, "default"),
         new Ingredient("avocado", 1.0, "default")));
@@ -42,4 +47,5 @@ public abstract class AppTest extends ApplicationTest {
     testRecipe.delete();
     RecipeFileHandler.setTestMode(true);
   }
+
 }
