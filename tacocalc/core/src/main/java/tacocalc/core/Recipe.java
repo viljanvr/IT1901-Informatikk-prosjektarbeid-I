@@ -288,10 +288,10 @@ public class Recipe {
     StringBuilder sb = new StringBuilder();
     String s = "";
     sb.append("Name = ").append(getName()).append("\nNumber of People = ")
-        .append(getNumberOfPeople()).append("\n").toString();
+        .append(getNumberOfPeople()).append("\n");
     for (Ingredient ingredient : list) {
-      s = sb.append(s).append(ingredient.toString()).append("\n").toString();
+      sb.append(s).append(ingredient.toString()).append("\n");
     }
-    return s;
+    return sb.append("\n").toString();
   }
 }

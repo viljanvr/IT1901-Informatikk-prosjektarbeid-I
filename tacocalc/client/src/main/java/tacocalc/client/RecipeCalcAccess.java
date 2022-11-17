@@ -1,5 +1,6 @@
 package tacocalc.client;
 
+import java.util.HashMap;
 import java.util.List;
 import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
@@ -9,18 +10,23 @@ import tacocalc.core.Recipe;
  */
 public interface RecipeCalcAccess {
 
-  public void changeRecipeName(Recipe r, String name);
-
-  public void setBought(Recipe recipe, String ingredientName, Boolean bought);
-
-  public void deleteIngredient(Recipe recipe, String ingredientName);
-
-  public void updateIngredient(Recipe recipe, String ingredient, String newIngredientName,
-      Double perPersonAmount, Double roundUpTo, String measuringUnit);
-
-  public void addIngredient(Recipe recipe, Ingredient ingredient);
-
   public List<Recipe> getAllRecipes();
 
-  public void addRecipe(Recipe r);
+  public boolean addRecipe(Recipe recipe);
+
+  public boolean deleteRecipe(String recipeName);
+
+  public boolean changeRecipeName(String oldRecipeName, String newRecipeName);
+
+  public boolean addIngredient(String recipeName, Ingredient ingredient);
+
+  public boolean deleteIngredient(String recipeName, String ingredientName);
+
+  public boolean setBought(String recipeName, String ingredientName, Boolean bought);
+
+  public HashMap<String, Boolean> updateIngredient(String recipeName, String oldIngredientName,
+      String newIngredientName, Double perPersonAmount, Double roundUpTo, String measuringUnit);
+
+
+
 }

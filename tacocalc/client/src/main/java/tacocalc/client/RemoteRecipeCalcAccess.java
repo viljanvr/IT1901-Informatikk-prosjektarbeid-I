@@ -9,6 +9,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
 import java.util.List;
 import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
@@ -24,9 +25,9 @@ public class RemoteRecipeCalcAccess implements RecipeCalcAccess {
 
   private final int port;
 
-  private static final String APPLICATION_JSON = "application/json";
+  private static final String API_URL = "/api/v1/";
 
-  private static final String APPLICATION_FORM_URLENCODED = "application/x-www-form-urlencoded";
+  private static final String APPLICATION_JSON = "application/json";
 
   private static final String ACCEPT_HEADER = "Accept";
 
@@ -39,106 +40,16 @@ public class RemoteRecipeCalcAccess implements RecipeCalcAccess {
   }
 
   /**
-   * Returns a URL to the endpoint in the REST API.
-   *
-   * @param endpoint Location in the API
-   * @return URL to the endpoint
-   */
-  private URI getUri(String endpoint) {
-    try {
-      return new URI(this.url + ":" + this.port + endpoint);
-    } catch (URISyntaxException e) {
-      return null;
-    }
-
-  }
-
-  @Override
-  public void changeRecipeName(Recipe r, String name) {
-    // TODO Auto-generated method stub
-
-  }
-
-
-
-  @Override
-  public void setBought(Recipe recipe, String ingredientName, Boolean bought) {
-    try {
-      HttpRequest request = HttpRequest
-          .newBuilder(getUri(
-              "/api/v1/recipes/" + recipe.getName() + "/" + ingredientName + "?bought=" + bought))
-          .header(ACCEPT_HEADER, APPLICATION_JSON).header(CONTENT_TYPE_HEADER, APPLICATION_JSON)
-          .PUT(BodyPublishers.ofString("")).build();
-      final HttpResponse<String> response =
-          HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
-      String responseString = response.body();
-      System.out.println(responseString);
-    } catch (IOException | InterruptedException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  @Override
-  public void deleteIngredient(Recipe recipe, String ingredientName) {
-    // TODO Auto-generated method stub
-
-  }
-
-
-
-  @Override
-  public void updateIngredient(Recipe recipe, String ingredient, String newIngredientName,
-      Double perPersonAmount, Double roundUpTo, String measuringUnit) {
-    // try {
-    // HttpRequest request = HttpRequest.newBuilder(getUri("/api/v1/recipes/add"))
-    // .header(CONTENT_TYPE_HEADER, APPLICATION_JSON)
-    // .POST(BodyPublishers.ofString(new Gson().toJson(r))).build();
-    // final HttpResponse<String> response =
-    // HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
-    // String responseString = response.body();
-    // System.out.println(responseString);
-    // } catch (IOException | InterruptedException e) {
-    // throw new RuntimeException(e);
-    // }
-  }
-
-
-
-  @Override
-  public void addIngredient(Recipe recipe, Ingredient ingredient) {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public void addRecipe(Recipe r) {
-    try {
-      HttpRequest request = HttpRequest.newBuilder(getUri("/api/v1/recipes/add"))
-          .header(CONTENT_TYPE_HEADER, APPLICATION_JSON)
-          .POST(BodyPublishers.ofString(new Gson().toJson(r))).build();
-      final HttpResponse<String> response =
-          HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
-      String responseString = response.body();
-      System.out.println(responseString);
-    } catch (IOException | InterruptedException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  /**
    * Sends HTTP Request to get a list of all recipes in the API.a
    */
   @Override
   public List<Recipe> getAllRecipes() {
-    System.out.println("getTodoList(String name) :" + getUri("/api/v1/recipes/").toString());
-    HttpRequest request = HttpRequest.newBuilder(getUri("/api/v1/recipes/"))
+    HttpRequest request = HttpRequest.newBuilder(getUri("recipes/"))
         .header(ACCEPT_HEADER, APPLICATION_JSON).GET().build();
     try {
       final HttpResponse<String> response =
           HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
       String responseString = response.body();
-      System.out.println("Response: " + responseString);
-
       Gson gson = new Gson();
       return gson.fromJson(responseString, new TypeToken<List<Recipe>>() {}.getType());
     } catch (IOException | InterruptedException e) {
@@ -147,16 +58,236 @@ public class RemoteRecipeCalcAccess implements RecipeCalcAccess {
   }
 
   /**
-   * Main method for testing.
+   * Sends a HTTP Post request to add a new recipe.
+   *
+   * @param r The recipe to be added
+   * @return True if successful, else false.
    */
-  public static void main(String[] args) {
-    RemoteRecipeCalcAccess rrca = new RemoteRecipeCalcAccess("http://localhost", 8080);
-    Recipe r = new Recipe("detteerentest", new Ingredient("Ost", 100.0, "g"));
-    rrca.addRecipe(r);
-    List<Recipe> list = rrca.getAllRecipes();
-    System.out.println(list.toString());
-    rrca.setBought(r, "Ost", true);
-    list = rrca.getAllRecipes();
-    System.out.println(list.toString());
+  @Override
+  public boolean addRecipe(Recipe r) {
+    try {
+      HttpRequest request = HttpRequest.newBuilder(getUri("recipes/recipe"))
+          .header(CONTENT_TYPE_HEADER, APPLICATION_JSON)
+          .POST(BodyPublishers.ofString(new Gson().toJson(r))).build();
+      final HttpResponse<String> response =
+          HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
+      return new Gson().fromJson(response.body(), Boolean.class);
+    } catch (IOException | InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * Delete recipe.
+   *
+   * @param r Recipe to be deleted.
+   * @return True if successful, else false.
+   */
+  @Override
+  public boolean deleteRecipe(String recipeName) {
+    try {
+      HttpRequest request = HttpRequest.newBuilder(getUri("recipes/" + recipeName))
+          .header(CONTENT_TYPE_HEADER, APPLICATION_JSON).DELETE().build();
+      final HttpResponse<String> response =
+          HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
+      return new Gson().fromJson(response.body(), Boolean.class);
+    } catch (IOException | InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * Sends a HTTP Put request to rename a Recipe.
+   *
+   * @param r Recipe to be renamed
+   * @param newName New name of recipe
+   * @return True if successful, else false.
+   */
+  @Override
+  public boolean changeRecipeName(String oldName, String newName) {
+    try {
+      HttpRequest request = HttpRequest
+          .newBuilder(getUri("recipes/" + oldName + "/name?newName=" + newName))
+          .header(CONTENT_TYPE_HEADER, APPLICATION_JSON).PUT(BodyPublishers.ofString("")).build();
+      final HttpResponse<String> response =
+          HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
+      return new Gson().fromJson(response.body(), Boolean.class);
+    } catch (IOException | InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * Sends a HTTP request to add an ingredient to a recipe.
+   *
+   * @param recipeName The name of the recipe to add the ingredient to
+   * @param ingredient The ingredient to add
+   * @return True if successful, else false.
+   */
+  @Override
+  public boolean addIngredient(String recipeName, Ingredient ingredient) {
+    try {
+      HttpRequest request = HttpRequest.newBuilder(getUri("recipes/" + recipeName + "/ingredient"))
+          .header(CONTENT_TYPE_HEADER, APPLICATION_JSON)
+          .POST(BodyPublishers.ofString(new Gson().toJson(ingredient))).build();
+      final HttpResponse<String> response =
+          HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
+      return new Gson().fromJson(response.body(), Boolean.class);
+    } catch (IOException | InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+
+  }
+
+  /**
+   * Delete Ingredient.
+   *
+   * @param recipe Recipe which contains the ingredient
+   * @param ingredientName String of the ingredient to be deleted
+   * @return True if successful, else false.
+   */
+  @Override
+  public boolean deleteIngredient(String recipeName, String ingredientName) {
+    try {
+      HttpRequest request =
+          HttpRequest.newBuilder(getUri("recipes/" + recipeName + "/" + ingredientName))
+              .header(CONTENT_TYPE_HEADER, APPLICATION_JSON).DELETE().build();
+      final HttpResponse<String> response =
+          HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
+      return new Gson().fromJson(response.body(), Boolean.class);
+    } catch (IOException | InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+
+  /**
+   * Update the properties of a given ingredient. Delegates to other methods, that each sends their
+   * own HTTP request for separate properties.
+   *
+   * @param recipe The recipe in which the ingredient is located
+   * @param ingredientName The ingredient to be updated
+   * @param newIngredientName New name
+   * @param perPersonAmount New amount per person
+   * @param roundUpTo New round up to amount
+   * @param measuringUnit New measuring unit
+   * @return True if successful, else false.
+   */
+  @Override
+  public HashMap<String, Boolean> updateIngredient(String recipeName, String ingredientName,
+      String newIngredientName, Double perPersonAmount, Double roundUpTo, String measuringUnit) {
+    HashMap<String, Boolean> results = new HashMap<>();
+    results.put("setPerPersonAmount",
+        setIngredientPerPersonAmount(recipeName, ingredientName, perPersonAmount));
+    results.put("setRoundUpTo", setRoundUpTo(recipeName, ingredientName, roundUpTo));
+    results.put("setMeasuringUnit", setMeasuringUnit(recipeName, ingredientName, measuringUnit));
+    results.put("changeIngredientName",
+        changeIngredientName(recipeName, ingredientName, newIngredientName));
+    return results;
+  }
+
+  /**
+   * Update the name of a given ingredient.
+   *
+   * @param recipeName Name of the recipe in which the ingredient is located
+   * @param ingredientName The ingredient to be updated
+   * @param newIngredientName The new value to be set
+   * @return True if successful, else false.
+   */
+  private boolean changeIngredientName(String recipeName, String ingredientName,
+      String newIngredientName) {
+    URI uri = getUri(
+        "recipes/" + recipeName + "/" + ingredientName + "/name?newName=" + newIngredientName);
+    return ingredientPropertyPutRequest(uri);
+  }
+
+  /**
+   * Update the per person amount property of a given ingredient.
+   *
+   * @param recipeName Name of the recipe in which the ingredient is located
+   * @param ingredientName The ingredient to be updated
+   * @param perPersonAmount The new value to be set
+   * @return True if successful, else false.
+   */
+  private boolean setIngredientPerPersonAmount(String recipeName, String ingredientName,
+      Double perPersonAmount) {
+    URI uri = getUri(
+        "recipes/" + recipeName + "/" + ingredientName + "/amount?amount=" + perPersonAmount);
+    return ingredientPropertyPutRequest(uri);
+  }
+
+  /**
+   * Update the round up amount property of a given ingredient.
+   *
+   * @param recipeName Name of the recipe
+   * @param ingredientName The ingredient to be updated
+   * @param roundUpTo The new value to be set
+   * @return True if successful, else false.
+   */
+  private boolean setRoundUpTo(String recipeName, String ingredientName, Double roundUpTo) {
+    URI uri =
+        getUri("recipes/" + recipeName + "/" + ingredientName + "/roundUp?roundUp=" + roundUpTo);
+    return ingredientPropertyPutRequest(uri);
+  }
+
+  /**
+   * Update the measuring unit property of a given ingredient.
+   *
+   * @param recipeName Name of the recipe
+   * @param ingredientName The ingredient to be updated
+   * @param measuringUnit The new value to be set
+   * @return True if successful, else false.
+   */
+  private boolean setMeasuringUnit(String recipeName, String ingredientName, String measuringUnit) {
+    URI uri = getUri(
+        "recipes/" + recipeName + "/" + ingredientName + "/unit?measuringUnit=" + measuringUnit);
+    return ingredientPropertyPutRequest(uri);
+  }
+
+  /**
+   * Update the bought property of a given ingredient.
+   *
+   * @param recipeName The name of the recipe in which the ingredient is located
+   * @param ingredientName The ingredient to be updated
+   * @param bought The new value to be set
+   * @return True if successful, else false.
+   */
+  @Override
+  public boolean setBought(String recipeName, String ingredientName, Boolean bought) {
+    URI uri = getUri("recipes/" + recipeName + "/" + ingredientName + "/bought?bought=" + bought);
+    return ingredientPropertyPutRequest(uri);
+  }
+
+  /**
+   * Sends HTTP Put request to update ingredient properties.
+   *
+   * @param uri The uri with the properties to be updated
+   * @return True if successful, else false.
+   */
+  private boolean ingredientPropertyPutRequest(URI uri) {
+    try {
+      HttpRequest request = HttpRequest.newBuilder(uri)
+          .header(CONTENT_TYPE_HEADER, APPLICATION_JSON).PUT(BodyPublishers.ofString("")).build();
+      final HttpResponse<String> response =
+          HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
+      return new Gson().fromJson(response.body(), Boolean.class);
+    } catch (IOException | InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+
+  /**
+   * Returns a URL to the endpoint of the REST API.
+   *
+   * @param endpoint Location of the server
+   * @return URL to the endpoint
+   */
+  private URI getUri(String endpoint) {
+    try {
+      return new URI(this.url + ":" + this.port + API_URL + endpoint);
+    } catch (URISyntaxException e) {
+      return null;
+    }
   }
 }
