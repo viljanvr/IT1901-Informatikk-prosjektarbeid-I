@@ -58,6 +58,21 @@ public class IngredientEditControllerTest extends AppTest {
     clickOn(getIngredientEditButton(0, this.controller));
     clickOn("#deleteIngredientButton");
     Assertions.assertEquals(0, controller.getIngredientViewStream().count());
-    // TODO: Maybe test checkbox
+  }
+
+  @Test
+
+  @DisplayName("Test-input-validation")
+  public void testValidation() {
+    clickOn("#editButton");
+    addIngredient("1", "rømme", "dl");
+    clickOn(getIngredientEditButton(0, this.controller));
+    Assertions.assertFalse(controller.getIngredientEditController().getSaveButton().isDisable());
+    clickOn("#quantityField").eraseText(3).write("invalid");
+    Assertions.assertTrue(controller.getIngredientEditController().getSaveButton().isDisable());
+    clickOn("#roundAmountField").eraseText(3).write("invalid");
+    Assertions.assertTrue(controller.getIngredientEditController().getSaveButton().isDisable());
+    clickOn("#quantityField").eraseText(7).write("3.5");
+    Assertions.assertTrue(controller.getIngredientEditController().getSaveButton().isDisable());
   }
 }

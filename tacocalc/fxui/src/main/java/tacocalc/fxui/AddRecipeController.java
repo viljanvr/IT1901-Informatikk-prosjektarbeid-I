@@ -5,6 +5,7 @@ import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -75,11 +76,6 @@ public class AddRecipeController {
 
   }
 
-  protected MFXCheckbox getCheckbox() {
-    MFXCheckbox duplicate = templateCheckbox;
-    return duplicate;
-  }
-
   protected void handleRecipeNameChange() {
     if (RecipeFileHandler.validFileName(recipeNameField.getText())) {
       // If input is valid
@@ -94,6 +90,15 @@ public class AddRecipeController {
       createButton.setDisable(true);
       errorMessage.setVisible(true);
     }
+  }
+
+  protected MFXCheckbox getCheckbox() {
+    MFXCheckbox duplicate = templateCheckbox;
+    return duplicate;
+  }
+
+  protected Button getCreateButton() {
+    return this.createButton;
   }
 
 }

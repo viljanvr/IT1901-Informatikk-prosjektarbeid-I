@@ -1,11 +1,6 @@
 package tacocalc.core;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -16,12 +11,12 @@ public class RecipeTest {
     Ingredient I2 = new Ingredient("ost", 1.0, "stk");
     Recipe r = new Recipe(I1, I2);
     r.setNumberOfPeople(1);
-    assertEquals(1, r.getIngredientPerPersonAmount("ost"));
-    assertEquals(3, r.getIngredientPerPersonAmount("agurk"));
+    Assertions.assertEquals(1, r.getIngredientPerPersonAmount("ost"));
+    Assertions.assertEquals(3, r.getIngredientPerPersonAmount("agurk"));
     r.setIngredientPerPersonAmount("ost", 2.0);
     r.setIngredientPerPersonAmount("agurk", 2.0);
-    assertEquals(2, r.getIngredientPerPersonAmount("ost"));
-    assertEquals(2, r.getIngredientPerPersonAmount("agurk"));
+    Assertions.assertEquals(2, r.getIngredientPerPersonAmount("ost"));
+    Assertions.assertEquals(2, r.getIngredientPerPersonAmount("agurk"));
   }
 
   @Test
@@ -29,7 +24,7 @@ public class RecipeTest {
     Ingredient I1 = new Ingredient("agurk", 3.0, "stk");
     Recipe r = new Recipe(I1);
     r.setBought("agurk", true);
-    assertTrue(r.getBought("agurk"));
+    Assertions.assertTrue(r.getBought("agurk"));
   }
 
   @Test
@@ -37,14 +32,14 @@ public class RecipeTest {
     Recipe r = new Recipe();
     r.addItem("ost", 1.0, "kg");
     r.setBought("ost", true);
-    assertTrue(r.getBought("ost"));
+    Assertions.assertTrue(r.getBought("ost"));
     // Adding the same ingredient again
     r.addItem("ost", 3.0, "kg");
-    assertFalse(r.getBought("ost"));
-    assertEquals(3, r.getIngredientPerPersonAmount("ost"));
+    Assertions.assertFalse(r.getBought("ost"));
+    Assertions.assertEquals(3, r.getIngredientPerPersonAmount("ost"));
     r.deleteItem("ost");
-    assertNull(r.getIngredient("ost"));
-    assertThrows(IllegalStateException.class, () -> {
+    Assertions.assertNull(r.getIngredient("ost"));
+    Assertions.assertThrows(IllegalStateException.class, () -> {
       r.deleteItem("ost");
     });
   }
@@ -55,11 +50,11 @@ public class RecipeTest {
   public void testChangeName() {
     Recipe r = new Recipe();
     r.addItem("ost", 0.5, "stk");
-    assertEquals("[ ]: 0.5 stk ost", r.getIngredient("ost").toString());
+    Assertions.assertEquals("[ ]: 0.5 stk ost", r.getIngredient("ost").toString());
     r.changeIngredientName("ost", "avokado");
     // Avokado should now be in reipe, and ost not
-    assertEquals("[ ]: 0.5 stk avokado", r.getIngredient("avokado").toString());
-    assertNull(r.getIngredient("ost"));
+    Assertions.assertEquals("[ ]: 0.5 stk avokado", r.getIngredient("avokado").toString());
+    Assertions.assertNull(r.getIngredient("ost"));
   }
 
   // Tests for the recipe class that checks if throws are done correctly
@@ -68,20 +63,38 @@ public class RecipeTest {
   public void testThrows() {
     Ingredient I1 = new Ingredient("tomat", 3.0, "stk");
     Recipe r = new Recipe(I1);
-    assertThrows(IllegalStateException.class, () -> {
+    Assertions.assertThrows(IllegalStateException.class, () -> {
       r.getBought("ost");
     });
-    assertThrows(IllegalStateException.class, () -> {
+    Assertions.assertThrows(IllegalStateException.class, () -> {
       r.deleteItem("ost");
     });
-    assertThrows(IllegalStateException.class, () -> {
+    Assertions.assertThrows(IllegalStateException.class, () -> {
       r.setBought("ost", true);
     });
-    assertThrows(IllegalStateException.class, () -> {
+    Assertions.assertThrows(IllegalStateException.class, () -> {
       r.setIngredientPerPersonAmount("ost", 2.0);
     });
-    assertThrows(IllegalStateException.class, () -> {
+    Assertions.assertThrows(IllegalStateException.class, () -> {
       r.getIngredientPerPersonAmount("ost");
+    });
+    Assertions.assertThrows(IllegalStateException.class, () -> {
+      r.changeIngredientName("ost", "cheddar");
+    });
+    Assertions.assertThrows(IllegalArgumentException.class, () -> {
+      r.setNumberOfPeople(0);
+    });
+    Assertions.assertThrows(IllegalStateException.class, () -> {
+      r.getRoundUpTo("ost");
+    });
+    Assertions.assertThrows(IllegalStateException.class, () -> {
+      r.getIngredientTotalAmount("ost");
+    });
+    Assertions.assertThrows(IllegalStateException.class, () -> {
+      r.getMeasuringUnit("ost");
+    });
+    Assertions.assertThrows(IllegalStateException.class, () -> {
+      r.setIngredientMeasurement("ost", "stk");
     });
   }
 }

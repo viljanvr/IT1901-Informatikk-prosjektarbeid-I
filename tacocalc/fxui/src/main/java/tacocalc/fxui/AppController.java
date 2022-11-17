@@ -507,4 +507,8 @@ public class AppController {
     fh.deleteFile(recipe.getName());
     handleGoBack();
   }
+
+  protected IngredientEditController getIngredientEditController() {
+    return this.ingredientEditController;
+  }
 }
