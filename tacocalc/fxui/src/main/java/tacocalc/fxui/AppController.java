@@ -5,7 +5,6 @@ import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.enums.FloatMode;
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 import javafx.event.ActionEvent;
@@ -332,6 +331,7 @@ public class AppController {
 
       if (!isDuplicate(ingredientName)) {
         recipe.addItem(ingredientName, ingredientPerPersonAmnt, ingredientUnit);
+        handleSaveToFile();
         // TODO:
         // rrca.addIngredient(this.recipe, new Ingredient(ingredientName, ingredientPerPersonAmnt,
         // ingredientUnit));

@@ -9,5 +9,5 @@ module restapi {
   requires data;
   requires transitive com.google.gson;
 
-  opens tacocalc.restiapi;
+  opens tacocalc.restapi;
 }
