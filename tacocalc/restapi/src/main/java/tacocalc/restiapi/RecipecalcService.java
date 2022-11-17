@@ -1,6 +1,10 @@
 package tacocalc.restiapi;
 
+import java.util.List;
 import org.springframework.stereotype.Service;
+import tacocalc.core.Ingredient;
+import tacocalc.core.Recipe;
+import tacocalc.data.RecipeFileHandler;
 
 /**
  * Service handler for REST API.
@@ -11,48 +15,46 @@ public class RecipecalcService {
 
   public RecipecalcService() {}
 
-  // private RecipeFileHandler fh = new RecipeFileHandler();
+  /**
+   * Returns a list of all recipes saved to file. If no recipes are saved, a default recipe is
+   * returned.
+   *
+   * @return List of recipe objects
+   */
+  protected List<Recipe> getAllRecipes() {
+    List<Recipe> list = RecipeFileHandler.getAllRecipies();
+    if (list.isEmpty()) {
+      list.add(new Recipe("test", new Ingredient("avocado", 1.0, "stk")));
+      list.add(new Recipe("test2", new Ingredient("bananer", 2.0, "stk")));
+    }
+    return list;
+  }
 
-  // private RecipeBook recipes = new RecipeBook(new Recipe[] {
-  // new Recipe("Pølser", new Ingredient("Pølser", 2d, "stk"),
-  // new Ingredient("Pølsebrød", 2d, "stk")),
-  // new Recipe("Øl", new Ingredient("Ringnes", 6d, "stk"))});
+  protected Recipe getRecipe(String name) {
+    return RecipeFileHandler.readRecipe(name);
+  }
 
-  // public Collection<Recipe> getAllRecipes() {
-  // return recipes.getAllRecipes();
-  // }
+  protected boolean setBought(boolean bought, String recipeName, String ingredientName) {
+    Recipe r = RecipeFileHandler.readRecipe(recipeName);
+    r.setBought(ingredientName, bought);
+    return RecipeFileHandler.write(r);
+  }
 
-  // /**
-  // * Adds a recipe to the RecipeBook.
-  // *
-  // * @param recipe Recipe to be added
-  // * @return The id of the recipe in the RecipeBook
-  // */
-  // public String addRecipe(Recipe recipe) {
-  // String id = recipes.addRecipe(recipe);
-  // fh.write(recipe);
-  // return id;
-  // }
+  protected boolean addRecipe(Recipe r) {
+    return RecipeFileHandler.write(r);
+  }
 
-  // /**
-  // * Returns a given recipe based on an ID.
-  // *
-  // * @param id ID to the recipe
-  // * @return Recipe with the given ID
-  // */
-  // public Recipe getRecipeById(String id) {
-  // return recipes.getRecipeById(id);
-  // }
+  protected boolean removeRecipe(String name) {
+    return RecipeFileHandler.deleteFile(name);
+  }
 
-  // /**
-  // * Removes a recipe from the RecipeBook if it exists.
-  // *
-  // * @param id String of Recipe to be removed (key)
-  // */
-  // public void removeRecipe(String id) {
-  // if (recipes.getRecipeById(id) == null) {
-  // throw new NoSuchElementException(HttpStatus.NOT_FOUND + "Recipe not found");
-  // }
-  // recipes.removeRecipe(id);
-  // }
+
+  protected void setUnit(String measuringUnit, String recipeName, String ingredientName) {
+    Recipe r = RecipeFileHandler.readRecipe(recipeName);
+    r.setIngredientMeasurement(ingredientName, measuringUnit);
+    RecipeFileHandler.write(r);
+  }
+
+
+
 }

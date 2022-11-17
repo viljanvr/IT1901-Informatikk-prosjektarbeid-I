@@ -34,21 +34,23 @@ public class RecipeFileHandler {
    *
    * @param r the recipie to write
    */
-  public static void write(Recipe r) {
+  public static boolean write(Recipe r) {
     String folder = testMode ? TEST : RECIPE;
     try (FileWriter fw = new FileWriter(getFilePath(r.getName(), folder), StandardCharsets.UTF_8)) {
       Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
       gson.toJson(r, fw);
+      return true;
     } catch (FileNotFoundException e) {
       File parent = new File(System.getProperty("user.home") + FILEPATH + folder);
       if (!parent.isFile()) {
         if (parent.mkdirs()) {
-          write(r);
+          return write(r);
         }
       }
+      return false;
     } catch (IOException e) {
-      e.printStackTrace();
+      return false;
     }
   }
 

@@ -1,22 +1,15 @@
 package tacocalc.client;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import java.lang.reflect.Type;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
-import java.net.http.HttpResponse.BodyHandlers;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import org.springframework.http.HttpStatus;
 import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
 
@@ -25,221 +18,24 @@ import tacocalc.core.Recipe;
 /**
  * Client class that sends HTTP requests to the REST API.
  */
-public class RemoteRecipeCalcAccess {
+public class RemoteRecipeCalcAccess implements RecipeCalcAccess {
 
   private final String url;
 
   private final int port;
 
+  private static final String APPLICATION_JSON = "application/json";
+
+  private static final String APPLICATION_FORM_URLENCODED = "application/x-www-form-urlencoded";
+
+  private static final String ACCEPT_HEADER = "Accept";
+
+  private static final String CONTENT_TYPE_HEADER = "Content-Type";
+
+
   public RemoteRecipeCalcAccess(final String url, final int port) {
     this.url = url;
     this.port = port;
-  }
-
-
-  /**
-   * Gets all the recipes stored in the REST API.
-   *
-   * @return A map of all the recipes with id's as keys
-   * @throws RuntimeException If the request isn't good
-   * @throws InterruptedException If the thread is interrupted in the process
-   * @throws ExecutionException If the process did not execute properly
-   * @throws URISyntaxException If the URI syntax is incorrect
-   */
-  public HashMap<String, Recipe> getRecipes()
-      throws RuntimeException, InterruptedException, ExecutionException, URISyntaxException {
-    HttpResponse<String> response = this.get(getUrl("/api/v1/recipes"));
-    return getMapFromHttpResponse(response);
-  }
-
-  /**
-   * Returns a recipe based on an ID.
-   *
-   * @param id The ID of the recipe to get
-   * @return Returns a recipe
-   * @throws RuntimeException If the request isn't good
-   * @throws InterruptedException If the thread is interrupted in the process
-   * @throws ExecutionException If the process did not execute properly
-   * @throws URISyntaxException If the URI syntax is incorrect
-   */
-  public Recipe getRecipe(final String id)
-      throws RuntimeException, InterruptedException, ExecutionException, URISyntaxException {
-
-    HttpResponse<String> response = this.get(getUrl("/api/v1/recipes/" + id));
-    return (Recipe) getMapFromHttpResponse(response).get(id);
-  }
-
-  /**
-   * Sends a request to add a Recipe to the API.
-   *
-   * @param recipe A map representing
-   * @return The ID to the recipe
-   * @throws RuntimeException If the request isn't good
-   * @throws InterruptedException If the thread is interrupted in the process
-   * @throws ExecutionException If the process did not execute properly
-   * @throws URISyntaxException If the URI syntax is incorrect
-   */
-  public String addRecipe(HashMap<String, Recipe> recipe)
-      throws RuntimeException, InterruptedException, ExecutionException, URISyntaxException {
-    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    String payload = gson.toJson(recipe);
-    HttpResponse<String> response = this.post(getUrl("/api/v1/recipes/add"), payload);
-    return gson.fromJson(response.body(), JsonObject.class).get("id").getAsString();
-  }
-
-  /**
-   * Deletes the recipe with the given ID.
-   *
-   * @param id The ID of the Recipe to be deleted
-   * @throws InterruptedException If the thread is interrupted in the process
-   * @throws ExecutionException If the process did not execute properly
-   * @throws URISyntaxException If the URI syntax is incorrect
-   */
-  public void deleteRecipe(String id)
-      throws InterruptedException, ExecutionException, URISyntaxException {
-    this.delete("/api/v1/recipes/" + id);
-  }
-
-  public void changeRecipeName(Recipe r, String name) {
-    // TODO: implement
-  }
-
-  public void setBought(Recipe recipe, String ingredientName, Boolean bought) {
-    // TODO: implement
-  }
-
-  public void deleteIngerdient(Recipe recipe, String ingredientName) {
-    // TODO: implement
-  }
-
-  public void updateIngredient(Recipe recipe, String ingredient, String newIngredientName,
-      Double perPersonAmount, Double roundUpTo, String measuringUnit) {
-    // TODO: implement
-  }
-
-  public void addIngredient(Recipe recipe, Ingredient ingredient) {
-    // TODO: implement
-  }
-
-  public List<Recipe> getAllRecipes() {
-    // TODO: implement
-    return new ArrayList<>();
-  }
-
-  /**
-   * Makes a map from a HTTP response.
-   *
-   * @param response HTTP response to covert to map
-   * @return HashMap consisting of the Recipes ID and Recipe object
-   */
-  private HashMap<String, Recipe> getMapFromHttpResponse(final HttpResponse<String> response) {
-    Gson gson = new Gson();
-    Type mapType = new TypeToken<HashMap<String, Recipe>>() {}.getType();
-    return gson.fromJson(response.body(), mapType);
-
-  }
-
-  /**
-   * Sends a HTTP GET request.
-   *
-   * @param endpoint The endpoint to fetch data from
-   * @return A HTTP response
-   * @throws RuntimeException If the request isn't good
-   * @throws InterruptedException If the thread is interrupted in the process
-   * @throws ExecutionException If the process did not execute properly
-   * @throws URISyntaxException If the URI syntax is incorrect
-   */
-  private HttpResponse<String> get(final String endpoint)
-      throws InterruptedException, ExecutionException, URISyntaxException, RuntimeException {
-    HttpResponse<String> response = this.getAsync(endpoint).get();
-
-    if (response.statusCode() != HttpStatus.OK.value()) {
-      throw new RuntimeException(response.statusCode() + response.body());
-    }
-    return response;
-  }
-
-  /**
-   * Sends an asynchronous HTTP GET request.
-   *
-   * @param endpoint The endpoint to fetch data from
-   * @return Completable HTTP Response
-   * @throws URISyntaxException If the URI syntax is incorrect
-   */
-  private CompletableFuture<HttpResponse<String>> getAsync(final String endpoint)
-      throws URISyntaxException {
-    HttpClient client = HttpClient.newBuilder().build();
-    HttpRequest req =
-        HttpRequest.newBuilder().GET().uri(new URI(this.url + ":" + this.port + endpoint)).build();
-    return client.sendAsync(req, BodyHandlers.ofString());
-  }
-
-  /**
-   * Sends a HTTP POST request.
-   *
-   * @param endpoint The endpoint to post data to
-   * @param payload The data that will be posted
-   * @return A HTTP Response
-   * @throws RuntimeException If the request isn't good
-   * @throws InterruptedException If the thread is interrupted in the process
-   * @throws ExecutionException If the process did not execute properly
-   * @throws URISyntaxException If the URI syntax is incorrect
-   */
-  private HttpResponse<String> post(final String endpoint, final String payload)
-      throws InterruptedException, ExecutionException, URISyntaxException, RuntimeException {
-    HttpResponse<String> response = this.postAsync(endpoint, payload).get();
-    if (response.statusCode() != HttpStatus.OK.value()) {
-      throw new RuntimeException(response.statusCode() + response.body());
-    }
-    return response;
-  }
-
-  /**
-   * Sends an asynchronous HTTP POST request.
-   *
-   * @param endpoint The endpoint to post data to
-   * @param payload The data that will be posted
-   * @return Completable HTTP Response
-   * @throws URISyntaxException If the URI syntax is incorrect
-   */
-  private CompletableFuture<HttpResponse<String>> postAsync(final String endpoint,
-      final String payload) throws URISyntaxException {
-    HttpClient client = HttpClient.newBuilder().build();
-    HttpRequest req = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString(payload))
-        .uri(new URI(this.url + ":" + this.port + endpoint)).build();
-    return client.sendAsync(req, BodyHandlers.ofString());
-  }
-
-  /**
-   * Sends a HTTP DELETE request.
-   *
-   * @param endpoint The endpoint to delete data from
-   * @return A HTTP Response
-   * @throws InterruptedException If the thread is interrupted in the process
-   * @throws ExecutionException If the process did not execute properly
-   * @throws URISyntaxException If the URI syntax is incorrect
-   */
-  private HttpResponse<String> delete(final String endpoint)
-      throws InterruptedException, ExecutionException, URISyntaxException {
-    HttpResponse<String> response = this.deleteAsync(endpoint).get();
-    if (response.statusCode() != HttpStatus.OK.value()) {
-      throw new RuntimeException(response.statusCode() + response.body());
-    }
-    return response;
-  }
-
-  /**
-   * Sends an asynchronous delete request.
-   *
-   * @param endpoint Location in the API
-   * @return Completable HTTP Response
-   * @throws URISyntaxException If the URI syntax is incorrect
-   */
-  private CompletableFuture<HttpResponse<String>> deleteAsync(final String endpoint)
-      throws URISyntaxException {
-    HttpClient client = HttpClient.newBuilder().build();
-    HttpRequest req = HttpRequest.newBuilder().DELETE().uri(new URI(getUrl(endpoint))).build();
-    return client.sendAsync(req, BodyHandlers.ofString());
   }
 
   /**
@@ -248,8 +44,119 @@ public class RemoteRecipeCalcAccess {
    * @param endpoint Location in the API
    * @return URL to the endpoint
    */
-  private String getUrl(String endpoint) {
-    return this.url + ":" + this.port + endpoint;
+  private URI getUri(String endpoint) {
+    try {
+      return new URI(this.url + ":" + this.port + endpoint);
+    } catch (URISyntaxException e) {
+      return null;
+    }
+
   }
 
+  @Override
+  public void changeRecipeName(Recipe r, String name) {
+    // TODO Auto-generated method stub
+
+  }
+
+
+
+  @Override
+  public void setBought(Recipe recipe, String ingredientName, Boolean bought) {
+    try {
+      HttpRequest request = HttpRequest
+          .newBuilder(getUri(
+              "/api/v1/recipes/" + recipe.getName() + "/" + ingredientName + "?bought=" + bought))
+          .header(ACCEPT_HEADER, APPLICATION_JSON).header(CONTENT_TYPE_HEADER, APPLICATION_JSON)
+          .PUT(BodyPublishers.ofString("")).build();
+      final HttpResponse<String> response =
+          HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
+      String responseString = response.body();
+      System.out.println(responseString);
+    } catch (IOException | InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public void deleteIngredient(Recipe recipe, String ingredientName) {
+    // TODO Auto-generated method stub
+
+  }
+
+
+
+  @Override
+  public void updateIngredient(Recipe recipe, String ingredient, String newIngredientName,
+      Double perPersonAmount, Double roundUpTo, String measuringUnit) {
+    // try {
+    // HttpRequest request = HttpRequest.newBuilder(getUri("/api/v1/recipes/add"))
+    // .header(CONTENT_TYPE_HEADER, APPLICATION_JSON)
+    // .POST(BodyPublishers.ofString(new Gson().toJson(r))).build();
+    // final HttpResponse<String> response =
+    // HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
+    // String responseString = response.body();
+    // System.out.println(responseString);
+    // } catch (IOException | InterruptedException e) {
+    // throw new RuntimeException(e);
+    // }
+  }
+
+
+
+  @Override
+  public void addIngredient(Recipe recipe, Ingredient ingredient) {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void addRecipe(Recipe r) {
+    try {
+      HttpRequest request = HttpRequest.newBuilder(getUri("/api/v1/recipes/add"))
+          .header(CONTENT_TYPE_HEADER, APPLICATION_JSON)
+          .POST(BodyPublishers.ofString(new Gson().toJson(r))).build();
+      final HttpResponse<String> response =
+          HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
+      String responseString = response.body();
+      System.out.println(responseString);
+    } catch (IOException | InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * Sends HTTP Request to get a list of all recipes in the API.a
+   */
+  @Override
+  public List<Recipe> getAllRecipes() {
+    System.out.println("getTodoList(String name) :" + getUri("/api/v1/recipes/").toString());
+    HttpRequest request = HttpRequest.newBuilder(getUri("/api/v1/recipes/"))
+        .header(ACCEPT_HEADER, APPLICATION_JSON).GET().build();
+    try {
+      final HttpResponse<String> response =
+          HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandlers.ofString());
+      String responseString = response.body();
+      System.out.println("Response: " + responseString);
+
+      Gson gson = new Gson();
+      return gson.fromJson(responseString, new TypeToken<List<Recipe>>() {}.getType());
+    } catch (IOException | InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * Main method for testing.
+   */
+  public static void main(String[] args) {
+    RemoteRecipeCalcAccess rrca = new RemoteRecipeCalcAccess("http://localhost", 8080);
+    Recipe r = new Recipe("detteerentest", new Ingredient("Ost", 100.0, "g"));
+    rrca.addRecipe(r);
+    List<Recipe> list = rrca.getAllRecipes();
+    System.out.println(list.toString());
+    rrca.setBought(r, "Ost", true);
+    list = rrca.getAllRecipes();
+    System.out.println(list.toString());
+  }
 }

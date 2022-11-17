@@ -28,6 +28,13 @@ public class Recipe {
   }
 
   /**
+   * No args constructor for GSON.
+   */
+  public Recipe() {
+
+  }
+
+  /**
    * Get the name of this recipie.
    *
    * @return the name as a string
@@ -280,6 +287,8 @@ public class Recipe {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     String s = "";
+    sb.append("Name = ").append(getName()).append("\nNumber of People = ")
+        .append(getNumberOfPeople()).append("\n").toString();
     for (Ingredient ingredient : list) {
       s = sb.append(s).append(ingredient.toString()).append("\n").toString();
     }
