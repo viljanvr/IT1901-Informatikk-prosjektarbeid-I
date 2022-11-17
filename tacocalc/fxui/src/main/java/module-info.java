@@ -1,6 +1,7 @@
 open module fxui {
   requires core;
   requires data;
+  requires client;
   requires javafx.base;
   requires javafx.fxml;
   requires javafx.graphics;

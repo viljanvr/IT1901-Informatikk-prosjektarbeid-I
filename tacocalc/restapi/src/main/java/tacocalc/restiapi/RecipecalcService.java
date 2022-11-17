@@ -1,12 +1,9 @@
 package tacocalc.restiapi;
 
-import java.util.Collection;
-import java.util.NoSuchElementException;
-import org.springframework.http.HttpStatus;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import tacocalc.core.Ingredient;
 import tacocalc.core.Recipe;
-import tacocalc.core.RecipeBook;
 import tacocalc.data.RecipeFileHandler;
 
 /**
@@ -16,49 +13,171 @@ import tacocalc.data.RecipeFileHandler;
 @Service
 public class RecipecalcService {
 
-  private RecipeFileHandler fh = new RecipeFileHandler();
-
-  private RecipeBook recipes = new RecipeBook(new Recipe[] {
-      new Recipe("Pølser", new Ingredient("Pølser", 2d, "stk"),
-          new Ingredient("Pølsebrød", 2d, "stk")),
-      new Recipe("Øl", new Ingredient("Ringnes", 6d, "stk"))});
-
-  public Collection<Recipe> getAllRecipes() {
-    return recipes.getAllRecipes();
-  }
+  public RecipecalcService() {}
 
   /**
-   * Adds a recipe to the RecipeBook.
+   * Returns a list of all Recipes saved to file. If no Recipes are saved, a default Recipe is
+   * returned.
    *
-   * @param recipe Recipe to be added
-   * @return The id of the recipe in the RecipeBook
+   * @return List of Recipe objects
    */
-  public String addRecipe(Recipe recipe) {
-    String id = recipes.addRecipe(recipe);
-    fh.write(recipe);
-    return id;
-  }
-
-  /**
-   * Returns a given recipe based on an ID.
-   *
-   * @param id ID to the recipe
-   * @return Recipe with the given ID
-   */
-  public Recipe getRecipeById(String id) {
-    return recipes.getRecipeById(id);
-  }
-
-  /**
-   * Removes a recipe from the RecipeBook if it exists.
-   *
-   * @param id String of Recipe to be removed (key)
-   */
-  public void removeRecipe(String id) {
-    if (recipes.getRecipeById(id) == null) {
-      throw new NoSuchElementException(HttpStatus.NOT_FOUND + "Recipe not found");
+  protected List<Recipe> getAllRecipes() {
+    List<Recipe> list = RecipeFileHandler.getAllRecipies();
+    if (list.isEmpty()) {
+      list.add(new Recipe("test", new Ingredient("avocado", 1.0, "stk")));
+      list.add(new Recipe("test2", new Ingredient("bananer", 2.0, "stk")));
     }
-    recipes.removeRecipe(id);
+    return list;
   }
+
+
+  /**
+   * Gets a recipe by name.
+   *
+   * @param name Name of the Recipe to get.
+   * @return The recipe
+   */
+  protected Recipe getRecipe(String name) {
+    return RecipeFileHandler.readRecipe(name);
+  }
+
+  /**
+   * Adds a Recipe to the API.
+   *
+   * @param r Recipe to add
+   * @return True if add was successful, else false
+   */
+  protected boolean addRecipe(Recipe r) {
+    return RecipeFileHandler.write(r);
+  }
+
+  /**
+   * Removes a recipe from the API.
+   *
+   * @param name Name of the Recipe to delete
+   * @return True if remove is successful, else false
+   */
+  protected boolean removeRecipe(String name) {
+    return RecipeFileHandler.deleteFile(name);
+  }
+
+  /**
+   * Rename the Recipe.
+   *
+   * @param recipeName Old name of the Recipe
+   * @param newName New name of the Recipe
+   * @return True if name change is successful, else false
+   */
+  protected boolean renameRecipe(String recipeName, String newName) {
+    Recipe r = RecipeFileHandler.readRecipe(recipeName);
+    if (RecipeFileHandler.renameFile(recipeName, newName)) {
+      r.setName(newName);
+      return RecipeFileHandler.write(r);
+    }
+    return false;
+  }
+
+  /**
+   * Add new ingredient.
+   *
+   * @param recipeName Name of the Recipe to add Ingredient to
+   * @param i Ingredient to add
+   * @return True if add is successful
+   */
+  protected boolean addIngredient(String recipeName, Ingredient i) {
+    Recipe r = RecipeFileHandler.readRecipe(recipeName);
+    r.addItem(i.getName(), i.getPerPersonAmount(), i.getRoundUpTo(), i.getMeasuringUnit());
+    r.setBought(i.getName(), i.getBought());
+    return RecipeFileHandler.write(r);
+  }
+
+  /**
+   * Delete an ingredient.
+   *
+   * @param recipeName Name of the Recipe that contains the Ingredient
+   * @param ingredientName Name of the ingredient that will be deleted
+   * @return True if successful, else False
+   */
+  protected boolean deleteIngredient(String recipeName, String ingredientName) {
+    Recipe r = RecipeFileHandler.readRecipe(recipeName);
+    r.deleteItem(ingredientName);
+    return RecipeFileHandler.write(r);
+  }
+
+  /**
+   * Change the ingredient name.
+   *
+   * @param recipeName The name of the recipe to be changed
+   * @param oldIngredientName the old name of the ingredient
+   * @param newIngredientName the new name of the ingredient
+   * @return True if successful, else False
+   */
+  protected boolean changeIngredientName(String recipeName, String oldIngredientName,
+      String newIngredientName) {
+    Recipe r = RecipeFileHandler.readRecipe(recipeName);
+    r.changeIngredientName(oldIngredientName, newIngredientName);
+    return RecipeFileHandler.write(r);
+  }
+
+  /**
+   * Set the amount per person.
+   *
+   * @param recipeName the name of the recipe containing the ingredient
+   * @param ingredientName the name of the ingredient to be changed
+   * @param perPersonAmount the Double of the amount per person
+   * @return True if successful, else False
+   */
+  protected boolean setPerPersonAmount(String recipeName, String ingredientName,
+      Double perPersonAmount) {
+    Recipe r = RecipeFileHandler.readRecipe(recipeName);
+    r.setIngredientPerPersonAmount(ingredientName, perPersonAmount);
+    return RecipeFileHandler.write(r);
+
+  }
+
+  /**
+   * Set the round up amount.
+   *
+   * @param recipeName the recipe that contains the ingredient
+   * @param ingredientName the name of the Ingredient to be changed
+   * @param roundUpAmount Double to be that is to be rounded to
+   * @return True if successful, else False
+   */
+  protected boolean setRoundUpAmount(String recipeName, String ingredientName,
+      Double roundUpAmount) {
+    Recipe r = RecipeFileHandler.readRecipe(recipeName);
+    r.setRoundUpTo(ingredientName, roundUpAmount);
+    return RecipeFileHandler.write(r);
+  }
+
+  /**
+   * Set the measuring unit.
+   *
+   * @param measuringUnit String of the unit to be set
+   * @param recipeName name of the Recipe that contains the ingredient
+   * @param ingredientName name of the ingredient to be changed
+   * @return True if successful, else False
+   */
+  protected boolean setUnit(String measuringUnit, String recipeName, String ingredientName) {
+    Recipe r = RecipeFileHandler.readRecipe(recipeName);
+    r.setIngredientMeasurement(ingredientName, measuringUnit);
+    return RecipeFileHandler.write(r);
+  }
+
+  /**
+   * Set if ingredient is bought or not.
+   *
+   * @param bought Boolean
+   * @param recipeName name of the recipe containing the ingredient
+   * @param ingredientName the ingredient to be changed
+   * @return True if successful, else False
+   */
+  protected boolean setBought(boolean bought, String recipeName, String ingredientName) {
+    Recipe r = RecipeFileHandler.readRecipe(recipeName);
+    r.setBought(ingredientName, bought);
+    return RecipeFileHandler.write(r);
+  }
+
+
 
 }

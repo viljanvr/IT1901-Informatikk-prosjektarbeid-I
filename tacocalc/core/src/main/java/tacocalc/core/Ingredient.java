@@ -36,6 +36,13 @@ public class Ingredient {
     setRoundUpTo(roundUpTo);
   }
 
+  /**
+   * No args constructor for GSON.
+   */
+  public Ingredient() {
+
+  }
+
   public String getName() {
     return name;
   }
@@ -44,7 +51,7 @@ public class Ingredient {
     this.name = name;
   }
 
-  protected void setMeasuringUnit(String measuringUnit) {
+  public void setMeasuringUnit(String measuringUnit) {
     this.measuringUnit = measuringUnit;
   }
 

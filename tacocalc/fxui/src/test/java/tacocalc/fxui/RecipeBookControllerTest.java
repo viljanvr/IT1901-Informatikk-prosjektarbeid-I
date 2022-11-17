@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tacocalc.core.Recipe;
 
 public class RecipeBookControllerTest extends AppTest {
   Parent root;
@@ -17,6 +18,7 @@ public class RecipeBookControllerTest extends AppTest {
 
   @Override
   public void start(final Stage stage) throws Exception {
+    RecipeBookController.setTransfer(new Recipe("Test-file"));
     FXMLLoader loader = new FXMLLoader(getClass().getResource("RecipeBook.fxml"));
     Parent root = loader.load();
     stage.setScene(new Scene(root));
@@ -26,7 +28,6 @@ public class RecipeBookControllerTest extends AppTest {
   }
 
   @Test
-
   @DisplayName("Test-add-item-to-view")
   public void testCreateRecipe() {
     create();

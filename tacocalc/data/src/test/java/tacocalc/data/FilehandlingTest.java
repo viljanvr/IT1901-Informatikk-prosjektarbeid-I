@@ -14,11 +14,10 @@ public class FilehandlingTest {
   public void testWrite() throws FileNotFoundException {
     RecipeFileHandler.setTestMode(true);
 
-    RecipeFileHandler th = new RecipeFileHandler();
     Recipe r1 = new Recipe("Write-test");
     r1.addItem("agurk", 4.0, "stk");
     r1.addItem("paprika", 6.0, "stk");
-    th.write(r1);
+    RecipeFileHandler.write(r1);
     File f1 = new File(System.getProperty("user.home") + "/recipecalc/test/Write-test.json");
     Assertions.assertTrue(f1.isFile());
     // Check if you can write to existing file
@@ -32,15 +31,15 @@ public class FilehandlingTest {
   public void testRead() {
     RecipeFileHandler.setTestMode(true);
 
-    RecipeFileHandler th = new RecipeFileHandler();
     Recipe r1 = new Recipe("Read-test");
     r1.addItem("genus", 3.0, "mange");
-    th.write(r1);
+    RecipeFileHandler.write(r1);
     // If file doesn't exist it returns a new Recipe
-    Recipe r2 = th.readRecipe("Read-test");
+    Recipe r2 = RecipeFileHandler.readRecipe("Read-test");
     Assertions.assertEquals(r1.getIngredientPerPersonAmount("genus"),
         r2.getIngredientPerPersonAmount("genus"));
     // If file doesn't exist it returns a new Recipe
-    Assertions.assertEquals(0, th.readRecipe("NonFileNameOnlyForTesting").getList().size());
+    Assertions.assertEquals(0,
+        RecipeFileHandler.readRecipe("NonFileNameOnlyForTesting").getList().size());
   }
 }

@@ -34,21 +34,23 @@ public class RecipeFileHandler {
    *
    * @param r the recipie to write
    */
-  public void write(Recipe r) {
+  public static boolean write(Recipe r) {
     String folder = testMode ? TEST : RECIPE;
     try (FileWriter fw = new FileWriter(getFilePath(r.getName(), folder), StandardCharsets.UTF_8)) {
       Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
       gson.toJson(r, fw);
+      return true;
     } catch (FileNotFoundException e) {
       File parent = new File(System.getProperty("user.home") + FILEPATH + folder);
       if (!parent.isFile()) {
         if (parent.mkdirs()) {
-          write(r);
+          return write(r);
         }
       }
+      return false;
     } catch (IOException e) {
-      e.printStackTrace();
+      return false;
     }
   }
 
@@ -62,15 +64,15 @@ public class RecipeFileHandler {
    *
    * @return a ShoppingList created from the contents of the Json file
    */
-  public Recipe readRecipe(String name) {
+  public static Recipe readRecipe(String name) {
     return read(name, (testMode ? TEST : RECIPE));
   }
 
-  public Recipe readTemplate(String name) {
+  public static Recipe readTemplate(String name) {
     return read(name, TEMPLATE);
   }
 
-  private Recipe read(String name, String folder) {
+  private static Recipe read(String name, String folder) {
     try (FileReader fr = new FileReader(getFilePath(name, folder), StandardCharsets.UTF_8)) {
       Gson gson = new Gson();
 
@@ -93,7 +95,7 @@ public class RecipeFileHandler {
    * @param newName the new file name
    * @return returns true if renaming succeded
    */
-  public boolean renameFile(String oldName, String newName) {
+  public static boolean renameFile(String oldName, String newName) {
     String folder = testMode ? TEST : RECIPE;
     File oldFile = new File(getFilePath(oldName, folder));
     File newFile = new File(getFilePath(newName, folder));
@@ -104,12 +106,12 @@ public class RecipeFileHandler {
     return oldFile.renameTo(newFile);
   }
 
-  public boolean deleteFile(String name) {
+  public static boolean deleteFile(String name) {
     File file = new File(getFilePath(name, (testMode ? TEST : RECIPE)));
     return file.delete();
   }
 
-  private String getFilePath(String name, String folder) {
+  private static String getFilePath(String name, String folder) {
     if (!validFileName(name)) {
       throw new IllegalArgumentException("\"" + name + "\" is not a valid file name");
     }
@@ -132,7 +134,7 @@ public class RecipeFileHandler {
    *
    * @return Returns a list of Recipe objects
    */
-  public List<Recipe> getAllRecipies() {
+  public static List<Recipe> getAllRecipies() {
     String folder = (testMode ? TEST : RECIPE);
     File dir = new File(System.getProperty("user.home") + FILEPATH + folder);
     System.out
