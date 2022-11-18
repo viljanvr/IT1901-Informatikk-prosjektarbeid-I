@@ -1,0 +1,21 @@
+@startuml Sequence diagram
+
+actor User as u
+participant AppController as AC
+u -> AC : Add an ingredient to a recipe
+participant RemoteRecipeCalcAccess as rrca
+AC -> rrca : handleAddIngredient()
+participant RecipeCalcController as rcc
+rrca --> rcc : POST request with ingredient as body
+participant RecipeCalcService as rcs
+rcc -> rcs : addIngredient(ingredient) to server recipe
+
+participant TacoCalcFileHandler as fh
+rcs -> fh : write(server side recipe)
+rcs <- fh : true
+rcc <- rcs : true
+rrca <-- rcc : true
+AC <- rrca : true
+u <- AC : update GUI
+
+@enduml
