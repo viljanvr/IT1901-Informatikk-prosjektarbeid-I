@@ -42,20 +42,19 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 
 @SpringBootTest(classes = RecipecalcController.class)
-@AutoConfiguration
+@AutoConfigureMockMvc
 public class RecipeCalcControllerTest {
 
-  private final static String mockEntryAsString =
-      """
-          {"list": [{"name": "bacon terninger","perPersonAmount": 1.0,"measuringUnit": "stk","roundUpTo": 1.0,"bought": false}],"name": "Add-duplicate-ingredient-test","numberOfPeople": 4}
-          """
-          .strip();
+  private Gson gson = new Gson();
+
+  private String mockEntryAsString;
+
   private final static String path = "/api/v1/recipes/";
 
   @Autowired
   private MockMvc mvc;
 
-  @MockBean
+  @Autowired
   private RecipecalcController controller;
 
   @MockBean
@@ -64,10 +63,24 @@ public class RecipeCalcControllerTest {
   @MockBean
   private RecipeFileHandler handler;
 
+  private void mockEntryMethod() {
+    Recipe r = new Recipe(new Ingredient("agurk", 2.0, "stk"));
+    mockEntryAsString = gson.toJson(r);
+  }
+
   @Test
-  public void testGetAllRecipes() throws Exception {
-    mvc.perform(MockMvcRequestBuilders.get("api/v1/recipes/"))
-        .andExpect(MockMvcResultMatchers.status().is(200));
+  public void testAddRecipe() {
+    try {
+      mockEntryMethod();
+      MediaType MEDIA_TYPE_JSON_UTF8 =
+          new MediaType("application", "json", java.nio.charset.Charset.forName("UTF-8"));
+      this.mvc
+          .perform(MockMvcRequestBuilders.post("/api/v1/recipes/recipe")
+              .accept(MEDIA_TYPE_JSON_UTF8).contentType(MediaType.APPLICATION_JSON)
+              .content(String.format(mockEntryAsString, "")))
+          .andDo(print()).andExpect(status().isOk());
+    } catch (Exception e) {
+    }
   }
 
 
