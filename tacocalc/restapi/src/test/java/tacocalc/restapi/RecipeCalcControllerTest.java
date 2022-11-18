@@ -57,7 +57,8 @@ public class RecipeCalcControllerTest {
 
   @AfterEach
   public void teardown() {
-    recipes.stream().forEach(r -> RecipeFileHandler.deleteFile(r.getName()));
+    System.out.println("Jup jeg kjører");
+    RecipeFileHandler.deleteFile("coolName");
   }
 
   @Test
@@ -78,7 +79,7 @@ public class RecipeCalcControllerTest {
   }
 
   @Test
-  public void testAddRecipe() {
+  public void testPostAddRecipe() {
     Request request = null;
     Response response = null;
     ResponseBody responseBody = null;
@@ -95,7 +96,6 @@ public class RecipeCalcControllerTest {
       response = client.newCall(request).execute();
       responseBody = response.body();
       responseBodyString = responseBody.string();
-      System.out.println(responseBodyString);
       output = mapper.readValue(responseBodyString, Boolean.class);
     } catch (Exception e) {
       e.printStackTrace();
@@ -111,6 +111,7 @@ public class RecipeCalcControllerTest {
     Response response = null;
     String responseBodyString = null;
     Recipe r = new Recipe("deleteMePls");
+    recipes.add(r);
     RecipeFileHandler.write(r);
     Boolean output = false;
     try {
@@ -128,13 +129,64 @@ public class RecipeCalcControllerTest {
   }
 
   @Test
-  public void testChangeRecipeName() {
+  public void testPutRenameRecipe() {
     ResponseBody responseBody = null;
     Response response = null;
     String responseBodyString = null;
+    MediaType mediaType = MediaType.parse("application/json");
     Recipe r = new Recipe("oldDumbName");
+    // So Recipe is deleted after testrun
+    Recipe r2 = new Recipe("coolName");
+    recipes.add(r);
+    recipes.add(r2);
     RecipeFileHandler.write(r);
+    Boolean output = false;
+    try {
+      // TODO: Fix test so file is deleted after, as it is now renamed and therefore not deleted
+      Request request = new Request.Builder()
+          .url(host + port + API_URL + "recipes/" + r.getName() + "/name?newName=coolName")
+          .put(RequestBody.create("", mediaType)).build();
+      response = client.newCall(request).execute();
+      responseBody = response.body();
+      responseBodyString = responseBody.string();
+      System.out.println("Jeg kjørte" + responseBodyString);
+      output = mapper.readValue(responseBodyString, Boolean.class);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    assertTrue(output);
+    assertTrue(response.isSuccessful());
+  }
 
+  @Test
+  public void testPostAddIngredient() {
+    Request request = null;
+    Response response = null;
+    ResponseBody responseBody = null;
+    String responseBodyString = null;
+    Ingredient i = new Ingredient("tomat", 1.0, "stk");
+    Ingredient newIngredient = new Ingredient("agurk", 3.0, "stk");
+    Recipe r = new Recipe("addingredient", i);
+    recipes.add(r);
+    RecipeFileHandler.write(r);
+    Boolean output = false;
+    try {
+      String sendString = mapper.writeValueAsString(newIngredient);
+      MediaType mediaType = MediaType.parse("application/json");
+      request = new Request.Builder()
+          .url(host + port + API_URL + "recipes/" + r.getName() + "/ingredient")
+          .header(CONTENT_TYPE_HEADER, APPLICATION_JSON)
+          .post(RequestBody.create(sendString, mediaType)).build();
+      response = client.newCall(request).execute();
+      responseBody = response.body();
+      responseBodyString = responseBody.string();
+      System.out.println(responseBodyString);
+      output = mapper.readValue(responseBodyString, Boolean.class);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    assertTrue(output);
+    assertTrue(response.isSuccessful());
   }
 
 }
