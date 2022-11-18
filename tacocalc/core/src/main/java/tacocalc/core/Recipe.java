@@ -3,6 +3,7 @@ package tacocalc.core;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Class for a single recipie, containing multiple ingredients.
@@ -21,10 +22,6 @@ public class Recipe {
     list.addAll(Arrays.asList(ingredients));
     this.numberOfPeople = 4;
     setName(name);
-  }
-
-  public Recipe(Ingredient... ingredients) {
-    this(null, ingredients);
   }
 
   /**
@@ -49,7 +46,20 @@ public class Recipe {
    * @param name the new name to be set
    */
   public void setName(String name) {
-    this.name = name;
+    if (!isValidRecipeName(name)) {
+      throw new IllegalArgumentException("\"" + name + "\" is not a valid recipe name");
+    }
+    this.name = name.strip();
+  }
+
+  /**
+   * Checks if a string is a suitable recipe name.
+   *
+   * @param name The string to check
+   * @return True if it's a suitable name
+   */
+  public static boolean isValidRecipeName(String name) {
+    return Pattern.matches("^[æøåÆØÅa-zA-Z0-9 _-]*[æøåÆØÅa-zA-Z0-9_-][æøåÆØÅa-zA-Z0-9 _-]*$", name);
   }
 
   /**
@@ -104,7 +114,7 @@ public class Recipe {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
       throw new IllegalStateException(
-          "The item doesn't exist in the list, and can therefore not be set to bought");
+          "The item doesn't exist in the recipe, and can therefore not be set to bought");
     }
     getIngredient(name).setBought(bought);
   }
@@ -118,7 +128,7 @@ public class Recipe {
   public boolean getBought(String name) {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
-      throw new IllegalStateException("This ingredient is not in the shoppinglist");
+      throw new IllegalStateException("This ingredient is not in the recipe");
     }
     return getIngredient(name).getBought();
   }
@@ -133,7 +143,7 @@ public class Recipe {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
       throw new IllegalStateException(
-          "The item doesn't exist in the list, and can therefore not be removed");
+          "The item doesn't exist in the recipe, and can therefore not be removed");
     }
     list.remove(getIngredient(name));
   }
@@ -166,7 +176,7 @@ public class Recipe {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
       throw new IllegalStateException(
-          "The item doesn't exist in the list, and can therefore not give a new measuring unit");
+          "The item doesn't exist in the recipe, and can therefore not set a new measuring unit");
     }
     getIngredient(name).setMeasuringUnit(measuringUnit);
   }
@@ -180,7 +190,7 @@ public class Recipe {
   public String getMeasuringUnit(String name) {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
-      throw new IllegalStateException("This ingredient is not in the shoppinglist");
+      throw new IllegalStateException("This ingredient is not in the recipe");
     }
     return getIngredient(name).getMeasuringUnit();
   }
@@ -195,7 +205,7 @@ public class Recipe {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
       throw new IllegalStateException(
-          "The item doesn't exist in the list, and can therefore not set new amount");
+          "The item doesn't exist in the recipe, and can therefore not set new amount");
     }
     getIngredient(name).setPerPersonAmount(perPersonAmount);
   }
@@ -209,7 +219,7 @@ public class Recipe {
   public Double getIngredientPerPersonAmount(String name) {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
-      throw new IllegalStateException("This ingredient is not in the shoppinglist");
+      throw new IllegalStateException("This ingredient is not in the recipe");
     }
     return getIngredient(name).getPerPersonAmount();
   }
@@ -223,7 +233,7 @@ public class Recipe {
   public Double getIngredientTotalAmount(String name) {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
-      throw new IllegalStateException("This ingredient is not in the shoppinglist");
+      throw new IllegalStateException("This ingredient is not in the recipe");
     }
     return getIngredient(name).getTotalAmount(numberOfPeople);
   }
@@ -237,7 +247,7 @@ public class Recipe {
   public void changeIngredientName(String originalName, String newName) {
     Ingredient ingredient = getIngredient(originalName);
     if (ingredient == null) {
-      throw new IllegalStateException("The item doesn't exist in the list");
+      throw new IllegalStateException("The item doesn't exist in the recipe");
     }
     ingredient.setName(newName);
   }
@@ -257,10 +267,14 @@ public class Recipe {
    * @param people the number of people to be set
    */
   public void setNumberOfPeople(int people) {
-    if (people < 1) {
+    if (!isValidNumberOfPeople(people)) {
       throw new IllegalArgumentException("A recipe must be for 1 or more people");
     }
     this.numberOfPeople = people;
+  }
+
+  public static boolean isValidNumberOfPeople(int people) {
+    return people >= 1;
   }
 
   public void setRoundUpTo(String ingredient, Double roundUpTo) {
@@ -276,7 +290,7 @@ public class Recipe {
   public Double getRoundUpTo(String name) {
     Ingredient ingredient = getIngredient(name);
     if (ingredient == null) {
-      throw new IllegalStateException("This ingredient is not in the shoppinglist");
+      throw new IllegalStateException("This ingredient is not in the recipe");
     }
     return ingredient.getRoundUpTo();
   }

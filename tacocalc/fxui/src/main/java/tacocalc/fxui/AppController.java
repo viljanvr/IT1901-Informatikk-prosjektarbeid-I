@@ -5,6 +5,8 @@ import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.enums.FloatMode;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -90,13 +92,16 @@ public class AppController {
   private VBox container;
 
   @FXML
-  private HBox scaleBox;
+  private VBox scaleBox;
 
   @FXML
-  private HBox addIngredientBox;
+  private VBox addIngredientBox;
 
   @FXML
   private Text numberOfPeopleErrorText;
+
+  @FXML
+  private Text addIngredientErrorText;
 
   @FXML
   private Text recipieNameText;
@@ -133,13 +138,7 @@ public class AppController {
     loadRecipeFromRecipeBook(recipe);
     numberOfPeopleField.setText(String.valueOf(recipe.getNumberOfPeople()));
 
-    numberOfPeopleField.addEventFilter(KeyEvent.ANY, e -> {
-      handleNumberOfPeopleChange();
-    });
-
-    recipeNameEditingField.addEventFilter(KeyEvent.ANY, e -> {
-      handleRecipeNameChange();
-    });
+    initEventHandlers();
   }
 
   /**
@@ -207,13 +206,9 @@ public class AppController {
   }
 
   private void handleRecipeNameChange() {
-    if (RecipeFileHandler.validFileName(recipeNameEditingField.getText())) {
-      recipeNameErrorText.setVisible(false);
-      editButton.setDisable(false);
-    } else {
-      recipeNameErrorText.setVisible(true);
-      editButton.setDisable(true);
-    }
+    recipeNameErrorText
+        .setVisible(!RecipeFileHandler.validFileName(recipeNameEditingField.getText()));
+    editButton.setDisable(!RecipeFileHandler.validFileName(recipeNameEditingField.getText()));
   }
 
   private void saveNewRecipeName(String newName) {
@@ -349,9 +344,46 @@ public class AppController {
       newIngredientNameField.clear();
       newMeasurementField.clear();
     } catch (NumberFormatException e) {
-      Alert a = new Alert(AlertType.ERROR);
-      a.setContentText("Amount needs to be a valid integer");
-      a.show();
+      e.printStackTrace();
+    }
+  }
+
+  private void validateAddNewIngredientFields() {
+    Boolean nameEmpty = newIngredientNameField.getText().isEmpty();
+    Boolean nameError =
+        !(Ingredient.isValidIngredientName(newIngredientNameField.getText()) || nameEmpty);
+    Boolean unitEmpty = newMeasurementField.getText().isEmpty();
+    Boolean unitError =
+        !(Ingredient.isValidMeasuringUnit(newMeasurementField.getText()) || unitEmpty);
+    Boolean amountEmpty = false;
+    Boolean amountError = false;
+
+
+    if (newIngredientAmntField.getText().isEmpty()) {
+      amountEmpty = true;
+    } else {
+      try {
+        Double amount = Double.parseDouble(newIngredientAmntField.getText());
+        amountError = !Ingredient.isValidPerPersonAmount(amount);
+      } catch (NumberFormatException e) {
+        amountError = true;
+      }
+    }
+
+    if (nameError || unitError || amountError) {
+      addIngredient.setDisable(true);
+      addIngredientErrorText.setVisible(true);
+
+      Boolean severalErrors =
+          new ArrayList<Boolean>(Arrays.asList(nameError, unitError, amountError)).stream()
+              .filter(e -> e).count() > 1;
+
+      addIngredientErrorText.setText(severalErrors ? "There are several invalid fields"
+          : nameError ? "The name is invalid"
+              : unitError ? "The measuring unit is invalid" : "The amount value is unvalid");
+    } else {
+      addIngredient.setDisable(nameEmpty || unitEmpty || amountEmpty);
+      addIngredientErrorText.setVisible(false);
     }
   }
 
@@ -511,6 +543,28 @@ public class AppController {
   private void handleDeleteRecipe() {
     RecipeFileHandler.deleteFile(recipe.getName());
     handleGoBack();
+  }
+
+  private void initEventHandlers() {
+    numberOfPeopleField.addEventFilter(KeyEvent.ANY, e -> {
+      handleNumberOfPeopleChange();
+    });
+
+    recipeNameEditingField.addEventFilter(KeyEvent.ANY, e -> {
+      handleRecipeNameChange();
+    });
+
+    newIngredientNameField.addEventFilter(KeyEvent.ANY, e -> {
+      validateAddNewIngredientFields();
+    });
+
+    newIngredientAmntField.addEventFilter(KeyEvent.ANY, e -> {
+      validateAddNewIngredientFields();
+    });
+
+    newMeasurementField.addEventFilter(KeyEvent.ANY, e -> {
+      validateAddNewIngredientFields();
+    });
   }
 
   protected IngredientEditController getIngredientEditController() {

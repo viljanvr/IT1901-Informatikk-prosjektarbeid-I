@@ -18,7 +18,7 @@ public class RecipeBookControllerTest extends AppTest {
 
   @Override
   public void start(final Stage stage) throws Exception {
-    RecipeBookController.setTransfer(new Recipe("Test-file"));
+    RecipeBookController.setTransfer(new Recipe("Recipe-book-controller-test-file"));
     FXMLLoader loader = new FXMLLoader(getClass().getResource("RecipeBook.fxml"));
     Parent root = loader.load();
     stage.setScene(new Scene(root));

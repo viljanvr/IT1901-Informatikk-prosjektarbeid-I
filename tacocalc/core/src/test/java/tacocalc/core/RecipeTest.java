@@ -9,7 +9,7 @@ public class RecipeTest {
   public void testMultipleIngredients() {
     Ingredient I1 = new Ingredient("agurk", 3.0, "stk");
     Ingredient I2 = new Ingredient("ost", 1.0, "stk");
-    Recipe r = new Recipe(I1, I2);
+    Recipe r = new Recipe("testRecipe", I1, I2);
     r.setNumberOfPeople(1);
     Assertions.assertEquals(1, r.getIngredientPerPersonAmount("ost"));
     Assertions.assertEquals(3, r.getIngredientPerPersonAmount("agurk"));
@@ -22,14 +22,14 @@ public class RecipeTest {
   @Test
   public void testShoppingListBought() {
     Ingredient I1 = new Ingredient("agurk", 3.0, "stk");
-    Recipe r = new Recipe(I1);
+    Recipe r = new Recipe("testRecipe", I1);
     r.setBought("agurk", true);
     Assertions.assertTrue(r.getBought("agurk"));
   }
 
   @Test
   public void testAddAndDelete() {
-    Recipe r = new Recipe();
+    Recipe r = new Recipe("testRecipe");
     r.addItem("ost", 1.0, "kg");
     r.setBought("ost", true);
     Assertions.assertTrue(r.getBought("ost"));
@@ -48,7 +48,7 @@ public class RecipeTest {
 
   @DisplayName("Test that changeName method changes name of ingredient")
   public void testChangeName() {
-    Recipe r = new Recipe();
+    Recipe r = new Recipe("testRecipe");
     r.addItem("ost", 0.5, "stk");
     Assertions.assertEquals("[ ]: 0.5 stk ost", r.getIngredient("ost").toString());
     r.changeIngredientName("ost", "avokado");
@@ -62,7 +62,7 @@ public class RecipeTest {
   @Test
   public void testThrows() {
     Ingredient I1 = new Ingredient("tomat", 3.0, "stk");
-    Recipe r = new Recipe(I1);
+    Recipe r = new Recipe("testRecipe", I1);
     Assertions.assertThrows(IllegalStateException.class, () -> {
       r.getBought("ost");
     });
