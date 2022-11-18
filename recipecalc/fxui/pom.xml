@@ -125,7 +125,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.6</version>
                 <configuration>
-                    <mainClass>fxui/tacocalc.fxui.App</mainClass>
+                    <mainClass>fxui/recipecalc.fxui.App</mainClass>
 
                     <!-- JLink settings -->
                     <compress>2</compress>
