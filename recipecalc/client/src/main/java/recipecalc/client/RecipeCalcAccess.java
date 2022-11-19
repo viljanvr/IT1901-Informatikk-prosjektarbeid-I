@@ -12,6 +12,8 @@ public interface RecipeCalcAccess {
 
   public List<Recipe> getAllRecipes();
 
+  public List<Recipe> getAllTemplates();
+
   public boolean addRecipe(Recipe recipe);
 
   public boolean deleteRecipe(String recipeName);
