@@ -72,16 +72,14 @@ public class Recipe {
   }
 
   /**
-   * Adds a new Ingredient to the ShoppingList. If it is already an Ingredient
-   * with the same name,
-   * the old Ingredient will be updated with the amount of the new, and its bought
-   * status is set to
+   * Adds a new Ingredient to the ShoppingList. If it is already an Ingredient with the same name,
+   * the old Ingredient will be updated with the amount of the new, and its bought status is set to
    * false.
    *
-   * @param name            the string to be added
+   * @param name the string to be added
    * @param perPersonAmount the integer to be added
-   * @param measuringUnit   the other string to be added
-   * @param roundUpTo       the value to round the total amount up to
+   * @param measuringUnit the other string to be added
+   * @param roundUpTo the value to round the total amount up to
    */
   public void addItem(String name, Double perPersonAmount, Double roundUpTo, String measuringUnit) {
     Ingredient duplicate = getIngredient(name);
@@ -95,13 +93,11 @@ public class Recipe {
   }
 
   /**
-   * Adds a new Ingredient to the ShoppingList. If it is already an Ingredient
-   * with the same name,
-   * the old Ingredient will be updated with the amount of the new, and its bought
-   * status is set to
+   * Adds a new Ingredient to the ShoppingList. If it is already an Ingredient with the same name,
+   * the old Ingredient will be updated with the amount of the new, and its bought status is set to
    * false.
    *
-   * @param name            the string to be added
+   * @param name the string to be added
    * @param perPersonAmount the integer to be added
    */
   public void addItem(String name, Double perPersonAmount, String measuringUnit) {
@@ -111,7 +107,7 @@ public class Recipe {
   /**
    * Update the bought propeperty of given ingredient.
    *
-   * @param name   name of the ingredient to update
+   * @param name name of the ingredient to update
    * @param bought the new value to be set
    */
   public void setBought(String name, Boolean bought) {
@@ -138,8 +134,7 @@ public class Recipe {
   }
 
   /**
-   * Delete an ingredient from this recipie. Will throw an IllegalStateException
-   * if the ingredient
+   * Delete an ingredient from this recipie. Will throw an IllegalStateException if the ingredient
    * is not present.
    *
    * @param name the name of the ingredient to be deleted.
@@ -172,7 +167,7 @@ public class Recipe {
    * Set the measuring unit of a given ingredient.
    * 
    *
-   * @param name          the name
+   * @param name the name
    *
    * @param measuringUnit the other thing
    * 
@@ -203,7 +198,7 @@ public class Recipe {
   /**
    * Set the amount per person of a given ingredient.
    *
-   * @param name            The ingredient to be set
+   * @param name The ingredient to be set
    * @param perPersonAmount The updated amount per person
    */
   public void setIngredientPerPersonAmount(String name, Double perPersonAmount) {
@@ -247,7 +242,7 @@ public class Recipe {
    * Change the name of a given ingredient.
    *
    * @param originalName The ingredient which the name is to be changed
-   * @param newName      The new name to be set
+   * @param newName The new name to be set
    */
   public void changeIngredientName(String originalName, String newName) {
     Ingredient ingredient = getIngredient(originalName);
@@ -287,8 +282,7 @@ public class Recipe {
   }
 
   /**
-   * Returns the value that a given ingredients total amount should be rounded up
-   * to.
+   * Returns the value that a given ingredients total amount should be rounded up to.
    *
    * @param name the name of the ingredient
    * @return the roundUpTo value as a Double
