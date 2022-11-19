@@ -15,8 +15,7 @@ import recipecalc.core.Ingredient;
 import recipecalc.core.Recipe;
 
 /**
- * Controller for the overlay where you can edit the properties of a single
- * ingredient.
+ * Controller for the overlay where you can edit the properties of a single ingredient.
  */
 public class IngredientEditController {
 
@@ -53,10 +52,10 @@ public class IngredientEditController {
   @FXML
   private Text errorMessage;
 
-  String ingredientName;
-  AppController appController;
-  Double newPerPersonAmount;
-  Double temporaryRoundUp;
+  private String ingredientName;
+  private AppController appController;
+  private Double newPerPersonAmount;
+  private Double temporaryRoundUp;
 
   protected IngredientEditController(AppController appController) {
     this.appController = appController;
@@ -67,11 +66,10 @@ public class IngredientEditController {
   }
 
   /**
-   * Updates the edit screen to show the name, amount and measuring unit of a
-   * single ingredient.
+   * Updates the edit screen to show the name, amount and measuring unit of a single ingredient.
    *
    * @param ingredientName name of the given ingredient
-   * @param recipe         internal object containing all ingredient objects
+   * @param recipe internal object containing all ingredient objects
    */
   protected void showNewIngredient(String ingredientName, Recipe recipe, String unit) {
     this.ingredientName = ingredientName;
@@ -117,6 +115,9 @@ public class IngredientEditController {
     inputValidation();
   }
 
+  /**
+   * Validates the input when trying to edit an ingredient.
+   */
   private void inputValidation() {
     Boolean nameError = !Ingredient.isValidIngredientName(ingredientNameField.getText());
     Boolean unitError = !Ingredient.isValidMeasuringUnit(measuringUnitField.getText());
@@ -163,6 +164,9 @@ public class IngredientEditController {
     }
   }
 
+  /**
+   * Changes the state of the roundAmount-field when checkbox is checked/unchecked.
+   */
   @FXML
   private void handleRoundToggle() {
     roundUpToText.setFill(roundCheckBox.isSelected() ? Color.WHITE : Color.web("#ababab"));
@@ -195,8 +199,7 @@ public class IngredientEditController {
   }
 
   /**
-   * Saves the changes to a given ingredient when pressing the save-button and
-   * closes the editing.
+   * Saves the changes to a given ingredient when pressing the save-button and closes the editing.
    * overlay.
    */
   @FXML
@@ -209,8 +212,7 @@ public class IngredientEditController {
   }
 
   /**
-   * Deletes the ingredient when pressing the delete-button and closes the editing
-   * overlay.
+   * Deletes the ingredient when pressing the delete-button and closes the editing overlay.
    */
   @FXML
   private void handleDelete() {

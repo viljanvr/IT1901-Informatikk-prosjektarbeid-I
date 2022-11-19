@@ -80,11 +80,17 @@ public class AddRecipeController {
     }
   }
 
+  /**
+   * Closes the overlay when a new Recipe is not created.
+   */
   @FXML
   private void handleCancel() {
     recipeBookController.closeOverlay();
   }
 
+  /**
+   * Updates the combobox if checkbox is pressed/unpressed.
+   */
   @FXML
   private void handleTemplateCheckbox() {
     createFromTemplateText
@@ -94,6 +100,9 @@ public class AddRecipeController {
     inputValidation();
   }
 
+  /**
+   * Validates that the template exists and delegates.
+   */
   @FXML
   private void handleTemplateChange() {
     inputValidation();
@@ -117,6 +126,11 @@ public class AddRecipeController {
     return duplicate;
   }
 
+  /**
+   * Method used in testing. Gets a button.
+   *
+   * @return A button
+   */
   protected Button getCreateButton() {
     return this.createButton;
   }

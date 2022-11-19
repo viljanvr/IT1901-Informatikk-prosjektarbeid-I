@@ -38,7 +38,7 @@ public class RecipecalcService {
   /**
    * Gets a recipe by name.
    *
-   * @param name Name of the Recipe to get.
+   * @param name Name of the Recipe to get
    * @return The recipe
    */
   protected Recipe getRecipe(String name) {

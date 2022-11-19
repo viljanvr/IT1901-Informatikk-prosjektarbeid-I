@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * Class for a single recipie, containing multiple ingredients.
+ * Class for a single Recipe, containing multiple ingredients.
  */
 public class Recipe {
   ArrayList<Ingredient> list = new ArrayList<>();
@@ -14,7 +14,7 @@ public class Recipe {
   private int numberOfPeople;
 
   /**
-   * Adds all ingdredients to the objects list.
+   * Adds all ingredients to the objects list.
    *
    * @param ingredients the Ingredients to be added
    */
@@ -32,7 +32,7 @@ public class Recipe {
   }
 
   /**
-   * Get the name of this recipie.
+   * Get the name of this Recipe.
    *
    * @return the name as a string
    */
@@ -41,7 +41,7 @@ public class Recipe {
   }
 
   /**
-   * Give this recipie a new name.
+   * Give this Recipe a new name.
    *
    * @param name the new name to be set
    */
@@ -53,7 +53,7 @@ public class Recipe {
   }
 
   /**
-   * Checks if a string is a suitable recipe name.
+   * Checks if a string is a suitable Recipe name.
    *
    * @param name The string to check
    * @return True if it's a suitable name
@@ -63,7 +63,7 @@ public class Recipe {
   }
 
   /**
-   * Get all ingridients in this recipie.
+   * Get all ingredients in this Recipe.
    *
    * @return a list of Recipie objects
    */
@@ -72,9 +72,8 @@ public class Recipe {
   }
 
   /**
-   * Adds a new Ingredient to the ShoppingList. If it is already an Ingredient with the same name,
-   * the old Ingredient will be updated with the amount of the new, and its bought status is set to
-   * false.
+   * Adds a new Ingredient to the Recipe. If it is already an Ingredient with the same name, the old
+   * Ingredient will be updated with the amount of the new, and its bought status is set to false.
    *
    * @param name the string to be added
    * @param perPersonAmount the integer to be added
@@ -93,9 +92,8 @@ public class Recipe {
   }
 
   /**
-   * Adds a new Ingredient to the ShoppingList. If it is already an Ingredient with the same name,
-   * the old Ingredient will be updated with the amount of the new, and its bought status is set to
-   * false.
+   * Adds a new Ingredient to the Recipe. If it is already an Ingredient with the same name, the old
+   * Ingredient will be updated with the amount of the new, and its bought status is set to false.
    *
    * @param name the string to be added
    * @param perPersonAmount the integer to be added
@@ -105,9 +103,9 @@ public class Recipe {
   }
 
   /**
-   * Update the bought propeperty of given ingredient.
+   * Update the bought propeperty of given Ingredient.
    *
-   * @param name name of the ingredient to update
+   * @param name name of the Ingredient to update
    * @param bought the new value to be set
    */
   public void setBought(String name, Boolean bought) {
@@ -120,9 +118,9 @@ public class Recipe {
   }
 
   /**
-   * Get the bought value of a given ingredient.
+   * Get the bought value of a given Ingredient.
    *
-   * @param name the ingredient to get the value from
+   * @param name the Ingredient to get the value from
    * @return a boolean
    */
   public boolean getBought(String name) {
@@ -134,10 +132,10 @@ public class Recipe {
   }
 
   /**
-   * Delete an ingredient from this recipie. Will throw an IllegalStateException if the ingredient
-   * is not present.
+   * Delete an Ingredient from this Recipe. Will throw an IllegalStateException if the Ingredient is
+   * not present.
    *
-   * @param name the name of the ingredient to be deleted.
+   * @param name the name of the Ingredient to be deleted.
    */
   public void deleteItem(String name) {
     Ingredient ingredient = getIngredient(name);
@@ -149,9 +147,9 @@ public class Recipe {
   }
 
   /**
-   * Get the ingredient object for the given ingredient name.
+   * Get the Ingredient object for the given Ingredient name.
    *
-   * @param name the name of the ingredient to get
+   * @param name the name of the Ingredient to get
    * @return an Ingredient object
    */
   public Ingredient getIngredient(String name) {
@@ -164,12 +162,11 @@ public class Recipe {
   }
 
   /**
-   * Set the measuring unit of a given ingredient.
-   * 
+   * Set the measuring unit of a given Ingredient.
    *
-   * @param name the name
+   * @param name the name of the Ingredient
    *
-   * @param measuringUnit the other thing
+   * @param measuringUnit the measuringunit to set
    * 
    */
   public void setIngredientMeasurement(String name, String measuringUnit) {
@@ -211,9 +208,9 @@ public class Recipe {
   }
 
   /**
-   * Get the amount per person of a given ingredient.
+   * Get the amount per person of a given Ingredient.
    *
-   * @param name the ingredient to get the value from
+   * @param name the Ingredient to get the value from
    * @return the amount per person as a Double
    */
   public Double getIngredientPerPersonAmount(String name) {
@@ -225,9 +222,9 @@ public class Recipe {
   }
 
   /**
-   * Get the total amount of a given ingredient.
+   * Get the total amount of a given Ingredient.
    *
-   * @param name the ingredient to get the value from
+   * @param name the Ingredient to get the value from
    * @return the total amount as a Double
    */
   public Double getIngredientTotalAmount(String name) {
@@ -239,9 +236,9 @@ public class Recipe {
   }
 
   /**
-   * Change the name of a given ingredient.
+   * Change the name of a given Ingredient.
    *
-   * @param originalName The ingredient which the name is to be changed
+   * @param originalName The Ingredient which the name is to be changed
    * @param newName The new name to be set
    */
   public void changeIngredientName(String originalName, String newName) {
@@ -253,7 +250,7 @@ public class Recipe {
   }
 
   /**
-   * Get the number of people used to scale the ingredient amount.
+   * Get the number of people used to scale the Ingredient amount.
    *
    * @return the number of people as an integer
    */
@@ -262,7 +259,7 @@ public class Recipe {
   }
 
   /**
-   * Set the number of people used to scale the ingredient amount.
+   * Set the number of people used to scale the Ingredient amount.
    *
    * @param people the number of people to be set
    */
@@ -284,7 +281,7 @@ public class Recipe {
   /**
    * Returns the value that a given ingredients total amount should be rounded up to.
    *
-   * @param name the name of the ingredient
+   * @param name the name of the Ingredient
    * @return the roundUpTo value as a Double
    */
   public Double getRoundUpTo(String name) {

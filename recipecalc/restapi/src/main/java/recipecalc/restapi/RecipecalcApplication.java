@@ -9,6 +9,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class RecipecalcApplication {
 
+  /**
+   * Starts the REST API.
+   *
+   * @param args Default strings
+   */
   public static void main(String[] args) {
     SpringApplication.run(RecipecalcApplication.class, args);
   }

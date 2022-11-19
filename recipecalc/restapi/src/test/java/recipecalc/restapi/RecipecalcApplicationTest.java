@@ -7,25 +7,18 @@ import recipecalc.core.Ingredient;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.ArrayType;
 import com.fasterxml.jackson.databind.type.CollectionLikeType;
-import com.fasterxml.jackson.databind.type.CollectionType;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.RequestEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -41,7 +34,8 @@ import okhttp3.ResponseBody;
 public class RecipecalcApplicationTest {
 
   private OkHttpClient client = new OkHttpClient();
-  private RecipeFileHandler recipeFileHandler = new RecipeFileHandler();
+  // Needed to mock filehandler
+  private RecipeFileHandler recipeFileHandler;
   private ObjectMapper mapper = new ObjectMapper();
   private List<Recipe> recipes = new ArrayList<>();
   private String host = "http://localhost:";
@@ -49,6 +43,7 @@ public class RecipecalcApplicationTest {
   private static final String CONTENT_TYPE_HEADER = "Content-Type";
   private static final String APPLICATION_JSON = "application/json";
   private static final String ACCEPT_HEADER = "Accept";
+  // Needed to mock service
   private RecipecalcService recipecalcService;
 
   @LocalServerPort
