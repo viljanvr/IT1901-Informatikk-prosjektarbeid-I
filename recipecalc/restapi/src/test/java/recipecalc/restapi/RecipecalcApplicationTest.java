@@ -98,39 +98,16 @@ public class RecipecalcApplicationTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    // returnList.get(0) should be r and returnList.get(1) should be r2
-    assertNotNull(returnList);
-    assertEquals(r.getName(), returnList.get(0).getName());
-    assertEquals(r2.getName(), returnList.get(1).getName());
+
+    assertTrue(returnList.stream().anyMatch(recipe -> recipe.getName().equals(r.getName())));
+    assertTrue(returnList.stream().anyMatch(recipe -> recipe.getName().equals(r2.getName())));
+
     assertEquals(r.getIngredientPerPersonAmount("agurk"),
-        returnList.get(0).getIngredientPerPersonAmount("agurk"));
+        returnList.stream().filter(recipe -> recipe.getName().equals(r.getName())).findFirst().get()
+            .getIngredientPerPersonAmount("agurk"));
     assertEquals(r2.getIngredientPerPersonAmount("tomat"),
-        returnList.get(1).getIngredientPerPersonAmount("tomat"));
-  }
-
-  @Test
-  public void testGetAllRecipesIfEmpty() {
-    Request request = new Request.Builder().url(host + port + "/api/v1/recipes/")
-        .header(ACCEPT_HEADER, APPLICATION_JSON).build();
-    List<Recipe> returnList = new ArrayList<>();
-    try {
-      ResponseBody response = client.newCall(request).execute().body();
-      CollectionLikeType listType =
-          mapper.getTypeFactory().constructCollectionLikeType(List.class, Recipe.class);
-      returnList = mapper.readValue(response.string(), listType);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    Recipe default1 = new Recipe("test", new Ingredient("avocado", 1.0, "stk"));
-    Recipe default2 = new Recipe("test2", new Ingredient("bananer", 2.0, "stk"));
-
-    assertEquals(default1.getName(), returnList.get(0).getName());
-    assertEquals(default2.getName(), returnList.get(1).getName());
-
-    assertEquals(default1.getIngredient("avocado").getMeasuringUnit(),
-        returnList.get(0).getIngredient("avocado").getMeasuringUnit());
-    assertEquals(default2.getIngredient("bananer").getMeasuringUnit(),
-        returnList.get(1).getIngredient("bananer").getMeasuringUnit());
+        returnList.stream().filter(recipe -> recipe.getName().equals(r2.getName())).findFirst()
+            .get().getIngredientPerPersonAmount("tomat"));
   }
 
   @Test
