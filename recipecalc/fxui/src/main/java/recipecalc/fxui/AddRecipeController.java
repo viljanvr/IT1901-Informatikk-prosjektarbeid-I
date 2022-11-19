@@ -13,8 +13,7 @@ import recipecalc.core.Recipe;
 import recipecalc.data.RecipeFileHandler;
 
 /**
- * Controller for overlay appearing when pressing the "Create new recipe"-button
- * from the recipe
+ * Controller for overlay appearing when pressing the "Create new recipe"-button from the recipe
  * overview screen.
  */
 public class AddRecipeController {
@@ -55,16 +54,25 @@ public class AddRecipeController {
     });
   }
 
+  /**
+   * Changes the scene to the new Recipe once it is created.
+   */
   @FXML
   private void handleCreate() {
     recipeBookController.changeToScene(new Recipe(recipeNameField.getText()));
   }
 
+  /**
+   * Closes the overlay when a new Recipe is not created.
+   */
   @FXML
   private void handleCancel() {
     recipeBookController.closeOverlay();
   }
 
+  /**
+   * Updates the combobox if checkbox is pressed/unpressed.
+   */
   @FXML
   private void handleTemplateCheckbox() {
     createFromTemplateText
@@ -73,11 +81,17 @@ public class AddRecipeController {
 
   }
 
+  /**
+   * Validates that the template exists and delegates.
+   */
   @FXML
   private void handleTemplateChange() {
 
   }
 
+  /**
+   * Validity checks a textfield.
+   */
   protected void handleRecipeNameChange() {
     if (RecipeFileHandler.validFileName(recipeNameField.getText())) {
       // If input is valid
@@ -94,11 +108,21 @@ public class AddRecipeController {
     }
   }
 
+  /**
+   * Method used in testing. Gets a checkbox.
+   *
+   * @return A checkbox
+   */
   protected MFXCheckbox getCheckbox() {
     MFXCheckbox duplicate = templateCheckbox;
     return duplicate;
   }
 
+  /**
+   * Method used in testing. Gets a button.
+   *
+   * @return A button
+   */
   protected Button getCreateButton() {
     return this.createButton;
   }

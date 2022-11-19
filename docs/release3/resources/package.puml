@@ -1,0 +1,51 @@
+@startuml packageDiagram
+
+component JAVAFX {
+  component FXML
+}
+
+component Gson
+
+component fxui {
+  package "recipecalc.fxui"
+
+}
+
+component client {
+  package "recipecalc.client"
+}
+
+component core {
+  package "recipecalc.core"
+}
+
+component data {
+  package "recipecalc.data"
+}
+
+component restapi {
+  package "recipecalc.restapi"
+}
+
+database LOCALHOST {
+
+}
+
+component SpringBoot{
+
+}
+fxui ..> FXML
+fxui ..> restapi
+fxui ..> client
+restapi ..> data
+data ..> Gson
+data ..> core
+client ..> core
+restapi ..> core
+client ..> restapi
+restapi ..> Gson
+restapi ..> LOCALHOST
+fxui ..> core
+restapi ..> SpringBoot
+
+@enduml
