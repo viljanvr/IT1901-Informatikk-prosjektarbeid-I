@@ -100,7 +100,6 @@ public class RecipecalcApplicationTest {
     }
     // returnList.get(0) should be r and returnList.get(1) should be r2
     assertNotNull(returnList);
-    System.out.println(returnList.toString());
     assertEquals(r.getName(), returnList.get(0).getName());
     assertEquals(r2.getName(), returnList.get(1).getName());
     assertEquals(r.getIngredientPerPersonAmount("agurk"),
@@ -423,6 +422,45 @@ public class RecipecalcApplicationTest {
     Ingredient returnI = copyRecipe.getIngredient("agurk");
     assertEquals(check.getName(), returnI.getName());
     assertEquals(check.getBought(), returnI.getBought());
+    assertEquals(check.getMeasuringUnit(), returnI.getMeasuringUnit());
+  }
+
+  @Test
+  public void testSetRoundUpAmount() {
+    ResponseBody responseBody = null;
+    Response response = null;
+    String responseBodyString = null;
+    MediaType mediaType = MediaType.parse("application/json");
+    // RoundUpAmount is 0.0 by default, so we set this first
+    Ingredient i = new Ingredient("agurk", 0.5, "stk");
+    Recipe r = new Recipe("testName", i);
+    r.setRoundUpTo("agurk", 4.0);
+    recipes.add(r);
+    RecipeFileHandler.write(r);
+    Boolean output = false;
+    try {
+      Request request = new Request.Builder().url(host + port + API_URL + "recipes/" + r.getName()
+          + "/" + i.getName() + "/roundUp?roundUp=0.0").put(RequestBody.create("", mediaType))
+          .build();
+      response = client.newCall(request).execute();
+      responseBody = response.body();
+      responseBodyString = responseBody.string();
+      output = mapper.readValue(responseBodyString, Boolean.class);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    assertTrue(output);
+    assertTrue(response.isSuccessful());
+
+    // Check that measuringunit actually has changed, but nothing else
+    Recipe copyRecipe = RecipeFileHandler.readRecipe(r.getName());
+
+    // Bought is false by default
+    Ingredient check = new Ingredient("agurk", 0.5, "stk");
+    Ingredient returnI = copyRecipe.getIngredient("agurk");
+    assertEquals(check.getName(), returnI.getName());
+    assertEquals(check.getRoundUpTo(), returnI.getRoundUpTo());
+    // Quick check that something else wasn't changed
     assertEquals(check.getMeasuringUnit(), returnI.getMeasuringUnit());
   }
 
