@@ -117,7 +117,7 @@ public class Ingredient {
   /**
    * Set the value that the total amount is rounded up to.
    *
-   * @param roundUpTo the value to be rounded up to. If the value is 0, the total value wount be
+   * @param roundUpTo the value to be rounded up to. If the value is 0, the total value won't be
    *        rounded.
    */
   public void setRoundUpTo(Double roundUpTo) {

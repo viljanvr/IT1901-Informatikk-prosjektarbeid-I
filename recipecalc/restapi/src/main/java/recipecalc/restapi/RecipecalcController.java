@@ -50,7 +50,7 @@ public class RecipecalcController {
    * Adds a recipe to the API.
    *
    * @param r Recipe to be added
-   * @return True if add was successful. False if not.
+   * @return True if add was successful
    */
   @PostMapping(path = "/recipes/recipe", consumes = "application/json")
   public boolean addRecipe(@RequestBody Recipe r) {
@@ -61,6 +61,7 @@ public class RecipecalcController {
    * Removes a Recipe from the API if it exists.
    *
    * @param recipeName The name of the Recipe to remove
+   * @return True if successful
    */
   @DeleteMapping(value = "/recipes/{recipe}")
   public boolean removeRecipe(final @PathVariable("recipe") String recipeName) {
@@ -72,7 +73,7 @@ public class RecipecalcController {
    *
    * @param recipeName Recipe to be renamed
    * @param newName New name of recipe
-   * @return True if rename was successful. False if not.
+   * @return True if rename was successful
    */
   @PutMapping(path = "/recipes/{recipe}/name", consumes = "application/json")
   public boolean renameRecipe(@RequestParam(value = "newName", required = true) String newName,
@@ -85,7 +86,7 @@ public class RecipecalcController {
    *
    * @param recipeName Name of recipe in which the ingredient is added to
    * @param i Recipe to be added
-   * @return True if add was successful. False if not.
+   * @return True if add was successful
    */
   @PostMapping(path = "/recipes/{recipe}/ingredient", consumes = "application/json")
   public boolean addIngredient(@PathVariable("recipe") String recipeName,

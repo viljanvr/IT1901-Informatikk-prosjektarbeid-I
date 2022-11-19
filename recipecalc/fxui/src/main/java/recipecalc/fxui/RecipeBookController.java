@@ -58,8 +58,7 @@ public class RecipeBookController {
   }
 
   /**
-   * new directory Fills this with files of.
-   *
+   * New directory fills view with recipes.
    */
   private void getRecipesFromFile() {
     recipeList = rrca.getAllRecipes();
@@ -114,7 +113,7 @@ public class RecipeBookController {
   /**
    * Changes scene to show a given recipe.
    *
-   * @param recipe the name of the recipie to open
+   * @param recipe the name of the recipe to open
    *
    * @throws IOException throws exception if specified FXML is not found
    */

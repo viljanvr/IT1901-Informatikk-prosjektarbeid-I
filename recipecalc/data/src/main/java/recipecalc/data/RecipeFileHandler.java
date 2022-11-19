@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import recipecalc.core.Recipe;
 
 /**
- * Class for reading and writing recipies to file.
+ * Class for reading and writing recipes to file.
  */
 public class RecipeFileHandler {
   private static final String FILEPATH = "/recipecalc/";
@@ -29,11 +29,10 @@ public class RecipeFileHandler {
   private static boolean testMode = false;
 
   /**
-   * Takes a filename and stores the object in that given Json file. If it does
-   * not exist then it
+   * Takes a filename and stores the object in that given Json file. If it does not exist then it
    * simply creates it.
    *
-   * @param r the recipie to write
+   * @param r the recipe to write
    */
   public static boolean write(Recipe r) {
     String folder = testMode ? TEST : RECIPE;
@@ -56,14 +55,12 @@ public class RecipeFileHandler {
   }
 
   /**
-   * Reads the file given by parameter fileName. If file does not exist it throws
-   * an exception. The
-   * contents of the file is stored and returned as a new object of type
-   * ShoppingList
+   * Reads the file given by parameter fileName. If file does not exist it throws an exception. The
+   * contents of the file is stored and returned as a new object of type Recipe
    *
    * @param name the String that is the name of the file to be read from
    *
-   * @return a ShoppingList created from the contents of the Json file
+   * @return a Recipe created from the contents of the Json file
    */
   public static Recipe readRecipe(String name) {
     return read(name, (testMode ? TEST : RECIPE));
@@ -76,14 +73,7 @@ public class RecipeFileHandler {
   private static Recipe read(String name, String folder) {
     try (FileReader fr = new FileReader(getFilePath(name, folder), StandardCharsets.UTF_8)) {
       Gson gson = new Gson();
-
-      // Make Ingredient list from Gson
-
-      // Type listType = new TypeToken<List<Recipe>>() {}.getType();
-      // return gson.fromJson(fr, listType);
-
       return gson.fromJson(fr, Recipe.class);
-      // Return shopping list from ArrayList
     } catch (IOException e) {
       return new Recipe(name);
     }
@@ -94,7 +84,7 @@ public class RecipeFileHandler {
    *
    * @param oldName the file to be renamed
    * @param newName the new file name
-   * @return returns true if renaming succeded
+   * @return true if renaming succeded
    */
   public static boolean renameFile(String oldName, String newName) {
     String folder = testMode ? TEST : RECIPE;
@@ -107,11 +97,24 @@ public class RecipeFileHandler {
     return oldFile.renameTo(newFile);
   }
 
+  /**
+   * Deletes a file locally based on the name of the file.
+   *
+   * @param name the name of the file to be deleted
+   * @return true if file was deleted
+   */
   public static boolean deleteFile(String name) {
     File file = new File(getFilePath(name, (testMode ? TEST : RECIPE)));
     return file.delete();
   }
 
+  /**
+   * Private method to find the path of a file.
+   *
+   * @param name the name of the file
+   * @param folder the folder the file is in
+   * @return the path as a String
+   */
   private static String getFilePath(String name, String folder) {
     if (!validFileName(name)) {
       throw new IllegalArgumentException("\"" + name + "\" is not a valid file name");
