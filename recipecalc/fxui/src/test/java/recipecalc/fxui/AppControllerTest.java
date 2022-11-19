@@ -15,7 +15,7 @@ public class AppControllerTest extends AppTest {
 
   @Override
   public void start(final Stage stage) throws Exception {
-    RecipeBookController.setTransfer(new Recipe("Test-file"));
+    RecipeBookController.setTransfer(new Recipe("App-controller-test-file"));
     FXMLLoader loader = new FXMLLoader(getClass().getResource("ShoppingList.fxml"));
     Parent root = loader.load();
     stage.setScene(new Scene(root));
@@ -54,16 +54,30 @@ public class AppControllerTest extends AppTest {
   // Tests the error message for wrong input in integer field
 
   @Test
-
-  @DisplayName("Invalid-ingredient-amount-test")
-  public void testInvalidAmount() {
+  @DisplayName("Invalid-ingredient-name-test")
+  public void testInvalidName() {
     clickOn("#editButton");
-    addIngredient("NotAnInteger", "Should give popup error", "Something stupid");
+    addIngredient("10", "non valid name%%", "valid unit");
     Assertions.assertEquals(0, controller.getIngredientViewStream().count());
   }
 
   @Test
+  @DisplayName("Invalid-ingredient-amount-test")
+  public void testInvalidAmount() {
+    clickOn("#editButton");
+    addIngredient("non valid amount", "valid name", "valid unit");
+    Assertions.assertEquals(0, controller.getIngredientViewStream().count());
+  }
 
+  @Test
+  @DisplayName("Invalid-ingredient-unit-test")
+  public void testInvalidUnit() {
+    clickOn("#editButton");
+    addIngredient("10", "valid name", "non valid unit//");
+    Assertions.assertEquals(0, controller.getIngredientViewStream().count());
+  }
+
+  @Test
   @DisplayName("Test-Ingredient-Bought")
   public void testCheckbox() {
     clickOn("#editButton");

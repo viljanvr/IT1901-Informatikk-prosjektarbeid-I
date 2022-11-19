@@ -5,6 +5,8 @@ import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.enums.FloatMode;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -90,13 +92,16 @@ public class AppController {
   private VBox container;
 
   @FXML
-  private HBox scaleBox;
+  private VBox scaleBox;
 
   @FXML
-  private HBox addIngredientBox;
+  private VBox addIngredientBox;
 
   @FXML
   private Text numberOfPeopleErrorText;
+
+  @FXML
+  private Text addIngredientErrorText;
 
   @FXML
   private Text recipieNameText;
@@ -133,20 +138,12 @@ public class AppController {
     loadRecipeFromRecipeBook(recipe);
     numberOfPeopleField.setText(String.valueOf(recipe.getNumberOfPeople()));
 
-    numberOfPeopleField.addEventFilter(KeyEvent.ANY, e -> {
-      handleNumberOfPeopleChange();
-    });
-
-    recipeNameEditingField.addEventFilter(KeyEvent.ANY, e -> {
-      handleRecipeNameChange();
-    });
+    initEventHandlers();
   }
 
   /**
-   * Enables/disables edit view when pressing the edit button. When entering edit
-   * mode a button to
-   * the right of each ingredient is shown. The button opens an overlay where you
-   * can edit the
+   * Enables/disables edit view when pressing the edit button. When entering edit mode a button to
+   * the right of each ingredient is shown. The button opens an overlay where you can edit the
    * properties of the given ingredient.
    */
   @FXML
@@ -209,13 +206,9 @@ public class AppController {
   }
 
   private void handleRecipeNameChange() {
-    if (RecipeFileHandler.validFileName(recipeNameEditingField.getText())) {
-      recipeNameErrorText.setVisible(false);
-      editButton.setDisable(false);
-    } else {
-      recipeNameErrorText.setVisible(true);
-      editButton.setDisable(true);
-    }
+    recipeNameErrorText
+        .setVisible(!RecipeFileHandler.validFileName(recipeNameEditingField.getText()));
+    editButton.setDisable(!RecipeFileHandler.validFileName(recipeNameEditingField.getText()));
   }
 
   private void saveNewRecipeName(String newName) {
@@ -226,12 +219,11 @@ public class AppController {
   }
 
   /**
-   * Update the bought-value of a given ingredient in the recipe object when a
-   * checkBox is clicked.
+   * Update the bought-value of a given ingredient in the recipe object when a checkBox is clicked.
    * The updated recipe is then saved to file.
    *
    * @param ingredientName String with the name of the ingredient
-   * @param c              Checkbox that has been clicked
+   * @param c Checkbox that has been clicked
    */
   private void handleToggleCheckbox(String ingredientName, MFXCheckbox c) {
     if (rrca.setBought(recipe.getName(), ingredientName, c.isSelected())) {
@@ -242,8 +234,7 @@ public class AppController {
   }
 
   /**
-   * Finds and deletes the given ingredient in the recipe object. Saves updated
-   * recipe to files and
+   * Finds and deletes the given ingredient in the recipe object. Saves updated recipe to files and
    * updates the view.
    *
    * @param ingredient name of the ingredient to be removed
@@ -280,13 +271,12 @@ public class AppController {
   }
 
   /**
-   * Updates the internal value of a single ingredient in the recipe object.
-   * Updated recipe is then
+   * Updates the internal value of a single ingredient in the recipe object. Updated recipe is then
    * saved to file and the view is updated.
    *
-   * @param ingredient        ingredient to be changed
+   * @param ingredient ingredient to be changed
    * @param newIngredientName new ingredient name
-   * @param amount            new amount to be set
+   * @param amount new amount to be set
    */
   protected void updateIngredient(String ingredient, String newIngredientName,
       Double perPersonAmount, Double roundUpTo, String measuringUnit) {
@@ -316,8 +306,7 @@ public class AppController {
   }
 
   /**
-   * Method takes in the name of an ingredient and checks if there is an item i
-   * view with the same
+   * Method takes in the name of an ingredient and checks if there is an item i view with the same
    * name.
    *
    * @param name String of the name of ingredient to be added
@@ -329,8 +318,7 @@ public class AppController {
   }
 
   /**
-   * Adds ingredient to the ShoppingList object. Saves the updated recipe object
-   * to file and updates
+   * Adds ingredient to the ShoppingList object. Saves the updated recipe object to file and updates
    * the view.
    *
    * <p>
@@ -356,9 +344,46 @@ public class AppController {
       newIngredientNameField.clear();
       newMeasurementField.clear();
     } catch (NumberFormatException e) {
-      Alert a = new Alert(AlertType.ERROR);
-      a.setContentText("Amount needs to be a valid integer");
-      a.show();
+      e.printStackTrace();
+    }
+  }
+
+  private void validateAddNewIngredientFields() {
+    Boolean nameEmpty = newIngredientNameField.getText().isEmpty();
+    Boolean nameError =
+        !(Ingredient.isValidIngredientName(newIngredientNameField.getText()) || nameEmpty);
+    Boolean unitEmpty = newMeasurementField.getText().isEmpty();
+    Boolean unitError =
+        !(Ingredient.isValidMeasuringUnit(newMeasurementField.getText()) || unitEmpty);
+    Boolean amountEmpty = false;
+    Boolean amountError = false;
+
+
+    if (newIngredientAmntField.getText().isEmpty()) {
+      amountEmpty = true;
+    } else {
+      try {
+        Double amount = Double.parseDouble(newIngredientAmntField.getText());
+        amountError = !Ingredient.isValidPerPersonAmount(amount);
+      } catch (NumberFormatException e) {
+        amountError = true;
+      }
+    }
+
+    if (nameError || unitError || amountError) {
+      addIngredient.setDisable(true);
+      addIngredientErrorText.setVisible(true);
+
+      Boolean severalErrors =
+          new ArrayList<Boolean>(Arrays.asList(nameError, unitError, amountError)).stream()
+              .filter(e -> e).count() > 1;
+
+      addIngredientErrorText.setText(severalErrors ? "There are several invalid fields"
+          : nameError ? "The name is invalid"
+              : unitError ? "The measuring unit is invalid" : "The amount value is unvalid");
+    } else {
+      addIngredient.setDisable(nameEmpty || unitEmpty || amountEmpty);
+      addIngredientErrorText.setVisible(false);
     }
   }
 
@@ -366,14 +391,13 @@ public class AppController {
    * Method takes in the properties of an ingredient and adds it to the view.
    *
    * <p>
-   * Method also initialises the eventhandlers for the new checkbox and the
-   * edit-button for the new
+   * Method also initialises the eventhandlers for the new checkbox and the edit-button for the new
    * ingredient.
    *
    * @param ingredientName the string of the name
    * @param ingredientAmnt the integer of the amount
-   * @param checked        the boolean state of the checkbox
-   * @param measuringUnit  the string of the measuring unit
+   * @param checked the boolean state of the checkbox
+   * @param measuringUnit the string of the measuring unit
    */
   private void addItemToView(String ingredientName, Double ingredientAmnt, String measuringUnit,
       Boolean checked) {
@@ -441,8 +465,7 @@ public class AppController {
   }
 
   /**
-   * Opens the overlay where you can edit the properties of a given ingredient.
-   * Updates the overlay
+   * Opens the overlay where you can edit the properties of a given ingredient. Updates the overlay
    * with the values of the given ingredient.
    *
    * @param ingredientName the ingredient to be edited
@@ -472,8 +495,7 @@ public class AppController {
   }
 
   /**
-   * A getter that maskes the newIngredientAmntField visible to other classes is
-   * used in tests.
+   * A getter that maskes the newIngredientAmntField visible to other classes is used in tests.
    *
    * @return returns the TextField object
    */
@@ -482,8 +504,7 @@ public class AppController {
   }
 
   /**
-   * A getter that makes the newingredientNameField visible to other classes Is
-   * used in test.
+   * A getter that makes the newingredientNameField visible to other classes Is used in test.
    *
    * @return returns the TextField object
    */
@@ -492,8 +513,7 @@ public class AppController {
   }
 
   /**
-   * Initialises the view with all the ingredients from the recipie, and sets the
-   * recipe title.
+   * Initialises the view with all the ingredients from the recipie, and sets the recipe title.
    *
    * @param recipe name of the recipie to load
    */
@@ -523,6 +543,28 @@ public class AppController {
   private void handleDeleteRecipe() {
     RecipeFileHandler.deleteFile(recipe.getName());
     handleGoBack();
+  }
+
+  private void initEventHandlers() {
+    numberOfPeopleField.addEventFilter(KeyEvent.ANY, e -> {
+      handleNumberOfPeopleChange();
+    });
+
+    recipeNameEditingField.addEventFilter(KeyEvent.ANY, e -> {
+      handleRecipeNameChange();
+    });
+
+    newIngredientNameField.addEventFilter(KeyEvent.ANY, e -> {
+      validateAddNewIngredientFields();
+    });
+
+    newIngredientAmntField.addEventFilter(KeyEvent.ANY, e -> {
+      validateAddNewIngredientFields();
+    });
+
+    newMeasurementField.addEventFilter(KeyEvent.ANY, e -> {
+      validateAddNewIngredientFields();
+    });
   }
 
   protected IngredientEditController getIngredientEditController() {

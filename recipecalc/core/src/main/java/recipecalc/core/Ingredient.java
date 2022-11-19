@@ -1,5 +1,7 @@
 package recipecalc.core;
 
+import java.util.regex.Pattern;
+
 /**
  * Class for an ingredient with the properties: name, amount and bought.
  */
@@ -14,9 +16,9 @@ public class Ingredient {
   /**
    * The constructor of the Ingredient.
    *
-   * @param name            another thing
+   * @param name another thing
    * @param perPersonAmount the other thing
-   * @param measuringUnit   the thing
+   * @param measuringUnit the thing
    */
   public Ingredient(String name, Double perPersonAmount, String measuringUnit) {
     this(name, perPersonAmount, 0.0, measuringUnit);
@@ -25,9 +27,9 @@ public class Ingredient {
   /**
    * Constructor for ingredient class.
    *
-   * @param name            the name of the new ingredient
+   * @param name the name of the new ingredient
    * @param perPersonAmount the amount per person
-   * @param roundUpTo       the amount to round up to
+   * @param roundUpTo the amount to round up to
    */
   public Ingredient(String name, Double perPersonAmount, Double roundUpTo, String measuringUnit) {
     setName(name);
@@ -48,11 +50,37 @@ public class Ingredient {
   }
 
   protected void setName(String name) {
-    this.name = name;
+    if (!isValidIngredientName(name)) {
+      throw new IllegalArgumentException("\"" + name + "\" is not a valid ingredient name");
+    }
+    this.name = name.strip();
   }
 
-  public void setMeasuringUnit(String measuringUnit) {
-    this.measuringUnit = measuringUnit;
+  /**
+   * Checks if a string is a suitable ingredient name.
+   *
+   * @param name The string to check
+   * @return True if it's a suitable name
+   */
+  public static boolean isValidIngredientName(String name) {
+    return Pattern.matches("^[æøåÆØÅa-zA-Z0-9 _-]*[æøåÆØÅa-zA-Z0-9_-][æøåÆØÅa-zA-Z0-9 _-]*$", name);
+  }
+
+  protected void setMeasuringUnit(String measuringUnit) {
+    if (!isValidMeasuringUnit(measuringUnit)) {
+      throw new IllegalArgumentException("Not a valid measuring unit");
+    }
+    this.measuringUnit = measuringUnit.strip();
+  }
+
+  /**
+   * Checks if a string is a suitable measuring unit.
+   *
+   * @param unit The string to check
+   * @return True if it's a suitable measuring unit
+   */
+  public static boolean isValidMeasuringUnit(String unit) {
+    return Pattern.matches("^[æøåÆØÅa-zA-Z0-9 _-]*[æøåÆØÅa-zA-Z0-9_-][æøåÆØÅa-zA-Z0-9 _-]*$", unit);
   }
 
   public String getMeasuringUnit() {
@@ -71,17 +99,15 @@ public class Ingredient {
     return perPersonAmount;
   }
 
-  /**
-   * Sets amount per person.
-   *
-   * @param amount Amount to set
-   * @throws IllegalArgumentException If amount is less or equal to 0
-   */
-  public void setPerPersonAmount(Double amount) {
-    if (amount <= 0) {
+  protected void setPerPersonAmount(Double amount) {
+    if (!isValidPerPersonAmount(amount)) {
       throw new IllegalArgumentException("Amount must be a positive number, but was " + amount);
     }
     this.perPersonAmount = amount;
+  }
+
+  public static boolean isValidPerPersonAmount(Double amount) {
+    return amount > 0;
   }
 
   public Double getRoundUpTo() {
@@ -91,15 +117,18 @@ public class Ingredient {
   /**
    * Set the value that the total amount is rounded up to.
    *
-   * @param roundUpTo the value to be rounded up to. If the value is 0, the total
-   *                  value wount be
-   *                  rounded.
+   * @param roundUpTo the value to be rounded up to. If the value is 0, the total value wount be
+   *        rounded.
    */
   public void setRoundUpTo(Double roundUpTo) {
-    if (roundUpTo < 0) {
+    if (!isValidRoundUpTo(roundUpTo)) {
       throw new IllegalArgumentException("Number be a positive number, but was " + roundUpTo);
     }
     this.roundUpTo = roundUpTo;
+  }
+
+  public static boolean isValidRoundUpTo(Double roundUpTo) {
+    return roundUpTo >= 0;
   }
 
   /**

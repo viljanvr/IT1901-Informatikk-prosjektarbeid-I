@@ -3,6 +3,8 @@ package recipecalc.fxui;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import java.util.ArrayList;
+import java.util.Arrays;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -52,9 +54,9 @@ public class IngredientEditController {
   private Text errorMessage;
 
   String ingredientName;
-  Recipe recipe;
   AppController appController;
   Double newPerPersonAmount;
+  Double temporaryRoundUp;
 
   protected IngredientEditController(AppController appController) {
     this.appController = appController;
@@ -73,7 +75,6 @@ public class IngredientEditController {
    */
   protected void showNewIngredient(String ingredientName, Recipe recipe, String unit) {
     this.ingredientName = ingredientName;
-    this.recipe = recipe;
     this.newPerPersonAmount = recipe.getIngredientPerPersonAmount(ingredientName);
 
     ingredientNameField.setText(ingredientName);
@@ -87,12 +88,10 @@ public class IngredientEditController {
 
     measuringUnitField.setText(unit);
 
-    if (recipe.getRoundUpTo(ingredientName) == 0.0) {
-      handleRoundToggle();
-    } else {
-      roundAmountField.setText(String.valueOf(recipe.getRoundUpTo(ingredientName)));
-      roundCheckBox.setSelected(true);
-    }
+    temporaryRoundUp = recipe.getRoundUpTo(ingredientName);
+    roundAmountField.clear();
+    roundCheckBox.setSelected(temporaryRoundUp != 0.0);
+    handleRoundToggle();
   }
 
   /**
@@ -100,11 +99,11 @@ public class IngredientEditController {
    */
   @FXML
   private void handleDecrease() {
-    newPerPersonAmount -= 1;
+    newPerPersonAmount = Math.ceil(newPerPersonAmount) - 1;
     quantityField.setText(Double.toString(newPerPersonAmount));
-    if (newPerPersonAmount == 1) {
-      decreaseButton.setDisable(true);
-    }
+    decreaseButton.setDisable(newPerPersonAmount <= 1);
+    inputValidation();
+
   }
 
   /**
@@ -112,56 +111,52 @@ public class IngredientEditController {
    */
   @FXML
   private void handleIncrease() {
-    newPerPersonAmount += 1;
+    newPerPersonAmount = Math.floor(newPerPersonAmount) + 1;
     quantityField.setText(Double.toString(newPerPersonAmount));
-    decreaseButton.setDisable(false);
-  }
-
-  @FXML
-  private void test123() {
-    System.out.println(ingredientNameField.getPseudoClassStates().toString());
+    decreaseButton.setDisable(newPerPersonAmount <= 1);
+    inputValidation();
   }
 
   private void inputValidation() {
+    Boolean nameError = !Ingredient.isValidIngredientName(ingredientNameField.getText());
+    Boolean unitError = !Ingredient.isValidMeasuringUnit(measuringUnitField.getText());
     Boolean amountError = false;
     Boolean roundError = false;
 
     // Check for error in the amount per person field
     try {
-      Double amount = Double.parseDouble(quantityField.getText());
-      if (amount <= 0) {
+      newPerPersonAmount = Double.parseDouble(quantityField.getText());
+      if (!Ingredient.isValidPerPersonAmount(newPerPersonAmount)) {
         amountError = true;
-      } else if (amount <= 1) {
-        decreaseButton.setDisable(true);
       } else {
-        decreaseButton.setDisable(false);
+        decreaseButton.setDisable(newPerPersonAmount <= 1.0);
       }
     } catch (NumberFormatException e) {
       amountError = true;
     }
 
     // Check for error in the round up to field
-    try {
-      Double value = Double.parseDouble(roundAmountField.getText());
-      if (value <= 0 && roundCheckBox.isSelected()) {
+    if (roundCheckBox.isSelected()) {
+      try {
+        Double value = Double.parseDouble(roundAmountField.getText());
+        roundError = value <= 0;
+      } catch (NumberFormatException e) {
         roundError = true;
       }
-    } catch (NumberFormatException e) {
-      roundError = true;
     }
 
-    if (amountError && roundError) {
+    if (nameError || unitError || amountError || roundError) {
       saveButton.setDisable(true);
       errorMessage.setVisible(true);
-      errorMessage.setText("Several values are incorrect");
-    } else if (amountError) {
-      saveButton.setDisable(true);
-      errorMessage.setVisible(true);
-      errorMessage.setText("The amount per person value is not valid");
-    } else if (roundError) {
-      saveButton.setDisable(true);
-      errorMessage.setVisible(true);
-      errorMessage.setText("The round up to value is not valid");
+      Boolean severalErrors =
+          new ArrayList<Boolean>(Arrays.asList(nameError, unitError, amountError, roundError))
+              .stream().filter(e -> e).count() > 1;
+
+      errorMessage.setText(severalErrors ? "Several values are incorrect"
+          : nameError ? "The ingredient name is not valid"
+              : unitError ? "The measuring unit is not valid"
+                  : amountError ? "The amount per person value is not valid"
+                      : "The round up amount value is not valid");
     } else {
       saveButton.setDisable(false);
       errorMessage.setVisible(false);
@@ -172,9 +167,31 @@ public class IngredientEditController {
   private void handleRoundToggle() {
     roundUpToText.setFill(roundCheckBox.isSelected() ? Color.WHITE : Color.web("#ababab"));
     roundAmountField.setDisable(!roundCheckBox.isSelected());
-    roundAmountField.setText(
-        roundCheckBox.isSelected() ? Ingredient.formatDouble(recipe.getRoundUpTo(ingredientName))
-            : "");
+
+    // When you turn of rounding
+    if (!roundCheckBox.isSelected()) {
+      try {
+        temporaryRoundUp = Double.parseDouble(roundAmountField.getText());
+        if (temporaryRoundUp == 0.0) {
+          temporaryRoundUp = 1.0;
+        }
+      } catch (NumberFormatException e) {
+        temporaryRoundUp = 1.0;
+      }
+      roundAmountField.clear();
+      inputValidation();
+    } else {
+      roundAmountField.setText(Ingredient.formatDouble(temporaryRoundUp));
+    }
+
+  }
+
+  /**
+   * Discards the changes to a given ingredient, and closes the overlay.
+   */
+  @FXML
+  private void handleCancel() {
+    appController.closeIngredientEditOverlay();
   }
 
   /**
@@ -202,6 +219,21 @@ public class IngredientEditController {
   }
 
   private void initEventHandlers() {
+
+
+    ingredientNameField.addEventFilter(KeyEvent.ANY, new EventHandler<KeyEvent>() {
+      @Override
+      public void handle(KeyEvent event) {
+        inputValidation();
+      }
+    });
+
+    measuringUnitField.addEventFilter(KeyEvent.ANY, new EventHandler<KeyEvent>() {
+      @Override
+      public void handle(KeyEvent event) {
+        inputValidation();
+      }
+    });
     quantityField.addEventFilter(KeyEvent.ANY, new EventHandler<KeyEvent>() {
       @Override
       public void handle(KeyEvent event) {

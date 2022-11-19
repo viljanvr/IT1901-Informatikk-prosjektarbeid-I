@@ -126,8 +126,8 @@ public class RecipeFileHandler {
    * @return Returns true if the string is a valid file name.
    */
   public static boolean validFileName(String s) {
-    return s == null
-        || Pattern.matches("^([a-zA-Z0-9_-]|[a-zA-Z0-9_-][a-zA-Z0-9 _-]*[a-zA-Z0-9_-])$", s);
+    return s == null || Pattern.matches(
+        "^([æøåÆØÅa-zA-Z0-9_-]|[æøåÆØÅa-zA-Z0-9_-][æøåÆØÅa-zA-Z0-9 _-]*[æøåÆØÅa-zA-Z0-9_-])$", s);
   }
 
   /**
