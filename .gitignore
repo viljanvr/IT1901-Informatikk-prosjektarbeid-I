@@ -3,8 +3,6 @@ recipecalc/fxui/target
 recipecalc/core/target
 recipecalc/target
 recipecalc/.vscode
-recipecalc/data/src/main/resources
-recipecalc/core/src/main/resources
 recipecalc/data/target
 recipecalc/restapi/target
 recipecalc/client/target
