@@ -144,11 +144,11 @@
                 <artifactId>jpackage-maven-plugin</artifactId>
                 <version>1.4.0</version>
                 <configuration>
-                    <name>RecipeCalc</name>
+                    <name>Recipe Calculator</name>
                     <appVersion>1.0.0</appVersion>
                     <vendor>it1901</vendor>
                     <destination>target/dist</destination>
-                    <module>fxui/tacocalc.fxui.App</module>
+                    <module>fxui/recipecalc.fxui.App</module>
                     <runtimeImage>target/recipecalc</runtimeImage>
                     <javaOptions>
                         <option>-Dfile.encoding=UTF-8</option>
