@@ -4,7 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import recipecalc.core.Recipe;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +15,7 @@ public class AddRecipeControllerTest extends AppTest {
 
   @Override
   public void start(final Stage stage) throws Exception {
+    RecipeBookController.setTransfer(new Recipe("Add-recipe-controller-test-file"));
     FXMLLoader loader = new FXMLLoader(getClass().getResource("RecipeBook.fxml"));
     Parent root = loader.load();
     stage.setScene(new Scene(root));
