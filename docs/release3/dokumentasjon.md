@@ -107,3 +107,35 @@ Vi har laget tester til appen som har som formål å oppdage eventuelle feil i a
 ## Brukerhistorier
 
 Vi valgte å skrive to nye historier til to brukere vi allerede har møtt i [release1](../release1/brukerhistorier.md) og [release2](../release2/brukerhistorier.md). De nye historiene finner du [her](brukerhistorier.md).
+
+## Figma mockups
+
+<p>
+    <figure align="center">
+        <img src="resources/RecipeListMockup.png" width="600"/>
+    </figure>
+</p>
+
+<p>
+    <figure align="center">
+        <img src="resources/CreateRecipeMockup.png" width="600"/>
+    </figure>
+</p>
+
+<p>
+    <figure align="center">
+        <img src="resources/RecipeMockup.png" width="600"/>
+    </figure>
+</p>
+
+<p>
+    <figure align="center">
+        <img src="resources/editRecipeMockup.png" alt="EditIngredient" width="600"/>
+    </figure>
+</p>
+
+<p>
+    <figure align="center">
+        <img src="resources/editIngredientMockup.png" alt="EditIngredient" width="600"/>
+    </figure>
+</p>
