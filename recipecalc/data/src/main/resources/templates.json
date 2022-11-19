@@ -1,0 +1,119 @@
+[
+  {
+    "list": [
+      {
+        "name": "paprika",
+        "perPersonAmount": 0.25,
+        "measuringUnit": "stk",
+        "roundUpTo": 0.0,
+        "bought": false
+      },
+      {
+        "name": "tomat",
+        "perPersonAmount": 0.25,
+        "measuringUnit": "boks",
+        "roundUpTo": 0.0,
+        "bought": false
+      },
+      {
+        "name": "agurk",
+        "perPersonAmount": 0.25,
+        "measuringUnit": "stk",
+        "roundUpTo": 0.0,
+        "bought": false
+      },
+      {
+        "name": "taco lefse",
+        "perPersonAmount": 2.0,
+        "measuringUnit": "stk",
+        "roundUpTo": 0.0,
+        "bought": false
+      },
+      {
+        "name": "avokado",
+        "perPersonAmount": 0.5,
+        "measuringUnit": "stk",
+        "roundUpTo": 0.0,
+        "bought": false
+      },
+      {
+        "name": "kjøttdeig",
+        "perPersonAmount": 100.0,
+        "measuringUnit": "g",
+        "roundUpTo": 400.0,
+        "bought": false
+      },
+      {
+        "name": "mais",
+        "perPersonAmount": 0.25,
+        "measuringUnit": "boks",
+        "roundUpTo": 0.0,
+        "bought": false
+      },
+      {
+        "name": "bønner",
+        "perPersonAmount": 0.33,
+        "measuringUnit": "boks",
+        "roundUpTo": 0.0,
+        "bought": false
+      },
+      {
+        "name": "løk",
+        "perPersonAmount": 0.25,
+        "measuringUnit": "stk",
+        "roundUpTo": 0.0,
+        "bought": false
+      },
+      {
+        "name": "rømme",
+        "perPersonAmount": 0.25,
+        "measuringUnit": "boks",
+        "roundUpTo": 0.0,
+        "bought": false
+      },
+      {
+        "name": "revet ost",
+        "perPersonAmount": 70.0,
+        "measuringUnit": "g",
+        "roundUpTo": 0.0,
+        "bought": false
+      },
+      {
+        "name": "salsa",
+        "perPersonAmount": 0.25,
+        "measuringUnit": "glass",
+        "roundUpTo": 0.0,
+        "bought": false
+      },
+      {
+        "name": "nacho chips",
+        "perPersonAmount": 0.25,
+        "measuringUnit": "pose",
+        "roundUpTo": 0.0,
+        "bought": false
+      }
+    ],
+    "name": "Taco",
+    "numberOfPeople": 4
+  },
+  {
+    "list": [
+      {
+        "name": "ingredient 1",
+        "perPersonAmount": 0.25,
+        "measuringUnit": "g",
+        "roundUpTo": 0.0,
+        "bought": false
+      },
+      {
+        "name": "ingredient 2",
+        "perPersonAmount": 0.25,
+        "measuringUnit": "boks",
+        "roundUpTo": 0.0,
+        "bought": false
+      }
+    ],
+    "name": "Example recipe",
+    "numberOfPeople": 4
+  }
+]

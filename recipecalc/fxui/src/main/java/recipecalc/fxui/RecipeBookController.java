@@ -93,9 +93,10 @@ public class RecipeBookController {
 
   @FXML
   private void handleCreateRecipe() {
+    addRecipeController.loadTemplates();
     popUpContain.setVisible(true);
     container.setEffect(blur);
-    addRecipeController.handleRecipeNameChange();
+    addRecipeController.inputValidation();
   }
 
   protected void closeOverlay() {

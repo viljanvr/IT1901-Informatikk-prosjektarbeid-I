@@ -51,6 +51,22 @@
 	-mfx-secondary: #ffc368;
 }
 
+.mfx-combo-box{
+    -fx-border-color: #FFA012;
+}
+
+.mfx-combo-box:disabled{
+    -fx-border-color: #696969;
+}
+
+.mfx-combo-box .combo-popup .virtual-flow .mfx-combo-box-cell:hover {
+	-fx-background-color: #ffa01256;
+}
+
+.mfx-combo-box .combo-popup .virtual-flow .mfx-combo-box-cell:selected {
+	-fx-background-color: #ffa012a0;
+}
+
 .mfx-combo-box .caret .mfx-font-icon{
     -mfx-color: #FFA012;
 }

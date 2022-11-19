@@ -2,12 +2,16 @@ package recipecalc.data;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,10 +25,10 @@ import recipecalc.core.Recipe;
  */
 public class RecipeFileHandler {
   private static final String FILEPATH = "/recipecalc/";
-
   private static final String RECIPE = "recipes/";
-  private static final String TEMPLATE = "templates/";
   private static final String TEST = "test/";
+
+  private static final String TEMPLATE = "templates.json";
 
   private static boolean testMode = false;
 
@@ -34,7 +38,7 @@ public class RecipeFileHandler {
    *
    * @param r the recipe to write
    */
-  public static boolean write(Recipe r) {
+  public static boolean writeRecipe(Recipe r) {
     String folder = testMode ? TEST : RECIPE;
     try (FileWriter fw = new FileWriter(getFilePath(r.getName(), folder), StandardCharsets.UTF_8)) {
       Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -45,7 +49,7 @@ public class RecipeFileHandler {
       File parent = new File(System.getProperty("user.home") + FILEPATH + folder);
       if (!parent.isFile()) {
         if (parent.mkdirs()) {
-          return write(r);
+          return writeRecipe(r);
         }
       }
       return false;
@@ -63,17 +67,9 @@ public class RecipeFileHandler {
    * @return a Recipe created from the contents of the Json file
    */
   public static Recipe readRecipe(String name) {
-    return read(name, (testMode ? TEST : RECIPE));
-  }
-
-  public static Recipe readTemplate(String name) {
-    return read(name, TEMPLATE);
-  }
-
-  private static Recipe read(String name, String folder) {
+    String folder = testMode ? TEST : RECIPE;
     try (FileReader fr = new FileReader(getFilePath(name, folder), StandardCharsets.UTF_8)) {
-      Gson gson = new Gson();
-      return gson.fromJson(fr, Recipe.class);
+      return new Gson().fromJson(fr, Recipe.class);
     } catch (IOException e) {
       return new Recipe(name);
     }
@@ -134,15 +130,27 @@ public class RecipeFileHandler {
   }
 
   /**
-   * Get a List of all recipies from file.
+   * Get a list of all recipe templates from file.
+   *
+   * @return Returns a list of Recipe objects
+   */
+  public static List<Recipe> getAllTemplates() {
+    Reader reader = new InputStreamReader(
+        RecipeFileHandler.class.getResourceAsStream("/" + TEMPLATE), StandardCharsets.UTF_8);
+    Type listType = new TypeToken<List<Recipe>>() {}.getType();
+    return new Gson().fromJson(reader, listType);
+
+  }
+
+  /**
+   * Get a list of all recipes from file.
    *
    * @return Returns a list of Recipe objects
    */
   public static List<Recipe> getAllRecipies() {
-    String folder = (testMode ? TEST : RECIPE);
-    File dir = new File(System.getProperty("user.home") + FILEPATH + folder);
-    System.out
-        .println("Reading recipes from " + System.getProperty("user.home") + FILEPATH + folder);
+    String path = System.getProperty("user.home") + FILEPATH + (testMode ? TEST : RECIPE);
+    File dir = new File(path);
+    System.out.println("Reading recipes from " + path);
 
     FilenameFilter filter = new FilenameFilter() {
       @Override
@@ -163,4 +171,5 @@ public class RecipeFileHandler {
   public static void setTestMode(Boolean b) {
     testMode = b;
   }
+
 }

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import recipecalc.core.Recipe;
+import recipecalc.data.RecipeFileHandler;
 
 public class AppControllerTest extends AppTest {
   Parent root;
@@ -15,6 +16,7 @@ public class AppControllerTest extends AppTest {
 
   @Override
   public void start(final Stage stage) throws Exception {
+    RecipeFileHandler.setTestMode(true);
     RecipeBookController.setTransfer(new Recipe("App-controller-test-file"));
     FXMLLoader loader = new FXMLLoader(getClass().getResource("ShoppingList.fxml"));
     Parent root = loader.load();

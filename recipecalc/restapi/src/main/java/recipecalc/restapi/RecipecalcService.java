@@ -16,17 +16,22 @@ public class RecipecalcService {
   public RecipecalcService() {}
 
   /**
-   * Returns a list of all Recipes saved to file. If no Recipes are saved, a default Recipe is
-   * returned.
+   * Returns a list of all recipes saved to file.
    *
    * @return List of Recipe objects
    */
   protected List<Recipe> getAllRecipes() {
     List<Recipe> list = RecipeFileHandler.getAllRecipies();
-    if (list.isEmpty()) {
-      list.add(new Recipe("test", new Ingredient("avocado", 1.0, "stk")));
-      list.add(new Recipe("test2", new Ingredient("bananer", 2.0, "stk")));
-    }
+    return list;
+  }
+
+  /**
+   * Returns a list of all recipe templates.
+   *
+   * @return List of Recipe objects
+   */
+  protected List<Recipe> getAllTemplates() {
+    List<Recipe> list = RecipeFileHandler.getAllTemplates();
     return list;
   }
 
@@ -47,7 +52,7 @@ public class RecipecalcService {
    * @return True if add was successful, else false
    */
   protected boolean addRecipe(Recipe r) {
-    return RecipeFileHandler.write(r);
+    return RecipeFileHandler.writeRecipe(r);
   }
 
   /**
@@ -71,7 +76,7 @@ public class RecipecalcService {
     Recipe r = RecipeFileHandler.readRecipe(recipeName);
     if (RecipeFileHandler.renameFile(recipeName, newName)) {
       r.setName(newName);
-      return RecipeFileHandler.write(r);
+      return RecipeFileHandler.writeRecipe(r);
     }
     return false;
   }
@@ -87,7 +92,7 @@ public class RecipecalcService {
     Recipe r = RecipeFileHandler.readRecipe(recipeName);
     r.addItem(i.getName(), i.getPerPersonAmount(), i.getRoundUpTo(), i.getMeasuringUnit());
     r.setBought(i.getName(), i.getBought());
-    return RecipeFileHandler.write(r);
+    return RecipeFileHandler.writeRecipe(r);
   }
 
   /**
@@ -100,7 +105,7 @@ public class RecipecalcService {
   protected boolean deleteIngredient(String recipeName, String ingredientName) {
     Recipe r = RecipeFileHandler.readRecipe(recipeName);
     r.deleteItem(ingredientName);
-    return RecipeFileHandler.write(r);
+    return RecipeFileHandler.writeRecipe(r);
   }
 
   /**
@@ -115,7 +120,7 @@ public class RecipecalcService {
       String newIngredientName) {
     Recipe r = RecipeFileHandler.readRecipe(recipeName);
     r.changeIngredientName(oldIngredientName, newIngredientName);
-    return RecipeFileHandler.write(r);
+    return RecipeFileHandler.writeRecipe(r);
   }
 
   /**
@@ -130,7 +135,7 @@ public class RecipecalcService {
       Double perPersonAmount) {
     Recipe r = RecipeFileHandler.readRecipe(recipeName);
     r.setIngredientPerPersonAmount(ingredientName, perPersonAmount);
-    return RecipeFileHandler.write(r);
+    return RecipeFileHandler.writeRecipe(r);
 
   }
 
@@ -146,7 +151,7 @@ public class RecipecalcService {
       Double roundUpAmount) {
     Recipe r = RecipeFileHandler.readRecipe(recipeName);
     r.setRoundUpTo(ingredientName, roundUpAmount);
-    return RecipeFileHandler.write(r);
+    return RecipeFileHandler.writeRecipe(r);
   }
 
   /**
@@ -160,7 +165,7 @@ public class RecipecalcService {
   protected boolean setUnit(String measuringUnit, String recipeName, String ingredientName) {
     Recipe r = RecipeFileHandler.readRecipe(recipeName);
     r.setIngredientMeasurement(ingredientName, measuringUnit);
-    return RecipeFileHandler.write(r);
+    return RecipeFileHandler.writeRecipe(r);
   }
 
   /**
@@ -174,7 +179,7 @@ public class RecipecalcService {
   protected boolean setBought(boolean bought, String recipeName, String ingredientName) {
     Recipe r = RecipeFileHandler.readRecipe(recipeName);
     r.setBought(ingredientName, bought);
-    return RecipeFileHandler.write(r);
+    return RecipeFileHandler.writeRecipe(r);
   }
 
 }

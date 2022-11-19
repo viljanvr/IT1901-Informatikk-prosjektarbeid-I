@@ -80,8 +80,8 @@ public class RecipecalcApplicationTest {
     Ingredient i2 = new Ingredient("tomat", 0.5, "stk");
     Recipe r = new Recipe("amogus", i);
     Recipe r2 = new Recipe("sussy", i2);
-    RecipeFileHandler.write(r);
-    RecipeFileHandler.write(r2);
+    RecipeFileHandler.writeRecipe(r);
+    RecipeFileHandler.writeRecipe(r2);
     Request request = new Request.Builder().url(host + port + "/api/v1/recipes/")
         .header(ACCEPT_HEADER, APPLICATION_JSON).build();
     List<Recipe> returnList = new ArrayList<>();
@@ -93,39 +93,16 @@ public class RecipecalcApplicationTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    // returnList.get(0) should be r and returnList.get(1) should be r2
-    assertNotNull(returnList);
-    assertEquals(r.getName(), returnList.get(0).getName());
-    assertEquals(r2.getName(), returnList.get(1).getName());
+
+    assertTrue(returnList.stream().anyMatch(recipe -> recipe.getName().equals(r.getName())));
+    assertTrue(returnList.stream().anyMatch(recipe -> recipe.getName().equals(r2.getName())));
+
     assertEquals(r.getIngredientPerPersonAmount("agurk"),
-        returnList.get(0).getIngredientPerPersonAmount("agurk"));
+        returnList.stream().filter(recipe -> recipe.getName().equals(r.getName())).findFirst().get()
+            .getIngredientPerPersonAmount("agurk"));
     assertEquals(r2.getIngredientPerPersonAmount("tomat"),
-        returnList.get(1).getIngredientPerPersonAmount("tomat"));
-  }
-
-  @Test
-  public void testGetAllRecipesIfEmpty() {
-    Request request = new Request.Builder().url(host + port + "/api/v1/recipes/")
-        .header(ACCEPT_HEADER, APPLICATION_JSON).build();
-    List<Recipe> returnList = new ArrayList<>();
-    try {
-      ResponseBody response = client.newCall(request).execute().body();
-      CollectionLikeType listType =
-          mapper.getTypeFactory().constructCollectionLikeType(List.class, Recipe.class);
-      returnList = mapper.readValue(response.string(), listType);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    Recipe default1 = new Recipe("test", new Ingredient("avocado", 1.0, "stk"));
-    Recipe default2 = new Recipe("test2", new Ingredient("bananer", 2.0, "stk"));
-
-    assertEquals(default1.getName(), returnList.get(0).getName());
-    assertEquals(default2.getName(), returnList.get(1).getName());
-
-    assertEquals(default1.getIngredient("avocado").getMeasuringUnit(),
-        returnList.get(0).getIngredient("avocado").getMeasuringUnit());
-    assertEquals(default2.getIngredient("bananer").getMeasuringUnit(),
-        returnList.get(1).getIngredient("bananer").getMeasuringUnit());
+        returnList.stream().filter(recipe -> recipe.getName().equals(r2.getName())).findFirst()
+            .get().getIngredientPerPersonAmount("tomat"));
   }
 
   @Test
@@ -133,7 +110,7 @@ public class RecipecalcApplicationTest {
     Ingredient i = new Ingredient("agurk", 2.0, "stk");
     Recipe r = new Recipe("amogus", i);
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Request request = new Request.Builder().url(host + port + "/api/v1/recipes/" + r.getName())
         .header(CONTENT_TYPE_HEADER, APPLICATION_JSON).build();
     Recipe r2 = new Recipe();
@@ -179,7 +156,7 @@ public class RecipecalcApplicationTest {
     String responseBodyString = null;
     Recipe r = new Recipe("deleteMePls");
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Boolean output = false;
     try {
       Request request = new Request.Builder().url(host + port + API_URL + "recipes/" + r.getName())
@@ -203,7 +180,7 @@ public class RecipecalcApplicationTest {
     MediaType mediaType = MediaType.parse("application/json");
     Recipe r = new Recipe("dumbOldName");
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Boolean output = false;
     try {
       Request request = new Request.Builder()
@@ -230,7 +207,7 @@ public class RecipecalcApplicationTest {
     Ingredient newIngredient = new Ingredient("agurk", 3.0, "stk");
     Recipe r = new Recipe("addingredient", i);
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Boolean output = false;
     try {
       String sendString = mapper.writeValueAsString(newIngredient);
@@ -261,7 +238,7 @@ public class RecipecalcApplicationTest {
 
     Recipe r = new Recipe("testdeletei", i1, i2);
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Boolean output = false;
     try {
       Request request = new Request.Builder()
@@ -289,7 +266,7 @@ public class RecipecalcApplicationTest {
     Ingredient i = new Ingredient("agurk", 0.5, "stk");
     Recipe r = new Recipe("testName", i);
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Boolean output = false;
     try {
       Request request =
@@ -324,7 +301,7 @@ public class RecipecalcApplicationTest {
     Ingredient i = new Ingredient("agurk", 0.5, "stk");
     Recipe r = new Recipe("testName", i);
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Boolean output = false;
     try {
       Request request = new Request.Builder().url(host + port + API_URL + "recipes/" + r.getName()
@@ -357,7 +334,7 @@ public class RecipecalcApplicationTest {
     Ingredient i = new Ingredient("agurk", 0.5, "stk");
     Recipe r = new Recipe("testName", i);
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Boolean output = false;
     try {
       Request request = new Request.Builder().url(host + port + API_URL + "recipes/" + r.getName()
@@ -393,7 +370,7 @@ public class RecipecalcApplicationTest {
     Recipe r = new Recipe("testName", i);
     r.setBought("agurk", true);
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Boolean output = false;
     try {
       Request request = new Request.Builder().url(host + port + API_URL + "recipes/" + r.getName()
@@ -431,7 +408,7 @@ public class RecipecalcApplicationTest {
     Recipe r = new Recipe("testName", i);
     r.setRoundUpTo("agurk", 4.0);
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Boolean output = false;
     try {
       Request request = new Request.Builder().url(host + port + API_URL + "recipes/" + r.getName()
