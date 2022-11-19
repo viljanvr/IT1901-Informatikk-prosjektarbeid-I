@@ -37,7 +37,7 @@ public abstract class AppTest extends ApplicationTest {
   }
 
   public void createTestFile() {
-    RecipeFileHandler.writeRecipe(new Recipe("testFile", new Ingredient("tomat", 2.0, "default"),
+    RecipeFileHandler.write(new Recipe("testFile", new Ingredient("tomat", 2.0, "default"),
         new Ingredient("avocado", 1.0, "default")));
   }
 

@@ -40,12 +40,12 @@
                   </MFXTextField>
                   <HBox alignment="CENTER" prefHeight="26.0" prefWidth="200.0">
                      <children>
-                        <MFXCheckbox fx:id="templateCheckbox" onAction="#handleTemplateCheckbox" selected="false" stylesheets="@Styling.css">
+                        <MFXCheckbox fx:id="templateCheckbox" onAction="#handleTemplateCheckbox" selected="true" stylesheets="@Styling.css">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
                         </MFXCheckbox>
-                        <Text fx:id="createFromTemplateText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Create recipe from template" wrappingWidth="168.0859375">
+                        <Text fx:id="createFromTemplateText" fill="#FFFFFF" strokeType="OUTSIDE" strokeWidth="0.0" text="Create from template">
                            <HBox.margin>
                               <Insets left="3.0" right="5.0" />
                            </HBox.margin>
@@ -53,13 +53,10 @@
                               <Font size="14.0" />
                            </font>
                         </Text>
-                        <MFXComboBox fx:id="templateComboBox" disable="true" floatMode="DISABLED" onAction="#handleTemplateChange" prefHeight="32.0" prefWidth="140.0">
+                        <MFXComboBox fx:id="templateComboBox" disable="true" onAction="#handleTemplateChange">
                            <HBox.margin>
-                              <Insets left="5.0" />
+                              <Insets />
                            </HBox.margin>
-                           <textFill>
-                              <Color red="1.0" green="1.0" blue="1.0" opacity="0.8700000047683716" />
-                           </textFill>
                         </MFXComboBox>
                      </children>
                      <VBox.margin>

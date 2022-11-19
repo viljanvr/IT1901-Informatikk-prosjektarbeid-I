@@ -28,21 +28,11 @@ public class RecipecalcController {
   /**
    * Returns a list of all the recipes.
    *
-   * @return A list with Recipe objects
+   * @return A list of all recipes in the API
    */
   @GetMapping(path = "/recipes", produces = "application/json")
   public List<Recipe> getAllRecipes() {
     return recipecalcService.getAllRecipes();
-  }
-
-  /**
-   * Returns a list of all recipe templates.
-   *
-   * @return A list with Recipe objects
-   */
-  @GetMapping(path = "/templates", produces = "application/json")
-  public List<Recipe> getAllTemplates() {
-    return recipecalcService.getAllTemplates();
   }
 
   /**

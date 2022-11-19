@@ -41,15 +41,7 @@ public class RemoteRecipeCalcAccess implements RecipeCalcAccess {
    */
   @Override
   public List<Recipe> getAllRecipes() {
-    return getListOfRecipeRequest(getUri("recipes/"));
-  }
-
-  @Override
-  public List<Recipe> getAllTemplates() {
-    return getListOfRecipeRequest(getUri("templates/"));
-  }
-
-  private List<Recipe> getListOfRecipeRequest(URI uri) {
+    URI uri = getUri("recipes/");
     HttpRequest request =
         HttpRequest.newBuilder(uri).header(ACCEPT_HEADER, APPLICATION_JSON).GET().build();
     try {

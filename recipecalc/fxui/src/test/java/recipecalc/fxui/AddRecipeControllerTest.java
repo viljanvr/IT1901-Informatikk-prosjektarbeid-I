@@ -37,13 +37,12 @@ public class AddRecipeControllerTest extends AppTest {
   @Test
 
   @DisplayName("Use-Checkmark-Test")
-  public void testCheckbox() {
+  public void testcheckbox() {
     clickOn("#createRecipeButton");
-    Assertions.assertTrue(controller.getAddRecipeController().getTemplateComboBox().isDisable());
     clickOn("#templateCheckbox");
-    Assertions.assertFalse(controller.getAddRecipeController().getTemplateComboBox().isDisable());
+    Assertions.assertFalse(controller.getAddRecipeController().getCheckbox().isDisable());
     clickOn("#templateCheckbox");
-    Assertions.assertTrue(controller.getAddRecipeController().getTemplateComboBox().isDisable());
+    Assertions.assertTrue(controller.getAddRecipeController().getCheckbox().isSelected());
   }
 
   @Test
@@ -58,9 +57,9 @@ public class AddRecipeControllerTest extends AppTest {
     Assertions.assertFalse(controller.getAddRecipeController().getCreateButton().isDisable());
     clickOn("#recipeNameField").eraseText(6).write("!!!");
     Assertions.assertTrue(controller.getAddRecipeController().getCreateButton().isDisable());
-    clickOn("#recipeNameField").eraseText(3).write("Test ");
-    Assertions.assertFalse(controller.getAddRecipeController().getCreateButton().isDisable());
-    clickOn("#recipeNameField").eraseText(5).write(" ");
+    clickOn("#recipeNameField").eraseText(3).write(" Test");
+    Assertions.assertTrue(controller.getAddRecipeController().getCreateButton().isDisable());
+    clickOn("#recipeNameField").eraseText(5).write("Test ");
     Assertions.assertTrue(controller.getAddRecipeController().getCreateButton().isDisable());
   }
 }
