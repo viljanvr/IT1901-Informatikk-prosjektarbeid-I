@@ -85,8 +85,8 @@ public class RecipecalcApplicationTest {
     Ingredient i2 = new Ingredient("tomat", 0.5, "stk");
     Recipe r = new Recipe("amogus", i);
     Recipe r2 = new Recipe("sussy", i2);
-    RecipeFileHandler.write(r);
-    RecipeFileHandler.write(r2);
+    RecipeFileHandler.writeRecipe(r);
+    RecipeFileHandler.writeRecipe(r2);
     Request request = new Request.Builder().url(host + port + "/api/v1/recipes/")
         .header(ACCEPT_HEADER, APPLICATION_JSON).build();
     List<Recipe> returnList = new ArrayList<>();
@@ -138,7 +138,7 @@ public class RecipecalcApplicationTest {
     Ingredient i = new Ingredient("agurk", 2.0, "stk");
     Recipe r = new Recipe("amogus", i);
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Request request = new Request.Builder().url(host + port + "/api/v1/recipes/" + r.getName())
         .header(CONTENT_TYPE_HEADER, APPLICATION_JSON).build();
     Recipe r2 = new Recipe();
@@ -184,7 +184,7 @@ public class RecipecalcApplicationTest {
     String responseBodyString = null;
     Recipe r = new Recipe("deleteMePls");
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Boolean output = false;
     try {
       Request request = new Request.Builder().url(host + port + API_URL + "recipes/" + r.getName())
@@ -208,7 +208,7 @@ public class RecipecalcApplicationTest {
     MediaType mediaType = MediaType.parse("application/json");
     Recipe r = new Recipe("dumbOldName");
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Boolean output = false;
     try {
       Request request = new Request.Builder()
@@ -235,7 +235,7 @@ public class RecipecalcApplicationTest {
     Ingredient newIngredient = new Ingredient("agurk", 3.0, "stk");
     Recipe r = new Recipe("addingredient", i);
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Boolean output = false;
     try {
       String sendString = mapper.writeValueAsString(newIngredient);
@@ -266,7 +266,7 @@ public class RecipecalcApplicationTest {
 
     Recipe r = new Recipe("testdeletei", i1, i2);
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Boolean output = false;
     try {
       Request request = new Request.Builder()
@@ -294,7 +294,7 @@ public class RecipecalcApplicationTest {
     Ingredient i = new Ingredient("agurk", 0.5, "stk");
     Recipe r = new Recipe("testName", i);
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Boolean output = false;
     try {
       Request request =
@@ -329,7 +329,7 @@ public class RecipecalcApplicationTest {
     Ingredient i = new Ingredient("agurk", 0.5, "stk");
     Recipe r = new Recipe("testName", i);
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Boolean output = false;
     try {
       Request request = new Request.Builder().url(host + port + API_URL + "recipes/" + r.getName()
@@ -362,7 +362,7 @@ public class RecipecalcApplicationTest {
     Ingredient i = new Ingredient("agurk", 0.5, "stk");
     Recipe r = new Recipe("testName", i);
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Boolean output = false;
     try {
       Request request = new Request.Builder().url(host + port + API_URL + "recipes/" + r.getName()
@@ -398,7 +398,7 @@ public class RecipecalcApplicationTest {
     Recipe r = new Recipe("testName", i);
     r.setBought("agurk", true);
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Boolean output = false;
     try {
       Request request = new Request.Builder().url(host + port + API_URL + "recipes/" + r.getName()
@@ -436,7 +436,7 @@ public class RecipecalcApplicationTest {
     Recipe r = new Recipe("testName", i);
     r.setRoundUpTo("agurk", 4.0);
     recipes.add(r);
-    RecipeFileHandler.write(r);
+    RecipeFileHandler.writeRecipe(r);
     Boolean output = false;
     try {
       Request request = new Request.Builder().url(host + port + API_URL + "recipes/" + r.getName()
