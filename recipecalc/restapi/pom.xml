@@ -39,12 +39,6 @@
 			<version>4.9.1</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<version>2.5.6</version>
-			<scope>test</scope>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.junit.platform/junit-platform-commons -->
 		<dependency>
 			<groupId>org.junit.platform</groupId>
@@ -86,7 +80,6 @@
                 <artifactId>spotbugs-maven-plugin</artifactId>
             </plugin>
 
-            <!-- jaCoCo test coverage tool -->
             <!-- Jacoco test coverage tool -->
             <plugin>
                 <groupId>org.jacoco</groupId>
