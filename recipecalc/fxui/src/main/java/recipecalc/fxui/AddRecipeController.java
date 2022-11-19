@@ -120,7 +120,7 @@ public class AddRecipeController {
 
   /**
    * Method used in testing. Gets a button.
-   * 
+   *
    * @return A button
    */
   protected Button getCreateButton() {
